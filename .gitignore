@@ -2,14 +2,14 @@
 .vs/
 
 # Various intermediate files
-GameEngineLib/intermediate/
-Main/intermediate/
-UnitTests/intermediate/
+GameEngine/GameEngineLib/intermediate/
+GameEngine/Main/intermediate/
+GameEngine/UnitTests/intermediate/
 
 #.libs to ignore
 bin/x64/*.lib
 bin/x64/*.ilk
-bin/x64/*.pbd
+bin/x64/*.pdb
 
 # Executables
 *.exe
