@@ -1,0 +1,21 @@
+# Visual Studio 2017 user specific files
+.vs/
+
+# Various intermediate files
+GameEngineLib/intermediate/
+Main/intermediate/
+UnitTests/intermediate/
+
+#.libs to ignore
+bin/*.lib
+bin/*.ilk
+bin/*.pbd
+
+# Executables
+*.exe
+*.out
+*.app
+*.ipa
+
+# Mac Artifacts
+*.DS_Store
