@@ -7,9 +7,9 @@ Main/intermediate/
 UnitTests/intermediate/
 
 #.libs to ignore
-bin/*.lib
-bin/*.ilk
-bin/*.pbd
+bin/x64/*.lib
+bin/x64/*.ilk
+bin/x64/*.pbd
 
 # Executables
 *.exe
