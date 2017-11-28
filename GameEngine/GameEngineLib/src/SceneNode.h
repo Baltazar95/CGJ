@@ -12,7 +12,7 @@ class SceneNode
 		std::vector<SceneNode*> children;
 		ShaderProgram *sh;
 		Mesh *mesh;
-		Matrix4 modelMatrix;
+		Matrix4 modelMatrix, worldModel;
 
 	public:
 		SceneNode();
@@ -24,6 +24,7 @@ class SceneNode
 		void setModelMatrix(const Matrix4 &model);
 		void addChild(SceneNode *child);
 		void removeChild(SceneNode *child);
+		void update(Matrix4 &model);
 		void draw(Matrix4 &model, ShaderProgram *shader);
 };
 

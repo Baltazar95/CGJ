@@ -1,28 +1,3 @@
-///////////////////////////////////////////////////////////////////////
-//
-//  Loading OBJ mesh from external file
-//
-//	Final individual assignment:
-//	1.	Create classes: Scene, Camera and Mesh (that loads a
-//		mesh from a Wavefront OBJ file) and build a small
-//		scenegraph of your tangram scene (you may create more 
-//		classes if needed).
-//	2.	Create a ground object and couple the tangram figure
-//		to the ground. Press keys to move the ground about: 
-//		the tangram figure must follow the ground.
-//	3.	Animate between closed puzzle (initial square) and 
-//		tangram figure by pressing a key.
-//	4.	Spherical camera interaction through mouse. It should
-//		be possible to interact while animation is playing.
-//
-//	Team assignment:
-//	Pick your team (3 elements from one same lab) for the team
-//	assignment you will be working until the end of the semester,
-//	and register it online.
-//
-// (c) 2013-17 by Carlos Martinho
-//
-///////////////////////////////////////////////////////////////////////
 #include "OpenGL_API.h"
 
 #define CAPTION "UniBox running"
@@ -31,8 +6,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-bool isOrtho = false, gimbalModeOn = false, draged = false, zoomed = false, keysThatPressed = false;
-//bool keyBuffer[256];
+bool isOrtho = false, gimbalModeOn = false, dragged = false, zoomed = false, keysThatPressed = false;
 
 float deltaAnglex = 0.0f, deltaAngley = 0.0f, fov = 30.0f;
 int xOrigin = -1, yOrigin = -1, elapsed = glutGet(GLUT_ELAPSED_TIME);
@@ -42,7 +16,7 @@ SceneManager *sm;
 void OpenGL_API::cleanup()
 {
 	delete sm;
-	sm = NULL;
+	sm = nullptr;
 }
 
 void OpenGL_API::display()
@@ -55,7 +29,6 @@ void OpenGL_API::display()
 
 void OpenGL_API::keysPressed(unsigned char key, int x, int y)
 {
-
 	KeyBuffer::instance()->pressKey(key);
 	keysThatPressed = true;
 }
@@ -99,7 +72,7 @@ void OpenGL_API::mouseMovement(int x, int y)
 		deltaAngley = (yOrigin - y) * 0.2f;
 		yOrigin = y;
 
-		draged = true;
+		dragged = true;
 	}
 }
 
@@ -119,21 +92,6 @@ void OpenGL_API::mouseWheel(int button, int direction, int x, int y)
 
 void OpenGL_API::idle()
 {
-	//if (draged)
-	//{
-	//	sm->updateScene(deltaAnglex, deltaAngley, 0.0f);
-	//	draged = false;
-	//}
-	//if (zoomed)
-	//{
-	//	sm->updateScene(0.0f, 0.0f, fov);
-	//	zoomed = false;
-	//}
-	//if (keysThatPressed)
-	//{
-	//	sm->updateScene(0.0f, 0.0f, 0.0f);
-	//	keysThatPressed = false;
-	//}
 	int difference = glutGet(GLUT_ELAPSED_TIME) - elapsed;
 	sm->updateScene(deltaAnglex, deltaAngley, fov, difference);
 	deltaAnglex = 0.0f;

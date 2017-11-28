@@ -20,6 +20,8 @@ SceneNode::~SceneNode()
 	{
 		delete (*it);
 	}
+	mesh = nullptr;
+	sh = nullptr;
 }
 
 void SceneNode::setParent(SceneNode *parentNode)
@@ -59,12 +61,17 @@ void SceneNode::removeChild(SceneNode *child)
 	}
 }
 
+void SceneNode::update(Matrix4 &model)
+{
+
+}
+
 void SceneNode::draw(Matrix4 &model, ShaderProgram *shader)
 {
-	ShaderProgram *useShader = NULL;
+	ShaderProgram *useShader = nullptr;
 	Matrix4 modelTemp = model * modelMatrix;
 
-	if (sh == NULL)
+	if (sh == nullptr)
 	{
 		useShader = shader;
 	}
@@ -73,7 +80,7 @@ void SceneNode::draw(Matrix4 &model, ShaderProgram *shader)
 		useShader = sh;
 	}
 
-	if (mesh != NULL)
+	if (mesh != nullptr)
 	{
 		useShader->useProgram();
 		mesh->draw(useShader->getUniform("ModelMatrix"), modelTemp);

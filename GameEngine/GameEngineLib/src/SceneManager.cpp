@@ -13,60 +13,51 @@ SceneManager::SceneManager()
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
 
-	tangram = new SceneNode(NULL, sh, modelMatrix);
+	tangram = new SceneNode(nullptr, sh, modelMatrix);
 
 	sceneGraph = tangram;
 
 	S = mf.scale(10.0f, 10.0f, 0.1f, 1.0f);
 	R = mf.rotation(Vector4(0.0f, 1.0f, 0.0f, 0.0f), 180.0f);
 	T = mf.translation(10.0f, -10.0f, -1.1f);
-	base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), NULL, T*R*S);
+	base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*R*S);
 	sceneGraph->addChild(base);
 
 	T = mf.translation(1.0f, -1.0f, 0.0f);
-	initCubeTranslation = cubeActual = Vector3(1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), NULL, T);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T);
 	sceneGraph->addChild(cube);
 
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), -45.0f);
-	parallelepipedActualRotationZ = -45.0f;
-	parallelepipedActualRotationY = 0.0f;
 	T = mf.translation(-1.0f, -3.2f, 0.0f);
-	initParallelepipedTranslation = parallelepipedActual = Vector3(-1.0f, -3.2f, 0.0f);
-	parallelepiped = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Parallelepiped.obj"), NULL, T*R);
+	parallelepiped = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Parallelepiped.obj"), nullptr, T*R);
 	sceneGraph->addChild(parallelepiped);
 
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), -90.0f);
 	T = mf.translation(3.1f, 1.0f, 0.0f);
-	initSmallRightTranslation = smallRightActual = Vector3(3.1f, 1.0f, 0.0f);
-	smallPyramideRight = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), NULL, T*R);
+	smallPyramideRight = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R);
 	sceneGraph->addChild(smallPyramideRight);
 
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), 180.0f);
 	T = mf.translation(-1.1f, -1.1f, 0.0f);
-	initSmallLeftTranslation = smallLeftActual = Vector3(-1.1f, -1.1f, 0.0f);
-	smallPyramideLeft = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), NULL, T*R);
+	smallPyramideLeft = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R);
 	sceneGraph->addChild(smallPyramideLeft);
 
 	S = mf.scale(1.45f, 1.45f, 1.0f, 0.0f);
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), 45.0f);
 	T = mf.translation(1.0f, -3.1f, 0.0f);
-	initPyramideTranslation = pyramideActual = Vector3(1.0f, -3.1f, 0.0f);
-	pyramide = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), NULL, T*R*S);
+	pyramide = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R*S);
 	sceneGraph->addChild(pyramide);
 
 	S = mf.scale(2.0f, 2.0f, 1.0f, 1.0f);
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), 0.0f);
 	T = mf.translation(-1.0f, 1.1f, 0.0f);
-	initBigRightTranslation = bigRightActual = Vector3(-1.0f, 1.1f, 0.0f);
-	bigPyramideRight = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), NULL, T*R*S);
+	bigPyramideRight = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R*S);
 	sceneGraph->addChild(bigPyramideRight);
 
 	S = mf.scale(2.0f, 2.0f, 1.0f, 1.0f);
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), 90.0f);
 	T = mf.translation(-1.1f, -1.0f, 0.0f);
-	initBigLeftTranslation = bigLeftActual = Vector3(-1.1f, -1.0f, 0.0f);
-	bigPyramideLeft = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), NULL, T*R*S);
+	bigPyramideLeft = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R*S);
 	sceneGraph->addChild(bigPyramideLeft);
 }
 
@@ -74,8 +65,8 @@ SceneManager::~SceneManager()
 {
 	delete sceneGraph;
 	delete camera;
-	sceneGraph = NULL;
-	camera = NULL;
+	sceneGraph = nullptr;
+	camera = nullptr;
 }
 
 ShaderProgram *SceneManager::createShader()
@@ -127,17 +118,5 @@ void SceneManager::updateScene(float deltaAnglex, float deltaAngley, float fov, 
 void SceneManager::drawScene()
 {
 	camera->setCamera();
-	sceneGraph->draw(modelMatrix, NULL);
-}
-
-void SceneManager::switchAnimationMode()
-{
-	if (animationMode == OFF)
-	{
-		animationMode = ON;
-	}
-	else
-	{
-		animationMode = OFF;
-	}
+	sceneGraph->draw(modelMatrix, nullptr);
 }
