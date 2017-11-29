@@ -61,15 +61,20 @@ void SceneNode::removeChild(SceneNode *child)
 	}
 }
 
-void SceneNode::update(Matrix4 &model)
+void SceneNode::update(const Matrix4 &model)
 {
+
+	worldModel =  model * modelMatrix;
+	for (std::vector<SceneNode*>::iterator it = children.begin(); it != children.end(); ++it)
+	{
+		(*it)->update(worldModel);
+	}
 
 }
 
-void SceneNode::draw(Matrix4 &model, ShaderProgram *shader)
+void SceneNode::draw(ShaderProgram *shader)
 {
 	ShaderProgram *useShader = nullptr;
-	Matrix4 modelTemp = model * modelMatrix;
 
 	if (sh == nullptr)
 	{
@@ -83,12 +88,12 @@ void SceneNode::draw(Matrix4 &model, ShaderProgram *shader)
 	if (mesh != nullptr)
 	{
 		useShader->useProgram();
-		mesh->draw(useShader->getUniform("ModelMatrix"), modelTemp);
+		mesh->draw(useShader->getUniform("ModelMatrix"), worldModel);
 		useShader->disableProgram();
 	}
 
 	for (std::vector<SceneNode*>::iterator it = children.begin(); it != children.end(); ++it) 
 	{
-		(*it)->draw(modelTemp, useShader);
+		(*it)->draw(useShader);
 	}
 }

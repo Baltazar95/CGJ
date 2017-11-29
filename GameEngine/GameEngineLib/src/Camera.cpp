@@ -23,14 +23,14 @@ Camera::~Camera()
 	GlUtils::checkOpenGLError("ERROR: Could not delete buffer object.");
 }
 
-void Camera::setOrthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+void Camera::setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &zNear, const float &zFar)
 {
 	MatrixFactory mf;
 
 	orthographic = mf.orthographicMatrix(left, right, bottom, top, zNear, zFar);
 }
 
-void Camera::setPerspective(float nfovy, float naspect, float nzNear, float nzFar)
+void Camera::setPerspective(const float &nfovy, const float &naspect,const float &nzNear, const float &nzFar)
 {
 	MatrixFactory mf;
 
@@ -78,7 +78,7 @@ void Camera::switchGimbalMode()
 	}
 }
 
-void Camera::updateView(float deltaAnglex, float deltaAngley, float fov)
+void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov)
 {
 	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
 	{

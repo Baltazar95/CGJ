@@ -52,12 +52,12 @@ class Camera
 		Camera() {};
 		Camera(const GLuint &newUBO_BP, Vector3 position);
 		~Camera();
-		void setOrthographic(float left, float right, float bottom, float top, float near, float far);
-		void setPerspective(float fovy, float aspect, float zNear, float zFar);
+		void setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &near, const float &far);
+		void setPerspective(const float &nfovy, const float &naspect, const float &nzNear, const float &nzFar);
 		void switchProjectionMode();
 		void switchCameraType();
 		void switchGimbalMode();
-		void updateView(float deltaAnglex, float deltaAngley, float fov);
+		void updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov);
 		void setCamera();
 		Vector3 getFront() { return view; };
 		Vector3 getSide() { return side; };

@@ -5,7 +5,6 @@ SceneManager::SceneManager()
 	MatrixFactory mf;
 	Matrix4 S, R, T;
 
-	modelMatrix = mf.identity4();
 
 	ShaderProgram *sh = createShader();
 
@@ -13,7 +12,7 @@ SceneManager::SceneManager()
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
 
-	tangram = new SceneNode(nullptr, sh, modelMatrix);
+	tangram = new SceneNode(nullptr, sh, mf.identity4());
 
 	sceneGraph = tangram;
 
@@ -86,7 +85,7 @@ ShaderProgram *SceneManager::createShader()
 	return shader;
 }
 
-void SceneManager::updateScene(float deltaAnglex, float deltaAngley, float fov, int elapsed)
+void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed)
 {
 	float astep = 0.05f * elapsed;
 	float vstep = 0.00025f * elapsed;
@@ -112,11 +111,11 @@ void SceneManager::updateScene(float deltaAnglex, float deltaAngley, float fov, 
 		position += normalized(camera->getSide()) * mSpeed;
 	}
 
-	modelMatrix = mf.translation(position);
+	sceneGraph->update(mf.translation(position));
 }
 
 void SceneManager::drawScene()
 {
 	camera->setCamera();
-	sceneGraph->draw(modelMatrix, nullptr);
+	sceneGraph->draw(nullptr);
 }

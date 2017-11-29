@@ -24,8 +24,8 @@ class SceneNode
 		void setModelMatrix(const Matrix4 &model);
 		void addChild(SceneNode *child);
 		void removeChild(SceneNode *child);
-		void update(Matrix4 &model);
-		void draw(Matrix4 &model, ShaderProgram *shader);
+		void update(const Matrix4 &model);
+		void draw(ShaderProgram *shader);
 };
 
 #endif // !__SCENENODE_H__
