@@ -6,7 +6,7 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-bool isOrtho = false, gimbalModeOn = false, dragged = false, zoomed = false, keysThatPressed = false;
+bool isOrtho = false, dragged = false, zoomed = false, keysThatPressed = false;
 
 float deltaAnglex = 0.0f, deltaAngley = 0.0f, fov = 30.0f;
 int xOrigin = -1, yOrigin = -1, elapsed = glutGet(GLUT_ELAPSED_TIME);

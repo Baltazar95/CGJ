@@ -3,8 +3,6 @@
 SceneManager::SceneManager()
 {
 	Matrix4 S, R, T;
-
-
 	ShaderProgram *sh = createShader();
 
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
@@ -90,7 +88,7 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 	float vstep = 0.00025f * elapsed;
 	float mSpeed = 0.025f * elapsed;
 
-	camera->updateView(deltaAnglex, deltaAngley, fov);
+	camera->updateView(deltaAnglex, deltaAngley, fov, elapsed);
 
 	if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
 	{

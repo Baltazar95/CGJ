@@ -4,7 +4,7 @@
 Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 {
 	UBO_BP = newUBO_BP;
-	
+	updatebool = true;
 	translation = mf.translation(position);
 
 	glGenBuffers(1, &VboId);
@@ -61,27 +61,23 @@ void Camera::switchCameraType()
 	}
 }
 
-void Camera::switchGimbalMode()
+void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed)
 {
-	if (gimbalMode == RODRIGUES)
-	{
-		gimbalMode = QUATERNIONS;
-	}
-	else
-	{
-		gimbalMode = RODRIGUES;
-	}
-}
+	timeamount += elapsed;
 
-void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov)
-{
+	std::cout << "ELAPSED" << elapsed << std::endl;
+	std::cout << "TIMEAMOUNT" << timeamount << std::endl;
 	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
 	{
-		switchProjectionMode();
+		if (updatebool) {
+			switchProjectionMode();
+			updatebool = false;
+			timeamount = 0;
+		}
 	}
-	if (KeyBuffer::instance()->isPressed('g') || KeyBuffer::instance()->isPressed('G'))
-	{
-		switchGimbalMode();
+
+	if (timeamount >= maxtime) {
+		updatebool = true;
 	}
 
 	Quaternion qx, qy;
@@ -135,20 +131,14 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 
 void Camera::setCamera()
 {
-	if (gimbalMode == RODRIGUES)
-	{
-		rotationView = rx * ry;
-	}
-	else
-	{
-		rotationView = toGlMatrix(qtrn);
-	}
+	rotationView = toGlMatrix(qtrn);
 
 /*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
 	{
 		viewMatrix = mf.viewMatrix(eye, eye + view, up);
 	}
-	else */if (cameraType == ARCBALL)
+	else */
+	if (cameraType == ARCBALL)
 	{
 		viewMatrix = translation * rotationView;
 	}

@@ -21,14 +21,6 @@ enum CameraType
 };
 //////////////////////////
 
-///// GIMBAL MODE ////////
-enum GimbalMode
-{
-	QUATERNIONS,
-	RODRIGUES
-};
-//////////////////////////
-
 class Camera
 {
 	private:
@@ -37,7 +29,6 @@ class Camera
 		GLuint VboId;
 		ProjectionType projectionMode = PERSPECTIVE;
 		CameraType cameraType = ARCBALL;
-		GimbalMode gimbalMode = QUATERNIONS;
 		float anglex = 0.0f, angley = 0.0f;
 		Vector3 eye = Vector3(0.0f, 0.0f, 3.0f), center = Vector3(0.0f, 0.0f, -1.0f), up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 view = center - eye, side = cross(center, up);
@@ -48,6 +39,9 @@ class Camera
 		Matrix4 rx, ry, rotationView;
 		float fovy, aspect, zNear, zFar;
 		MatrixFactory mf;
+		bool updatebool;
+		int timeamount = 0;
+		const int maxtime = 50;
 	public:
 		Camera() {};
 		Camera(const GLuint &newUBO_BP, Vector3 position);
@@ -56,8 +50,7 @@ class Camera
 		void setPerspective(const float &nfovy, const float &naspect, const float &nzNear, const float &nzFar);
 		void switchProjectionMode();
 		void switchCameraType();
-		void switchGimbalMode();
-		void updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov);
+		void updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed);
 		void setCamera();
 		Vector3 getFront() { return view; };
 		Vector3 getSide() { return side; };
