@@ -4,6 +4,7 @@
 Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 {
 	UBO_BP = newUBO_BP;
+	timeamount = 0;
 	updatebool = true;
 	translation = mf.translation(position);
 
@@ -64,9 +65,6 @@ void Camera::switchCameraType()
 void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed)
 {
 	timeamount += elapsed;
-
-	std::cout << "ELAPSED" << elapsed << std::endl;
-	std::cout << "TIMEAMOUNT" << timeamount << std::endl;
 	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
 	{
 		if (updatebool) {
@@ -76,7 +74,7 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 		}
 	}
 
-	if (timeamount >= maxtime) {
+	if (timeamount >= maxtime) {								//CHECK WHY TIMEAMOUNT IS INITIALIZED AT -INFINITY
 		updatebool = true;
 	}
 

@@ -41,7 +41,7 @@ class Camera
 		MatrixFactory mf;
 		bool updatebool;
 		int timeamount = 0;
-		const int maxtime = 50;
+		const int maxtime = 150;
 	public:
 		Camera() {};
 		Camera(const GLuint &newUBO_BP, Vector3 position);
