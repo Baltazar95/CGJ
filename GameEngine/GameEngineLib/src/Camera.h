@@ -47,7 +47,7 @@ class Camera
 		Matrix4 translation;
 		Matrix4 rx, ry, rotationView;
 		float fovy, aspect, zNear, zFar;
-
+		MatrixFactory mf;
 	public:
 		Camera() {};
 		Camera(const GLuint &newUBO_BP, Vector3 position);

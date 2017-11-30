@@ -3,7 +3,6 @@
 //TODO create initial position for the camera
 Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 {
-	MatrixFactory mf;
 	UBO_BP = newUBO_BP;
 	
 	translation = mf.translation(position);
@@ -25,15 +24,11 @@ Camera::~Camera()
 
 void Camera::setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &zNear, const float &zFar)
 {
-	MatrixFactory mf;
-
 	orthographic = mf.orthographicMatrix(left, right, bottom, top, zNear, zFar);
 }
 
 void Camera::setPerspective(const float &nfovy, const float &naspect,const float &nzNear, const float &nzFar)
 {
-	MatrixFactory mf;
-
 	fovy = nfovy;
 	aspect = naspect;
 	zNear = nzNear;
@@ -90,7 +85,6 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 	}
 
 	Quaternion qx, qy;
-	MatrixFactory mf;
 
 	////////////////// EULER ///////////////////////
 	view = mf.rotation(up, deltaAnglex) * view;
@@ -141,8 +135,6 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 
 void Camera::setCamera()
 {
-	//MatrixFactory mf;
-
 	if (gimbalMode == RODRIGUES)
 	{
 		rotationView = rx * ry;

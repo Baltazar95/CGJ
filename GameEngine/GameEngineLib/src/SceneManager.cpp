@@ -2,7 +2,6 @@
 
 SceneManager::SceneManager()
 {
-	MatrixFactory mf;
 	Matrix4 S, R, T;
 
 
@@ -90,7 +89,6 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 	float astep = 0.05f * elapsed;
 	float vstep = 0.00025f * elapsed;
 	float mSpeed = 0.025f * elapsed;
-	MatrixFactory mf;
 
 	camera->updateView(deltaAnglex, deltaAngley, fov);
 
