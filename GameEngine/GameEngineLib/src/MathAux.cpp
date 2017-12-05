@@ -1787,7 +1787,7 @@ void Quaternion::normalize()
 		throw std::overflow_error("Normalizing a null vector");
 	}
 
-	float s = 1.0f / sqrt(t * t + x * x + y * y + z * z);
+	float s = 1.0f / sqrt(t * t + x * x + y * y + z * z) /*TODO: make the tests appropriate for this hackfastInvSqrt(t * t + x * x + y * y + z * z)*/;
 
 	t *= s;
 	x *= s;
@@ -1981,3 +1981,21 @@ float degreesToRadians(const float angle)
 {
 	return (float) (angle * PI / TURN);
 }
+
+///////////////////////////////////////////////////////////////
+//  This function is a HACK to make 1/sqrt(x) way faster    ///
+//  link: http://h14s.p5r.org/2012/09/0x5f3759df.html?mwh=1 ///
+///////////////////////////////////////////////////////////////
+
+//TODO: remeber this function
+
+float fastInvSqrt(float x) 
+{
+	float xhalf = 0.5f * x;
+	int i = *(int*)&x;         // evil floating point bit level hacking
+	i = 0x5f3759df - (i >> 1);  // what the fuck?
+	x = *(float*)&i;
+	x = x*(1.5f - (xhalf*x*x));
+	return x;
+}
+/////////////////////////////////////////////////////////////////

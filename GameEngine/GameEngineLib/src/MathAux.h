@@ -420,6 +420,8 @@
 	float radiansToDegrees(const float angle);
 	float degreesToRadians(const float angle);
 
+	float fastInvSqrt(float x);
+
 //}
 
 #endif // !__MATHAUX_H__
