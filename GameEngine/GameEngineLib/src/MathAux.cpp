@@ -776,7 +776,7 @@ Matrix2 inverse(const Matrix2 &m)
 	float value = determinant(m);
 	if (value == 0)
 	{
-		throw new std::overflow_error("Divided by zero");
+		throw std::overflow_error("Divided by zero");
 	}
 	return (1 / value)*Matrix2(m.matrix[3], -m.matrix[2],  -m.matrix[1], m.matrix[0]);
 }
@@ -1072,9 +1072,9 @@ Matrix3 inverse(const Matrix3 &m)
 	newM = transpose(newM);
 
 	float value = determinant(m);
-	if (value == 0)
+	if (value == 0.0f)
 	{
-		throw new std::overflow_error("Divided by zero");
+		throw std::overflow_error("Divided by zero");
 	}
 	return (1/value) * newM;
 }

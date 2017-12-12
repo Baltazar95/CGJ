@@ -96,6 +96,18 @@ GLint ShaderProgram::getUniform(const char* attribute)
 	return uniforms[attribute];
 }
 
+bool ShaderProgram::containsUniform(const char* attribute)
+{
+	if (uniforms.find(attribute) != uniforms.end())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void ShaderProgram::useProgram()
 {
 	glUseProgram(programId);

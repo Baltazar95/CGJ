@@ -29,6 +29,7 @@ class ShaderProgram
 		void addUniform(const char* attribute);
 		void addUniformBlock(const char* attribute, const GLuint &UBO_BP);
 		GLint getUniform(const char* attribute);
+		bool containsUniform(const char* attribute);
 		void useProgram();
 		void disableProgram();
 		std::string readFile(const std::string &filename, std::string shaderType);

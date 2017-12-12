@@ -3,12 +3,14 @@
 Mesh::Mesh(std::string filename, Materials &m)
 {
 	vertices = std::vector<Vector3>();
-	normals = std::vector<Vector3>();
+	initNormals = normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
 	material = m;
 
 	Obj_Loader *loader = new Obj_Loader(filename);
 	loader->processMeshData(vertices, normals, texCoords);
+	//this vector is usaed to store the normals as they are when uploaded to the engine
+	initNormals = normals;
 	delete loader;
 	createBufferObjects();
 }
@@ -74,8 +76,49 @@ void Mesh::destroyBufferObjects()
 
 void Mesh::draw(const GLint &uniformId, const Matrix4 &modelMatrix)
 {
+	MatrixFactory mf;
+	std::vector<Vector3>::iterator itr = normals.begin();
+	for (std::vector<Vector3>::iterator it = initNormals.begin(); it != initNormals.end() && itr != normals.end(); ++it, ++itr)
+	{
+		try
+		{
+			(*itr) = mf.normalMatrix(mf.convert4To3(modelMatrix)) * (*it);
+		}
+		catch (std::overflow_error e)
+		{
+			std::cout << "tried to normalize a null vector" << std::endl;
+		}
+	}
+
 	glBindVertexArray(VaoId);
 	glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
+	glBindVertexArray(0);
+
+	GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
+}
+
+void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition)
+{
+	MatrixFactory mf;
+	std::vector<Vector3>::iterator itr = normals.begin();
+	for (std::vector<Vector3>::iterator it = initNormals.begin(); it != initNormals.end() && itr != normals.end(); ++it, ++itr)
+	{
+		try
+		{
+			(*itr) = mf.normalMatrix(mf.convert4To3(modelMatrix)) * (*it);
+		}
+		catch (std::overflow_error e)
+		{
+			std::cout << "tried to normalize a null vector" << std::endl;
+		}
+	}
+
+	const GLfloat pos[] = { lightPosition.x, lightPosition.y, lightPosition.z };
+
+	glBindVertexArray(VaoId);
+	glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
+	glUniform3fv(uniformLightPosId, 1, pos);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
