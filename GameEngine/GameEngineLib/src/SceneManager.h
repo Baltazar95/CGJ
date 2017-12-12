@@ -8,7 +8,6 @@
 #include "Camera.h"
 #include "KeyBuffer.h"
 
-
 class SceneManager
 {
 	private:
@@ -19,7 +18,6 @@ class SceneManager
 		SceneNode *tangram, *base, *cube, *pyramide, *smallPyramideLeft, *smallPyramideRight, *bigPyramideLeft, *bigPyramideRight, *parallelepiped;
 		SceneNode *light;
 		MatrixFactory mf;
-
 	public:
 		SceneManager();
 		~SceneManager();
