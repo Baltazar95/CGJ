@@ -17,7 +17,7 @@ class Mesh
 	private:
 		GLuint VaoId, vboVertices, vboTexCoords, vboNormals;
 		std::vector<Vector3> vertices;
-		std::vector<Vector3> normals;
+		std::vector<Vector3> normals, initNormals;
 		std::vector<Vector2> texCoords;
 
 	public:
@@ -27,6 +27,7 @@ class Mesh
 		void createBufferObjects();
 		void destroyBufferObjects();
 		void draw(const GLint &uniformId, const Matrix4 &modelMatrix);
+		void draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition);
 };
 
 #endif // !__MESH_H__
