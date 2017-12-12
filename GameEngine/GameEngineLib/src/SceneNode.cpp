@@ -82,6 +82,7 @@ void SceneNode::update(const Matrix4 &model)
 
 void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 {
+	MatrixFactory mf;
 	ShaderProgram *useShader = nullptr;
 
 	if (sh == nullptr)
@@ -99,8 +100,11 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 
 		if (useShader->containsUniform("LightPos"))
 		{
+
+			glUniformMatrix3fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.convert4To3(mf.normalMatrix(worldModel)).matrix);
 			glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, worldModel.matrix);
 			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
+			//glUniform3fv(useShader->getUniform("ViewPosition"), 1, pos);
 			glUniform3fv(useShader->getUniform("LightPos"), 1, pos);
 			mesh->draw(useShader->getUniform("ModelMatrix"), useShader->getUniform("LightPos"), worldModel, lightPos);
 		}
