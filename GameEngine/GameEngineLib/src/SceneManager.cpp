@@ -34,7 +34,7 @@ SceneManager::SceneManager()
 	shader->addUniform("ModelMatrix");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 /* */
-	T = mf.translation(3.0f, 3.0f, -3.0f);
+	T = mf.translation(2.0f, 1.0f, 3.0f);
 	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T);
 	sceneGraph->addChild(light);
 /* * /
@@ -92,8 +92,10 @@ ShaderProgram *SceneManager::createShader()
 	shader->addAttribute(TEXCOORDS, "inTexcoord");
 	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
-	shader->addUniform("LightPos");
+	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
+	shader->addUniform("LightPos");
+	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	return shader;
