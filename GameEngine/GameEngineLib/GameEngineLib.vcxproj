@@ -176,6 +176,8 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GlUtils.h" />
     <ClInclude Include="src\KeyBuffer.h" />
+    <ClInclude Include="src\MaterialLoader.h" />
+    <ClInclude Include="src\Materials.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Obj_Loader.h" />
     <ClInclude Include="src\OpenGL_Abstract_API.h" />
@@ -189,6 +191,8 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\GlUtils.cpp" />
     <ClCompile Include="src\KeyBuffer.cpp" />
+    <ClCompile Include="src\MaterialLoader.cpp" />
+    <ClCompile Include="src\Materials.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Obj_Loader.cpp" />
     <ClCompile Include="src\OpenGL_API.cpp" />
