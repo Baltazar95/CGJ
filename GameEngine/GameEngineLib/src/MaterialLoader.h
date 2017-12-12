@@ -18,6 +18,7 @@ class MaterialLoader {
 
 		void loadMaterialData(std::string &filename);
 		void parseMaterial(Materials &mat, std::stringstream& sin);
+		std::map<std::string, Materials> getMaterials();
 
 
 };

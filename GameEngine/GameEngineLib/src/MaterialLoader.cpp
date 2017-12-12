@@ -61,3 +61,7 @@ void MaterialLoader::parseMaterial(Materials &mat, std::stringstream& sin) {
 	
 }
 
+std::map<std::string, Materials> MaterialLoader::getMaterials() {
+
+	return _materials;
+}

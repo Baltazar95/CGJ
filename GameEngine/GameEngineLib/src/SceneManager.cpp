@@ -5,11 +5,19 @@ SceneManager::SceneManager()
 	Matrix4 S, R, T;
 	ShaderProgram *sh = createShader();
 
+	//TODO
+	ml.loadMaterialData(std::string(""));
+
+	materials = ml.getMaterials();
+
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
 
-	tangram = new SceneNode(nullptr, sh, mf.identity4());
+
+	//TODO
+	tangram = new SceneNode(nullptr, sh, mf.identity4(), materials[0]);
+
 
 	sceneGraph = tangram;
 /* * /
@@ -21,7 +29,10 @@ SceneManager::SceneManager()
 /* */
 	//T = mf.translation(1.0f, -1.0f, 0.0f);
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T);
+
+	//TODO
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials);
+
 	sceneGraph->addChild(cube);
 /* */
 	ShaderProgram *shader = new ShaderProgram();

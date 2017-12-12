@@ -13,10 +13,11 @@ class SceneNode
 		ShaderProgram *sh;
 		Mesh *mesh;
 		Matrix4 modelMatrix, worldModel;
+		Materials material;
 
 	public:
 		SceneNode();
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model);
+		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials &m);
 		~SceneNode();
 		void setParent(SceneNode *parentNode);
 		void setShader(ShaderProgram *shader);
