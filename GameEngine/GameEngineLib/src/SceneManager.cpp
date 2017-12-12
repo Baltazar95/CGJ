@@ -92,8 +92,9 @@ ShaderProgram *SceneManager::createShader()
 	shader->addAttribute(TEXCOORDS, "inTexcoord");
 	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
-	shader->addUniform("LightPos");
+	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
+	shader->addUniform("LightPos");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	return shader;

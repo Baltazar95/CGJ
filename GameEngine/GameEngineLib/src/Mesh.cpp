@@ -116,8 +116,8 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 	const GLfloat pos[] = { lightPosition.x, lightPosition.y, lightPosition.z };
 
 	glBindVertexArray(VaoId);
-	glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
-	glUniform3fv(uniformLightPosId, 1, pos);
+	//glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
+	//glUniform3fv(uniformLightPosId, 1, pos);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 

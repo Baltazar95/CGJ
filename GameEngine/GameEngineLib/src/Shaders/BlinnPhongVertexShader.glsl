@@ -9,6 +9,7 @@ out vec2 exTexcoord;
 out vec3 exNormal;
 out vec3 FragPos;
 
+//uniform mat4 NormalMatrix;
 uniform mat4 ModelMatrix;
 uniform SharedMatrices
 {
@@ -21,5 +22,5 @@ void main(void)
 	vec4 MCPosition = vec4(inPosition, 1.0);
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * MCPosition;
 	FragPos = vec3(ModelMatrix * MCPosition);
-	exNormal = inNormal;
+	exNormal = /*NormalMatrix **/ inNormal;
 }

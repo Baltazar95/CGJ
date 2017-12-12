@@ -99,6 +99,9 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 
 		if (useShader->containsUniform("LightPos"))
 		{
+			glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, worldModel.matrix);
+			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
+			glUniform3fv(useShader->getUniform("LightPos"), 1, pos);
 			mesh->draw(useShader->getUniform("ModelMatrix"), useShader->getUniform("LightPos"), worldModel, lightPos);
 		}
 		else
