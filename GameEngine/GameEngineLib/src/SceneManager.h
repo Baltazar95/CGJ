@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "KeyBuffer.h"
+#include "MaterialLoader.h"
 
 class SceneManager
 {
@@ -18,6 +19,8 @@ class SceneManager
 		SceneNode *tangram, *base, *cube, *pyramide, *smallPyramideLeft, *smallPyramideRight, *bigPyramideLeft, *bigPyramideRight, *parallelepiped;
 		SceneNode *light;
 		MatrixFactory mf;
+		std::map<std::string, Materials*> materials;
+
 	public:
 		SceneManager();
 		~SceneManager();
