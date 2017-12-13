@@ -6,7 +6,7 @@ SceneNode::SceneNode()
 	worldModel = modelMatrix = mf.identity4();
 }
 
-SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials &m)
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model)
 {
 	MatrixFactory mf;
 
@@ -14,7 +14,6 @@ SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model,
 	sh = shader;
 	modelMatrix = model;
 	worldModel = mf.identity4();
-	mesh->setMaterial(m);
 }
 
 SceneNode::~SceneNode()
