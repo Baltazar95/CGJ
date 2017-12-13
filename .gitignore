@@ -19,3 +19,5 @@ bin/x64/*.pdb
 
 # Mac Artifacts
 *.DS_Store
+/GameEngine/GameEngineLib/src/Meshes/bridge_low_poly.obj
+/GameEngine/GameEngineLib/src/Meshes/bridge_low_poly.mtl
