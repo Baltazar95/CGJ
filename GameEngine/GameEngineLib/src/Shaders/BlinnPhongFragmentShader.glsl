@@ -7,8 +7,8 @@ in vec3 exNormal;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition = vec3(0.0, 0.0, -20.0);
-uniform vec3 LightPos;
+uniform vec3 viewPosition /*= vec3(0.0, 0.0, 20.0)*/;
+uniform vec3 lightPos;
 
 //TODO: pass these values from the engine
 uniform vec3 objectColor = vec3(0.5, 0.5, 1.0);
@@ -16,13 +16,14 @@ uniform vec3 lightColor = vec3(1.0);
 
 void main(void)
 {
+	vec3 cam = vec3(viewPosition.x, viewPosition.y, viewPosition.z);
 	//ambient
 	float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
 
     //diffuse
 	vec3 norm = normalize(exNormal);
-	vec3 lightDir = normalize(LightPos - exFragmentPosition); 
+	vec3 lightDir = normalize(lightPos - exFragmentPosition); 
 
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * lightColor;
@@ -30,7 +31,7 @@ void main(void)
 	//specular
 	float specularStrength = 0.5;
 
-	vec3 viewDir = normalize(viewPosition - exFragmentPosition);
+	vec3 viewDir = normalize(cam - exFragmentPosition);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
