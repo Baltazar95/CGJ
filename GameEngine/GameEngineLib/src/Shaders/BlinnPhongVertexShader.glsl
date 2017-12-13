@@ -4,11 +4,11 @@ in vec3 inPosition;
 in vec2 inTexcoord;
 in vec3 inNormal;
 
-out vec3 exPosition;
-out vec2 exTexcoord;
+out vec3 exFragmentPosition;
 out vec3 exNormal;
-out vec3 FragPos;
+/*out vec2 exTexcoord;*/
 
+uniform mat4 NormalMatrix;
 uniform mat4 ModelMatrix;
 uniform SharedMatrices
 {
@@ -18,8 +18,8 @@ uniform SharedMatrices
 
 void main(void)
 {
-	vec4 MCPosition = vec4(inPosition, 1.0);
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * MCPosition;
-	FragPos = vec3(ModelMatrix * MCPosition);
-	exNormal = inNormal;
+	exFragmentPosition = vec3(ModelMatrix * vec4(inPosition, 1.0));
+	exNormal = mat3(NormalMatrix) * inNormal;
+
+	gl_Position = ProjectionMatrix * ViewMatrix * vec4(exFragmentPosition, 1.0);
 }

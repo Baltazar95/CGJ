@@ -19,7 +19,7 @@ class Mesh
 	private:
 		GLuint VaoId, vboVertices, vboTexCoords, vboNormals;
 		std::vector<Vector3> vertices;
-		std::vector<Vector3> normals, initNormals;
+		std::vector<Vector3> normals;
 		std::vector<Vector2> texCoords;
 		Materials *material;
 
