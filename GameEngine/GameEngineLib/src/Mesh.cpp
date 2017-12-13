@@ -1,11 +1,11 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::string filename)
+Mesh::Mesh(std::string filename, Materials *m)
 {
 	vertices = std::vector<Vector3>();
 	initNormals = normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
-
+	material = m;
 	Obj_Loader *loader = new Obj_Loader(filename);
 	loader->processMeshData(vertices, normals, texCoords);
 	//this vector is usaed to store the normals as they are when uploaded to the engine
@@ -124,7 +124,7 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 	GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
 
-void Mesh::setMaterial(Materials m) {
+/*void Mesh::setMaterial(Materials m) {
 
-	//material = m;
-}
+	material = m;
+}*/

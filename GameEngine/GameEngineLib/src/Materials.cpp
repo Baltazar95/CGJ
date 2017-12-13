@@ -3,6 +3,11 @@
 
 Materials::Materials(std::stringstream &sin) {
 	parseName(sin);
+
+	_ambient = Vector3();
+	_diffuse = Vector3();
+	_specular = Vector3();
+	_emission = Vector3();
 }
 
 
