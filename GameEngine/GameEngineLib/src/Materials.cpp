@@ -18,72 +18,49 @@ void Materials::parseName(std::stringstream &sin) {
 }
 
 void Materials::parseAmbient(std::stringstream &sin) {
-	
-	sin.ignore(1, ' ');
-	sin >> _ambient[0];
-	sin.ignore(1, ' ');
-	sin >> _ambient[1];
-	sin.ignore(1, ' ');
-	sin >> _ambient[2];
 
+	sin >> _ambient;
 }
 
 void Materials::parseDiffuse(std::stringstream &sin) {
-	sin.ignore(1, ' ');
-	sin >> _diffuse[0];
-	sin.ignore(1, ' ');
-	sin >> _diffuse[1];
-	sin.ignore(1, ' ');
-	sin >> _diffuse[2];
 
+	sin >> _diffuse;
 }
 
 void Materials::parseSpecular(std::stringstream &sin) {
-	sin.ignore(1, ' ');
-	sin >> _specular[0];
-	sin.ignore(1, ' ');
-	sin >> _specular[1];
-	sin.ignore(1, ' ');
-	sin >> _specular[2];
 
+	sin >> _specular;
 }
 
 void Materials::parseEmission(std::stringstream &sin) {
-	sin.ignore(1, ' ');
-	sin >> _emission[0];
-	sin.ignore(1, ' ');
-	sin >> _emission[1];
-	sin.ignore(1, ' ');
-	sin >> _emission[2];
+
+	sin >> _emission;
 
 }
 
 void Materials::parseShininess(std::stringstream &sin) {
-	sin.ignore(1, ' ');
+	sin.ignore(2, ' ');
 	sin >> _shininess;
 
 }
 
 void Materials::parseDissolve(std::stringstream &sin) {
-	sin.ignore(1, ' ');
+	sin.ignore(2, ' ');
 	sin >> _dissolve;
-
 }
 
 void Materials::parseNi(std::stringstream &sin) {
-	sin.ignore(1, ' ');
+	sin.ignore(2, ' ');
 	sin >> _Ni;
-
 }
 
 void Materials::parseIllum(std::stringstream &sin) {
-	sin.ignore(1, ' ');
+	sin.ignore(2, ' ');
 	sin >> _illum;
-
 }
 
+//TODO
 void Materials::parseMapPath(std::stringstream &sin) {
 	sin.ignore(1, ' ');
 	sin >> _map_Kd;
-
 }

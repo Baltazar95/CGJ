@@ -3,14 +3,15 @@
 
 #include <string>
 #include <sstream>
+#include "MathAux.h"
 class Materials {
 
 private:
 	std::string _mat_name;
-	float _ambient[3]; //Ka
-	float _diffuse[3]; //Kd
-	float _specular[3]; //Ks
-	float _emission[3]; //Ke
+	Vector3 _ambient; //Ka
+	Vector3 _diffuse; //Kd
+	Vector3 _specular; //Ks
+	Vector3 _emission; //Ke
 	float _shininess; //Ns
 	float _Ni; //dont know what it is yet
 	float _dissolve; //d - 1== opaque; 0 == fully transparent
@@ -18,7 +19,7 @@ private:
 	std::string _map_Kd; //path to texture, looks like
 
 public:
-	Materials();
+	Materials(){}
 	Materials(std::stringstream &sin);
 	std::string getName();
 	void parseName(std::stringstream &sin);

@@ -3,22 +3,24 @@
 
 void MaterialLoader::loadMaterialData(std::string &filename) {
 	std::ifstream ifile(filename);
-	std::string line;
+	std::string line, str;
 	std::stringstream aux;
 	Materials mat;
 	while (std::getline(ifile, line)) {
-		if (line.compare("#") == 1) {
-			if (line.compare("newmtl") == 0) {
-				std::stringstream aux(line);
-				mat = Materials(aux);
-				_materials[mat.getName()] = mat;
-
-			}
-			else {
-				parseMaterial(mat, std::stringstream(line));
-			}
-
+		std::stringstream aux(line);
+		aux >> str;
+		
+		if (str.compare("newmtl") == 0) {
+				
+			mat = Materials(aux);
+			_materials[mat.getName()] = mat;
 		}
+
+		else {
+			parseMaterial(mat, std::stringstream(line));
+		}
+
+		
 	}
 
 }

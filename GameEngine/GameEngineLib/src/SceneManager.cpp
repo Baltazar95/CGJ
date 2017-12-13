@@ -6,7 +6,7 @@ SceneManager::SceneManager()
 	ShaderProgram *sh = createShader();
 
 	//TODO
-	ml.loadMaterialData(std::string(""));
+	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
 
 	materials = ml.getMaterials();
 
@@ -16,7 +16,7 @@ SceneManager::SceneManager()
 
 
 	//TODO
-	tangram = new SceneNode(nullptr, sh, mf.identity4(), materials[0]);
+	tangram = new SceneNode(nullptr, sh, mf.identity4(), materials.find("lambert2SG")->second);
 
 
 	sceneGraph = tangram;
@@ -31,7 +31,7 @@ SceneManager::SceneManager()
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials.find("lambert3SG")->second);
 
 	sceneGraph->addChild(cube);
 /* */
@@ -46,7 +46,7 @@ SceneManager::SceneManager()
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 /* */
 	T = mf.translation(3.0f, 3.0f, -3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials.find("lambert4SG")->second);
 	sceneGraph->addChild(light);
 /* * /
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), -45.0f);

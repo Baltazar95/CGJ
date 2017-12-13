@@ -30,7 +30,7 @@ class Mesh
 		void destroyBufferObjects();
 		void draw(const GLint &uniformId, const Matrix4 &modelMatrix);
 		void draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition);
-		void setMaterial(Materials &m);
+		void setMaterial(Materials m);
 };
 
 #endif // !__MESH_H__
