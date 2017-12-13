@@ -127,5 +127,4 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 void Mesh::setMaterial(Materials m) {
 
 	//material = m;
-
 }

@@ -6,10 +6,49 @@ Materials::Materials(std::stringstream &sin) {
 }
 
 
+/*****************************************
+***************** GETTERS ****************
+******************************************/
+
 std::string Materials::getName() {
 
 	return _mat_name;
 }
+
+Vector3 Materials::getAmbient() {
+	return _ambient;
+}
+
+Vector3 Materials::getDiffuse() {
+	return _diffuse;
+}
+
+Vector3 Materials::getSpecular() {
+	return _specular;
+}
+
+Vector3 Materials::getEmission() {
+	return _emission;
+}
+
+float Materials::getShininess() {
+	return _shininess;
+}
+
+float Materials::getNi() {
+	return _Ni;
+}
+
+float Materials::getDissolve() {
+	return _dissolve;
+}
+
+int Materials::getIllum() {
+	return _illum;
+}
+
+
+
 
 
 void Materials::parseName(std::stringstream &sin) {
@@ -47,6 +86,9 @@ void Materials::parseShininess(std::stringstream &sin) {
 void Materials::parseDissolve(std::stringstream &sin) {
 	sin.ignore(2, ' ');
 	sin >> _dissolve;
+	if (_dissolve == NULL) {
+		_dissolve = 1;
+	}
 }
 
 void Materials::parseNi(std::stringstream &sin) {

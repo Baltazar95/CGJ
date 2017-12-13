@@ -22,6 +22,14 @@ public:
 	Materials(){}
 	Materials(std::stringstream &sin);
 	std::string getName();
+	Vector3 getAmbient();
+	Vector3 getDiffuse();
+	Vector3 getSpecular();
+	Vector3 getEmission();
+	float getShininess();
+	float getNi();
+	float getDissolve();
+	int getIllum();
 	void parseName(std::stringstream &sin);
 	void parseAmbient(std::stringstream &sin);
 	void parseDiffuse(std::stringstream &sin);
