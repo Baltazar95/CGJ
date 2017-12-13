@@ -12,13 +12,13 @@
 class MaterialLoader {
 	
 	private:
-		std::map<std::string, Materials> _materials;
-		
+		std::map<std::string, Materials*> _materials;
+	
 	public:
 
 		void loadMaterialData(std::string &filename);
-		void parseMaterial(Materials &mat, std::stringstream& sin);
-		std::map<std::string, Materials> getMaterials();
+		void parseMaterial(Materials *mat, std::stringstream& sin);
+		std::map<std::string, Materials*> getMaterials();
 
 
 };

@@ -19,8 +19,7 @@ class SceneManager
 		SceneNode *tangram, *base, *cube, *pyramide, *smallPyramideLeft, *smallPyramideRight, *bigPyramideLeft, *bigPyramideRight, *parallelepiped;
 		SceneNode *light;
 		MatrixFactory mf;
-		MaterialLoader ml;
-		std::map<std::string, Materials> materials;
+		std::map<std::string, Materials*> materials;
 
 	public:
 		SceneManager();

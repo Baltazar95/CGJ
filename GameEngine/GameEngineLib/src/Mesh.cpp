@@ -6,6 +6,7 @@ Mesh::Mesh(std::string filename, Materials *m)
 	initNormals = normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
 	material = m;
+
 	Obj_Loader *loader = new Obj_Loader(filename);
 	loader->processMeshData(vertices, normals, texCoords);
 	//this vector is usaed to store the normals as they are when uploaded to the engine

@@ -6,35 +6,37 @@ SceneManager::SceneManager()
 	ShaderProgram *sh = createShader();
 
 	//TODO
+	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
 
+
 	materials = ml.getMaterials();
-	
+
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
 
 
 	//TODO
-	tangram = new SceneNode(nullptr, sh, mf.identity4(), materials.find("lambert2SG")->second);
+	tangram = new SceneNode(nullptr, sh, mf.identity4());
 
 
 	sceneGraph = tangram;
-/* * /
-	S = mf.scale(10.0f, 10.0f, 0.1f, 1.0f);
-	R = mf.rotation(Vector4(0.0f, 1.0f, 0.0f, 0.0f), 180.0f);
-	T = mf.translation(10.0f, -10.0f, -1.1f);
-	base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*R*S);
-	sceneGraph->addChild(base);
-/* */
+	/* * /
+		S = mf.scale(10.0f, 10.0f, 0.1f, 1.0f);
+		R = mf.rotation(Vector4(0.0f, 1.0f, 0.0f, 0.0f), 180.0f);
+		T = mf.translation(10.0f, -10.0f, -1.1f);
+		base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*R*S);
+		sceneGraph->addChild(base);
+	/* */
 	//T = mf.translation(1.0f, -1.0f, 0.0f);
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials.find("lambert3SG")->second);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T);
 
 	sceneGraph->addChild(cube);
-/* */
+	/* */
 	ShaderProgram *shader = new ShaderProgram();
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MoonVertexShader.glsl", GL_VERTEX_SHADER);
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MoonFragmentShader.glsl", GL_FRAGMENT_SHADER);
@@ -44,9 +46,9 @@ SceneManager::SceneManager()
 	shader->linkProgram();
 	shader->addUniform("ModelMatrix");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
-/* */
+	/* */
 	T = mf.translation(3.0f, 3.0f, -3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials.find("lambert4SG")->second);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert4SG"]), shader, T);
 	sceneGraph->addChild(light);
 /* * /
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), -45.0f);
