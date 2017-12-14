@@ -73,25 +73,10 @@ void Mesh::destroyBufferObjects()
 	GlUtils::checkOpenGLError("ERROR: Could not delete VAOs and VBOs");
 }
 
-void Mesh::draw(const GLint &uniformId, const Matrix4 &modelMatrix)
+void Mesh::draw()
 {
 
 	glBindVertexArray(VaoId);
-	glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
-	glBindVertexArray(0);
-
-	//TODO: well this function blocks the framebuffer, why?
-	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
-}
-
-void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition)
-{
-	const GLfloat pos[] = { lightPosition.x, lightPosition.y, lightPosition.z };
-
-	glBindVertexArray(VaoId);
-	//glUniformMatrix4fv(uniformId, 1, GL_FALSE, modelMatrix.matrix);
-	//glUniform3fv(uniformLightPosId, 1, pos);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
