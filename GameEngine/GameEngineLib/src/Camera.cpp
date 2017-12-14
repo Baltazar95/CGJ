@@ -7,6 +7,7 @@ Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 	timeamount = 0;
 	updatebool = true;
 	translation = mf.translation(position);
+	eye = position;
 
 	glGenBuffers(1, &VboId);
 	glBindBuffer(GL_UNIFORM_BUFFER, VboId);

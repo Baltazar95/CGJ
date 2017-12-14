@@ -48,14 +48,13 @@
     <ClInclude Include="src\KeyBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\FrameBuffer.h">
-=======
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\MaterialLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Materials.h">
->>>>>>> 9dd3e826998812b30661aae4eff0c8d67f8b8dff
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -90,14 +89,13 @@
     <ClCompile Include="src\KeyBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\FrameBuffer.cpp">
-=======
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\MaterialLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Materials.cpp">
->>>>>>> 9dd3e826998812b30661aae4eff0c8d67f8b8dff
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

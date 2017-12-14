@@ -6,7 +6,7 @@ SceneNode::SceneNode()
 	worldModel = modelMatrix = mf.identity4();
 }
 
-SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model)
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m)
 {
 	MatrixFactory mf;
 
@@ -14,6 +14,7 @@ SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model)
 	sh = shader;
 	modelMatrix = model;
 	worldModel = mf.identity4();
+	material = m;
 }
 
 SceneNode::~SceneNode()
@@ -98,15 +99,40 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 	{
 		useShader->useProgram();
 
-		if (useShader->containsUniform("LightPos"))
+		if (useShader->containsUniform("light.position"))
 		{
+			const GLfloat ambient[] = { /*material->getAmbient().x,  material->getAmbient().y,  material->getAmbient().z*/1.0f, 0.5f, 0.31f };
+			glUniform3fv(useShader->getUniform("material.ambient"), 1, ambient);
+
+			const GLfloat diffuse[] = { /*material->getDiffuse().x,  material->getDiffuse().y,  material->getDiffuse().z*/1.0f, 0.5f, 0.31f };
+			glUniform3fv(useShader->getUniform("material.diffuse"), 1, diffuse);
+
+			const GLfloat specular[] = { /*material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z*/0.5f, 0.5f, 0.5f };
+			glUniform3fv(useShader->getUniform("material.specular"), 1, specular);
+
+			const GLfloat emissive[] = { /*material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z*/0.5f, 0.05f, 0.05f };
+			glUniform3fv(useShader->getUniform("material.emissive"), 1, emissive);
+
+			glUniform1f(useShader->getUniform("material.shininess"), /*material->getShininess()*/32.0f);
+
+			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
+			glUniform3fv(useShader->getUniform("light.position"), 1, pos);
+
+			const GLfloat lambient[] = { 0.2f, 0.2f, 0.2f };
+			glUniform3fv(useShader->getUniform("light.ambient"), 1, lambient);
+
+			const GLfloat ldiffuse[] = { 0.5f, 0.5f, 0.5f };
+			glUniform3fv(useShader->getUniform("light.diffuse"), 1, ldiffuse);
+
+			const GLfloat lspecular[] = { 1.0f, 1.0f, 1.0f };
+			glUniform3fv(useShader->getUniform("light.specular"), 1, lspecular);
+
+			//glUniform3fv(useShader->getUniform("ViewPosition"), 1, pos);
 
 			glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(worldModel).matrix);
 			glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, worldModel.matrix);
-			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
-			//glUniform3fv(useShader->getUniform("ViewPosition"), 1, pos);
-			glUniform3fv(useShader->getUniform("LightPos"), 1, pos);
-			mesh->draw(useShader->getUniform("ModelMatrix"), useShader->getUniform("LightPos"), worldModel, lightPos);
+
+			mesh->draw(useShader->getUniform("ModelMatrix"), useShader->getUniform("lightPos"), worldModel, lightPos);
 		}
 		else
 		{

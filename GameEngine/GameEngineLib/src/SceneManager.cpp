@@ -29,7 +29,7 @@ SceneManager::SceneManager()
 
 
 	//TODO
-	tangram = new SceneNode(nullptr, sh, mf.identity4());
+	tangram = new SceneNode(nullptr, sh, mf.identity4(), nullptr);
 
 
 	sceneGraph = tangram;
@@ -44,13 +44,13 @@ SceneManager::SceneManager()
 
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", nullptr), nullptr, T*S);
+	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr);
 	sceneGraph->addChild(water);
 
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"]);
 
 	sceneGraph->addChild(cube);
 	/* */
@@ -65,9 +65,8 @@ SceneManager::SceneManager()
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	/* */
-	T = mf.translation(3.0f, 3.0f, -3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert4SG"]), shader, T);
-
+	T = mf.translation(1.5f, 1.5f, 3.0f);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials["lambert4SG"]);
 	sceneGraph->addChild(light);
 
 /* * /
@@ -116,6 +115,7 @@ SceneManager::SceneManager()
 
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
+	waterShader->disableProgram();
 
 	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &quadVBO);
@@ -149,9 +149,22 @@ ShaderProgram *SceneManager::createShader()
 	shader->addAttribute(TEXCOORDS, "inTexcoord");
 	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
-	shader->addUniform("LightPos");
 	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
@@ -206,4 +219,6 @@ void SceneManager::drawQuad()
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, fbo->getFrame());	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	waterShader->disableProgram();
+
 }

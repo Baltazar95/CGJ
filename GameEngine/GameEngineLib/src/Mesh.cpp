@@ -1,11 +1,10 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::string filename, Materials *m)
+Mesh::Mesh(std::string filename)
 {
 	vertices = std::vector<Vector3>();
 	normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
-	material = m;
 
 	Obj_Loader *loader = new Obj_Loader(filename);
 	loader->processMeshData(vertices, normals, texCoords);
@@ -79,6 +78,7 @@ void Mesh::draw(const GLint &uniformId, const Matrix4 &modelMatrix)
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
+	//TODO: well this function blocks the framebuffer, why?
 	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
 
@@ -92,5 +92,6 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
+	//TODO: well this function blocks the framebuffer, why?
 	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
