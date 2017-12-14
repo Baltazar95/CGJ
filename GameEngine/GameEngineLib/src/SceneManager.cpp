@@ -18,13 +18,24 @@ SceneManager::SceneManager()
 	//shader creation
 	ShaderProgram *blShader = createBlinnPhongShader();
 	ShaderProgram *moonShader = createMoonShader();
+	ShaderProgram *textureShader = createSimpleTextureShader();
 	waterShader = createWaterShader();
 
 /* */
 	//import materials
 	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
+
+	TextureLoader tl;
+	//por aqui todas as texturas
+	//texture 1 - wood
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
+	//texture 2
+	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+
 	materials = ml.getMaterials();
+	textures = tl.getTextures();
+
 
 /* */
 	//setup cameras
@@ -34,22 +45,22 @@ SceneManager::SceneManager()
 
 /* */
 	//setup scene
-	sceneGraph = new SceneNode(nullptr, blShader, mf.identity4(), nullptr);
+	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr);
+	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr, textures["wood"]);
 	sceneGraph->addChild(water);
 
 /* */
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"]);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"], textures["wood"]);
 	sceneGraph->addChild(cube);
 
 /* */
 	T = mf.translation(1.5f, 1.5f, 3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), moonShader, T, materials["lambert4SG"]);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
 /* */
@@ -105,6 +116,9 @@ ShaderProgram *SceneManager::createBlinnPhongShader()
 
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
+
+	//shader->addUniform("tex");
+
 	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
@@ -128,7 +142,38 @@ ShaderProgram *SceneManager::createMoonShader()
 
 ShaderProgram *SceneManager::createSimpleTextureShader()
 {
-	return nullptr;
+	ShaderProgram *shader = new ShaderProgram();
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SimpleTextureVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SimpleTextureFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->compileShaders();
+	shader->createShaderProgram();
+	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
+	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
+	shader->addUniform("NormalMatrix");
+	shader->addUniform("ModelMatrix");
+
+	shader->addUniform("tex");
+
+	//shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
+
+	return shader;
 }
 
 ShaderProgram *SceneManager::createWaterShader()

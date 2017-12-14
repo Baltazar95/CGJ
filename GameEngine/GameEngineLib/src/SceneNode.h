@@ -4,6 +4,7 @@
 #include "ShaderProgram.h"
 #include "Mesh.h"
 #include "MathAux.h"
+#include "Texture.h"
 #include "Materials.h"
 
 class SceneNode
@@ -15,10 +16,11 @@ class SceneNode
 		Mesh *mesh;
 		Materials *material;
 		Matrix4 modelMatrix, worldModel;
+		Texture *texture;
 
 	public:
 		SceneNode();
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m);
+		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m, Texture *newTexture);
 		~SceneNode();
 		void setParent(SceneNode *parentNode);
 		void setShader(ShaderProgram *shader);

@@ -9,6 +9,7 @@
 #include "KeyBuffer.h"
 #include "FrameBuffer.h"
 #include "MaterialLoader.h"
+#include "TextureLoader.h"
 
 //// FRAME TYPE //////
 enum FrameType
@@ -33,6 +34,8 @@ class SceneManager
 		unsigned int quadVAO, quadVBO;
 		std::map<std::string, Materials*> materials;
 		FrameType frameType = REFLECTION;
+		std::map<std::string, Texture*> textures;
+
 
 	public:
 		SceneManager();

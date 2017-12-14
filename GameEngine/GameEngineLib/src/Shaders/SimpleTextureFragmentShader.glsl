@@ -30,6 +30,8 @@ struct Light
 };
 uniform Light light;
 
+uniform sampler2D tex;
+
 void main(void)
 {
 	//ambient
@@ -52,5 +54,6 @@ void main(void)
 	vec3 specular = light.specular * (spec * material.specular);
 
 	vec3 result = (ambient + diffuse + specular) + material.emissive;
-	FragmentColor = vec4(result, 1.0);
+	//FragmentColor = vec4(result, 1.0);
+	FragmentColor = texture(tex, exTexcoord) * vec4(result, 1.0);
 }

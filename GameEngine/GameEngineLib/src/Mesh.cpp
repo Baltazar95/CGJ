@@ -31,8 +31,10 @@ void Mesh::createBufferObjects()
 		glEnableVertexAttribArray(VERTICES);
 		glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);
 
+
 		if (!texCoords.empty())
 		{
+
 			glGenBuffers(1, &vboTexCoords);
 
 			glBindBuffer(GL_ARRAY_BUFFER, vboTexCoords);
@@ -73,6 +75,7 @@ void Mesh::destroyBufferObjects()
 
 void Mesh::draw()
 {
+
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
