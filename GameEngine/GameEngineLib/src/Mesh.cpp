@@ -1,14 +1,14 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::string filename)
+Mesh::Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, std::vector<Vector2> &newtexCoords)
 {
-	vertices = std::vector<Vector3>();
-	normals = std::vector<Vector3>();
-	texCoords = std::vector<Vector2>();
+	vertices = newvertices;
+	normals = newnormals;
+	texCoords = newtexCoords;
 
-	Obj_Loader *loader = new Obj_Loader(filename);
-	loader->processMeshData(vertices, normals, texCoords);
-	delete loader;
+	//Obj_Loader *loader = new Obj_Loader(filename);
+	//loader->processMeshData(vertices, normals, texCoords);
+	//delete loader;
 	createBufferObjects();
 }
 

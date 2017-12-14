@@ -21,6 +21,7 @@ SceneManager::SceneManager()
 	ShaderProgram *textureShader = createSimpleTextureShader();
 	waterShader = createWaterShader();
 
+
 /* */
 	//import materials
 	MaterialLoader ml;
@@ -31,11 +32,14 @@ SceneManager::SceneManager()
 	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
-	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
 
+	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), meshes);
+	//loader->processMeshData(vertices, normals, texCoords);
+	//delete loader;
 
 /* */
 	//setup cameras
@@ -55,8 +59,13 @@ SceneManager::SceneManager()
 
 /* */
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"], textures["wood"]);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, nullptr, textures["wood"]);
 	sceneGraph->addChild(cube);
+
+/* */
+	T = mf.translation(-1.0f, -1.0f, 0.0f);
+	bridge = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/bridge.obj"), nullptr, T, nullptr, textures["wood"]);
+	sceneGraph->addChild(bridge);
 
 /* */
 	T = mf.translation(1.5f, 1.5f, 3.0f);

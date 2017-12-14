@@ -11,17 +11,23 @@
 class Obj_Loader
 {
 	private:
-		std::vector <Vector3> vertexData, normalData;
-		std::vector <Vector2> texCoordData;
+		std::vector <Vector3> vertexData, normalData, vertexAux, normalAux;
+		std::vector <Vector2> texCoordData, texCoordAux;
 		std::vector <unsigned int> vertexIdx, texCoordIdx, normalIdx;
 		bool texcoordsLoaded = false, normalsLoaded = false;
-
+		std::string material;
+		bool smoothedFace = false;
+		
 		void parseVertex(std::stringstream& sin);
 		void parseTexcoord(std::stringstream& sin);
 		void parseNormal(std::stringstream& sin);
 		void parseFace(std::stringstream& sin);
 		void parseLine(std::stringstream& sin);
+		void parseMesh(std::stringstream& sin);
 		void loadMeshData(std::string& filename);
+		std::vector <Vector3> getVertices() { return vertexAux; };
+		std::vector <Vector3> getNormals() { return normalAux; };
+		std::vector <Vector3> getTextures() { return normalAux; };
 
 	public:
 		Obj_Loader(std::string& filename);
