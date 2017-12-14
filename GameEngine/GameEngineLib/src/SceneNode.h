@@ -5,7 +5,7 @@
 #include "Mesh.h"
 #include "MathAux.h"
 #include "Texture.h"
-
+#include "Materials.h"
 
 class SceneNode
 {
@@ -14,13 +14,13 @@ class SceneNode
 		std::vector<SceneNode*> children;
 		ShaderProgram *sh;
 		Mesh *mesh;
+		Materials *material;
 		Matrix4 modelMatrix, worldModel;
 		Texture *texture;
 
 	public:
 		SceneNode();
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Texture *newTexture);
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model);
+		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m, Texture *newTexture);
 		~SceneNode();
 		void setParent(SceneNode *parentNode);
 		void setShader(ShaderProgram *shader);

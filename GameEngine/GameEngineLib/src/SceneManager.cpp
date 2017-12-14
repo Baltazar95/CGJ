@@ -1,5 +1,16 @@
 #include "SceneManager.h"
 
+float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+						 // positions   // texCoords
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	-1.0f, -1.0f,  0.0f, 0.0f,
+	1.0f, -1.0f,  1.0f, 0.0f,
+
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	1.0f, -1.0f,  1.0f, 0.0f,
+	1.0f,  1.0f,  1.0f, 1.0f
+};
+
 SceneManager::SceneManager()
 {
 	Matrix4 S, R, T;
@@ -27,7 +38,7 @@ SceneManager::SceneManager()
 
 
 	//TODO
-	tangram = new SceneNode(nullptr, sh, mf.identity4());
+	tangram = new SceneNode(nullptr, sh, mf.identity4(), nullptr, nullptr);
 
 
 	sceneGraph = tangram;
@@ -39,11 +50,18 @@ SceneManager::SceneManager()
 		sceneGraph->addChild(base);
 	/* */
 	//T = mf.translation(1.0f, -1.0f, 0.0f);
+
+	T = mf.translation(-25.0f, -20.0f, 0.0f);
+	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
+	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr, nullptr);
+	sceneGraph->addChild(water);
+
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
 
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T, textures["wood"]);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"], textures["wood"]);
+
 
 	sceneGraph->addChild(cube);
 	/* */
@@ -58,10 +76,10 @@ SceneManager::SceneManager()
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	/* */
-	T = mf.translation(3.0f, 3.0f, -3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert4SG"]), shader, T);
-
+	T = mf.translation(1.5f, 1.5f, 3.0f);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
+
 /* * /
 	R = mf.rotation(Vector4(0.0f, 0.0f, 1.0f, 0.0f), -45.0f);
 	T = mf.translation(-1.0f, -3.2f, 0.0f);
@@ -96,6 +114,31 @@ SceneManager::SceneManager()
 	bigPyramideLeft = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Pyramide.obj"), nullptr, T*R*S);
 	sceneGraph->addChild(bigPyramideLeft);
 /* */
+
+	waterShader = new ShaderProgram();
+	waterShader->addShader("../../GameEngine/GameEngineLib/src/Shaders/WaterVertexShader.glsl", GL_VERTEX_SHADER);
+	waterShader->addShader("../../GameEngine/GameEngineLib/src/Shaders/WaterFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	waterShader->compileShaders();
+	waterShader->createShaderProgram();
+	waterShader->addAttribute(VERTICES, "position");
+	waterShader->linkProgram();
+	waterShader->addUniform("screenTexture");
+
+	waterShader->useProgram();
+	glUniform1i(waterShader->getUniform("screenTexture"), 0);
+	waterShader->disableProgram();
+
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+	fbo = new FrameBuffer(640, 480);
 }
 
 SceneManager::~SceneManager()
@@ -109,18 +152,33 @@ SceneManager::~SceneManager()
 ShaderProgram *SceneManager::createShader()
 {
 	ShaderProgram *shader = new ShaderProgram();
-	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/TextureVertexShader.glsl", GL_VERTEX_SHADER);
-	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/TextureFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/BlinnPhongVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/BlinnPhongFragmentShader.glsl", GL_FRAGMENT_SHADER);
 	shader->compileShaders();
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "in_Position");
 	shader->addAttribute(TEXCOORDS, "inTexcoord");
 	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
-	shader->addUniform("LightPos");
-	shader->addUniform("tex");
+
+	//shader->addUniform("tex");
+
 	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
@@ -159,4 +217,22 @@ void SceneManager::drawScene()
 {
 	camera->setCamera();
 	sceneGraph->draw(nullptr, light->getWorldPosition());
+}
+
+void SceneManager::bindFrameBuffer() {
+	fbo->bindFrameBuffer();
+}
+
+void SceneManager::unbindFrameBuffer() {
+	fbo->unbindFrameBuffer();
+}
+
+void SceneManager::drawQuad()
+{
+	waterShader->useProgram();
+	glBindVertexArray(quadVAO);
+	glBindTexture(GL_TEXTURE_2D, fbo->getFrame());	// use the color attachment texture as the texture of the quad plane
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	waterShader->disableProgram();
+
 }

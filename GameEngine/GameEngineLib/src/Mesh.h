@@ -7,7 +7,6 @@
 
 #include "MathAux.h"
 #include "Obj_Loader.h"
-#include "Materials.h"
 
 #define VERTICES 0
 #define TEXCOORDS 1
@@ -21,11 +20,10 @@ class Mesh
 		std::vector<Vector3> vertices;
 		std::vector<Vector3> normals;
 		std::vector<Vector2> texCoords;
-		Materials *material;
 
 	public:
 		Mesh() {};
-		Mesh(std::string filename, Materials *m);
+		Mesh(std::string filename);
 		~Mesh();
 		void createBufferObjects();
 		void destroyBufferObjects();
