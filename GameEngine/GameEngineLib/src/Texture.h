@@ -4,11 +4,6 @@
 #include <sstream>
 #include "GlUtils.h"
 
-//#define STB_IMAGE_IMPLEMENTATION
-//#define STBI_ASSERT(x)
-#include "stb_image.h"
-
-//#define STBI_MALLOC, STBI_REALLOC, and STBI_FREE
 
 class Texture {
 

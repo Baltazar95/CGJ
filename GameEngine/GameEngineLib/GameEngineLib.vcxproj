@@ -203,7 +203,6 @@
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\MathAux.cpp" />
-    <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
   </ItemGroup>
