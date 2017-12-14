@@ -18,12 +18,13 @@ before you include this file in *one* C or C++ file to create the implementation
 
 #include ...
 
-#include ...
+#include STBI_ASSERT(x)
 
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "stb_image.h"
 
+#define STBI_MALLOC, STBI_REALLOC, and STBI_FREE
 
 
 You can #define STBI_ASSERT(x) before the #include to avoid using assert.h.
@@ -201,7 +202,6 @@ Christian Floisand      Kevin Schmidt                         github:poppolopopp
 
 
 #ifndef STBI_INCLUDE_STB_IMAGE_H
-
 #define STBI_INCLUDE_STB_IMAGE_H
 
 

@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "KeyBuffer.h"
 #include "MaterialLoader.h"
+#include "TextureLoader.h"
 
 class SceneManager
 {
@@ -20,6 +21,7 @@ class SceneManager
 		SceneNode *light;
 		MatrixFactory mf;
 		std::map<std::string, Materials*> materials;
+		std::map<std::string, Texture*> textures;
 
 	public:
 		SceneManager();
