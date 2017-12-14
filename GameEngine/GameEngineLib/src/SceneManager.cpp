@@ -14,13 +14,12 @@ SceneManager::SceneManager()
 	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
-	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
 
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
 
-	
 
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
@@ -109,8 +108,8 @@ SceneManager::~SceneManager()
 ShaderProgram *SceneManager::createShader()
 {
 	ShaderProgram *shader = new ShaderProgram();
-	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/BlinnPhongVertexShader.glsl", GL_VERTEX_SHADER);
-	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/BlinnPhongFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/TextureVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/TextureFragmentShader.glsl", GL_FRAGMENT_SHADER);
 	shader->compileShaders();
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "in_Position");
@@ -120,6 +119,7 @@ ShaderProgram *SceneManager::createShader()
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
 	shader->addUniform("LightPos");
+	shader->addUniform("tex");
 	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
