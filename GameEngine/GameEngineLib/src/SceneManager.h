@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "KeyBuffer.h"
+#include "FrameBuffer.h"
 #include "MaterialLoader.h"
 
 class SceneManager
@@ -18,7 +19,11 @@ class SceneManager
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 		SceneNode *tangram, *base, *cube, *pyramide, *smallPyramideLeft, *smallPyramideRight, *bigPyramideLeft, *bigPyramideRight, *parallelepiped;
 		SceneNode *light;
+		SceneNode *water;
 		MatrixFactory mf;
+		FrameBuffer *fbo;
+		ShaderProgram *waterShader;
+		unsigned int quadVAO, quadVBO;
 		std::map<std::string, Materials*> materials;
 
 	public:
@@ -28,6 +33,9 @@ class SceneManager
 		//TODO missing parameters to update
 		void updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed);
 		void drawScene();
+		void bindFrameBuffer();
+		void unbindFrameBuffer();
+		void drawQuad();
 };
 
 #endif // !__SCENEMANAGER_H__

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -182,6 +182,7 @@
     <ClInclude Include="src\Obj_Loader.h" />
     <ClInclude Include="src\OpenGL_Abstract_API.h" />
     <ClInclude Include="src\OpenGL_API.h" />
+    <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\SceneNode.h" />
     <ClInclude Include="src\ShaderProgram.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Obj_Loader.cpp" />
     <ClCompile Include="src\OpenGL_API.cpp" />
+    <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />

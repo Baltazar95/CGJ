@@ -79,7 +79,7 @@ void Mesh::draw(const GLint &uniformId, const Matrix4 &modelMatrix)
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
-	GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
+	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
 
 void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition)
@@ -92,10 +92,5 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);
 
-	GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
+	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
-
-/*void Mesh::setMaterial(Materials m) {
-
-	material = m;
-}*/
