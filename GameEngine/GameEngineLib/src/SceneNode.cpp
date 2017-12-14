@@ -6,15 +6,16 @@ SceneNode::SceneNode()
 	worldModel = modelMatrix = mf.identity4();
 }
 
-SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m)
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Materials *m, Texture *newTexture)
 {
 	MatrixFactory mf;
 
 	mesh = newMesh;
 	sh = shader;
 	modelMatrix = model;
-	worldModel = mf.identity4();
+	texture = newTexture;
 	material = m;
+	worldModel = mf.identity4();
 }
 
 SceneNode::~SceneNode()
@@ -97,6 +98,8 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 
 	if (mesh != nullptr)
 	{
+
+
 		useShader->useProgram();
 
 		if (useShader->containsUniform("light.position"))
@@ -114,6 +117,12 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 			glUniform3fv(useShader->getUniform("material.emissive"), 1, emissive);
 
 			glUniform1f(useShader->getUniform("material.shininess"), /*material->getShininess()*/32.0f);
+
+			//// bind Texture
+			//glUniform1i(useShader->getUniform("tex"), 0);
+
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, texture->getTexture());
 
 			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
 			glUniform3fv(useShader->getUniform("light.position"), 1, pos);
@@ -139,6 +148,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 			mesh->draw(useShader->getUniform("ModelMatrix"), worldModel);
 		}
 
+		
 		useShader->disableProgram();
 	}
 

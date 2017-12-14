@@ -9,6 +9,7 @@
 #include "KeyBuffer.h"
 #include "FrameBuffer.h"
 #include "MaterialLoader.h"
+#include "TextureLoader.h"
 
 class SceneManager
 {
@@ -25,6 +26,7 @@ class SceneManager
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
 		std::map<std::string, Materials*> materials;
+		std::map<std::string, Texture*> textures;
 
 	public:
 		SceneManager();

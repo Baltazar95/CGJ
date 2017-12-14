@@ -20,8 +20,17 @@ SceneManager::SceneManager()
 	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
 
+	TextureLoader tl;
+	//por aqui todas as texturas
+	//texture 1 - wood
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
+	//texture 2
+	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+
 
 	materials = ml.getMaterials();
+	textures = tl.getTextures();
+
 
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
@@ -29,7 +38,7 @@ SceneManager::SceneManager()
 
 
 	//TODO
-	tangram = new SceneNode(nullptr, sh, mf.identity4(), nullptr);
+	tangram = new SceneNode(nullptr, sh, mf.identity4(), nullptr, nullptr);
 
 
 	sceneGraph = tangram;
@@ -44,13 +53,15 @@ SceneManager::SceneManager()
 
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr);
+	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr, nullptr);
 	sceneGraph->addChild(water);
 
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
+
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"]);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, materials["lambert3SG"], textures["wood"]);
+
 
 	sceneGraph->addChild(cube);
 	/* */
@@ -66,7 +77,7 @@ SceneManager::SceneManager()
 
 	/* */
 	T = mf.translation(1.5f, 1.5f, 3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials["lambert4SG"]);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
 /* * /
@@ -165,6 +176,9 @@ ShaderProgram *SceneManager::createShader()
 
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
+
+	//shader->addUniform("tex");
+
 	//shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
