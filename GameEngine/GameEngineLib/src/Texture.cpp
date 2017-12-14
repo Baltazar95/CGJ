@@ -5,6 +5,11 @@
 
 Texture::Texture(std::string &sin) {
 
+	std::string last_element(sin.substr(sin.rfind("/") + 1));
+	std::string no_extension(last_element.substr(0, last_element.rfind(".")));
+
+	_texture_name = no_extension;
+
 	const char* cstr = sin.c_str();
 
 	glGenTextures(1, &texture);
@@ -18,7 +23,7 @@ Texture::Texture(std::string &sin) {
 	
 	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 											// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load(cstr, &width, &height, &nrChannels, 0);
+	data = stbi_load(cstr, &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

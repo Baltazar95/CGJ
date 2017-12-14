@@ -12,6 +12,7 @@ private:
 	unsigned int texture;
 	std::string _texture_name;
 	int width, height, nrChannels;
+	unsigned char *data;
 
 public:
 

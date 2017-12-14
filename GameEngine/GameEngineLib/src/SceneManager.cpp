@@ -11,11 +11,16 @@ SceneManager::SceneManager()
 
 	TextureLoader tl;
 	//por aqui todas as texturas
+	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
+	//texture 2
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
 
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
+
+	
 
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
@@ -38,7 +43,7 @@ SceneManager::SceneManager()
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
 	//TODO
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T);
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T, textures["wood"]);
 
 	sceneGraph->addChild(cube);
 	/* */

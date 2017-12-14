@@ -94,8 +94,3 @@ void Mesh::draw(const GLint &uniformId, const GLint &uniformLightPosId, const Ma
 
 	GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
-
-/*void Mesh::setMaterial(Materials m) {
-
-	material = m;
-}*/
