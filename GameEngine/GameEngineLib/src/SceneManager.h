@@ -10,6 +10,15 @@
 #include "FrameBuffer.h"
 #include "MaterialLoader.h"
 
+//// FRAME TYPE //////
+enum FrameType
+{
+	REFLECTION,
+	BLOOM,
+	NORMAL
+};
+//////////////////////////
+
 class SceneManager
 {
 	private:
@@ -17,19 +26,21 @@ class SceneManager
 		Camera *camera;
 		const GLuint UBO_BP = 0;
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		SceneNode *tangram, *base, *cube, *pyramide, *smallPyramideLeft, *smallPyramideRight, *bigPyramideLeft, *bigPyramideRight, *parallelepiped;
-		SceneNode *light;
-		SceneNode *water;
+		SceneNode *cube, *light, *water;
 		MatrixFactory mf;
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
 		std::map<std::string, Materials*> materials;
+		FrameType frameType = REFLECTION;
 
 	public:
 		SceneManager();
 		~SceneManager();
-		ShaderProgram *createShader();
+		ShaderProgram *createBlinnPhongShader();
+		ShaderProgram *createMoonShader();
+		ShaderProgram *createSimpleTextureShader();
+		ShaderProgram *createWaterShader();
 		//TODO missing parameters to update
 		void updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed);
 		void drawScene();

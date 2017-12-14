@@ -27,8 +27,7 @@ class Mesh
 		~Mesh();
 		void createBufferObjects();
 		void destroyBufferObjects();
-		void draw(const GLint &uniformId, const Matrix4 &modelMatrix);
-		void draw(const GLint &uniformId, const GLint &uniformLightPosId, const Matrix4 &modelMatrix, const Vector3 &lightPosition);
+		void draw();
 };
 
 #endif // !__MESH_H__
