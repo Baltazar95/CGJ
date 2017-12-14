@@ -1,10 +1,11 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::string filename)
+Mesh::Mesh(std::string filename, Materials *m)
 {
 	vertices = std::vector<Vector3>();
 	normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
+	material = m;
 
 	Obj_Loader *loader = new Obj_Loader(filename);
 	loader->processMeshData(vertices, normals, texCoords);

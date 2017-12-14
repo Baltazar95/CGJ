@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "KeyBuffer.h"
 #include "FrameBuffer.h"
+#include "MaterialLoader.h"
 
 class SceneManager
 {
@@ -23,6 +24,7 @@ class SceneManager
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
+		std::map<std::string, Materials*> materials;
 
 	public:
 		SceneManager();

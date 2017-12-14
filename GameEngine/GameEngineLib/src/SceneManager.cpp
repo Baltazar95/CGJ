@@ -16,31 +16,44 @@ SceneManager::SceneManager()
 	Matrix4 S, R, T;
 	ShaderProgram *sh = createShader();
 
+	//TODO
+	MaterialLoader ml;
+	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
+
+
+	materials = ml.getMaterials();
+
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
 
+
+	//TODO
 	tangram = new SceneNode(nullptr, sh, mf.identity4());
 
+
 	sceneGraph = tangram;
-/* * /
-	S = mf.scale(10.0f, 10.0f, 0.1f, 1.0f);
-	R = mf.rotation(Vector4(0.0f, 1.0f, 0.0f, 0.0f), 180.0f);
-	T = mf.translation(10.0f, -10.0f, -1.1f);
-	base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*R*S);
-	sceneGraph->addChild(base);
-/* */
+	/* * /
+		S = mf.scale(10.0f, 10.0f, 0.1f, 1.0f);
+		R = mf.rotation(Vector4(0.0f, 1.0f, 0.0f, 0.0f), 180.0f);
+		T = mf.translation(10.0f, -10.0f, -1.1f);
+		base = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*R*S);
+		sceneGraph->addChild(base);
+	/* */
 	//T = mf.translation(1.0f, -1.0f, 0.0f);
 
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S);
+	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", nullptr), nullptr, T*S);
 	sceneGraph->addChild(water);
 
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T);
+
+	//TODO
+	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T);
+
 	sceneGraph->addChild(cube);
-/* */
+	/* */
 	ShaderProgram *shader = new ShaderProgram();
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MoonVertexShader.glsl", GL_VERTEX_SHADER);
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MoonFragmentShader.glsl", GL_FRAGMENT_SHADER);
@@ -50,9 +63,11 @@ SceneManager::SceneManager()
 	shader->linkProgram();
 	shader->addUniform("ModelMatrix");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
-/* */
-	T = mf.translation(2.0f, 1.0f, 3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), shader, T);
+
+	/* */
+	T = mf.translation(3.0f, 3.0f, -3.0f);
+	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert4SG"]), shader, T);
+
 	sceneGraph->addChild(light);
 
 /* * /
