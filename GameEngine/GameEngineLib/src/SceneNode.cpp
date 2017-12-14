@@ -107,10 +107,19 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 
 	if (mesh != nullptr)
 	{
+
+
 		useShader->useProgram();
 
 		if (useShader->containsUniform("LightPos"))
 		{
+
+			// bind Texture
+			glUniform1i(useShader->getUniform("tex"), 0);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+
 
 			glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(worldModel).matrix);
 			glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, worldModel.matrix);
@@ -124,6 +133,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 			mesh->draw(useShader->getUniform("ModelMatrix"), worldModel);
 		}
 
+		
 		useShader->disableProgram();
 	}
 

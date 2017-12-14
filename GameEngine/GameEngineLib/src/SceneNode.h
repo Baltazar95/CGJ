@@ -6,6 +6,7 @@
 #include "MathAux.h"
 #include "Texture.h"
 
+
 class SceneNode
 {
 	private:

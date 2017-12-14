@@ -19,7 +19,9 @@ public:
 	Texture() {};
 	Texture(std::string &sin);
 	std::string getName();
-
+	unsigned int getTexture() {
+		return texture;
+	};
 };
 
 #endif // !__TEXTURE_H__

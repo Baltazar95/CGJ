@@ -7,7 +7,6 @@ void TextureLoader::loadTextureData(std::string &filename) {
 
 	_textures[text->getName()] = text;
 
-
 }
 
 

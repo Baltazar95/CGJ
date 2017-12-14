@@ -12,6 +12,7 @@ Texture::Texture(std::string &sin) {
 
 	const char* cstr = sin.c_str();
 
+
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// set the texture wrapping parameters

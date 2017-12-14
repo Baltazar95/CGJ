@@ -41,6 +41,7 @@ SceneManager::SceneManager()
 	//T = mf.translation(1.0f, -1.0f, 0.0f);
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 
+
 	//TODO
 	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj", materials["lambert3SG"]), nullptr, T, textures["wood"]);
 

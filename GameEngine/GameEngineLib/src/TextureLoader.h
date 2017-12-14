@@ -16,7 +16,6 @@ public:
 	void loadTextureData(std::string &filename);
 	std::map<std::string, Texture*> getTextures();
 
-
 };
 
 #endif // !__TEXTURELOADER_H__
