@@ -7,36 +7,50 @@ in vec3 exNormal;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition /*= vec3(0.0, 0.0, 20.0)*/;
-uniform vec3 lightPos;
+uniform vec3 viewPosition = vec3(0.0, 0.0, 20.0);
 
-//TODO: pass these values from the engine
-uniform vec3 objectColor = vec3(0.5, 0.5, 1.0);
-uniform vec3 lightColor = vec3(1.0);
+struct Material 
+{
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    vec3 emissive;
+
+    float shininess;
+};  
+uniform Material material;
+
+struct Light 
+{
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform Light light;
 
 void main(void)
 {
-	vec3 cam = vec3(viewPosition.x, viewPosition.y, viewPosition.z);
 	//ambient
-	float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = light.ambient * material.ambient;
 
     //diffuse
 	vec3 norm = normalize(exNormal);
-	vec3 lightDir = normalize(lightPos - exFragmentPosition); 
+	vec3 lightDir = normalize(light.position - exFragmentPosition); 
 
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightColor;
+	vec3 diffuse = light.diffuse * (diff * material.diffuse);
 
 	//specular
-	float specularStrength = 0.5;
-
-	vec3 viewDir = normalize(cam - exFragmentPosition);
+	vec3 viewDir = normalize(viewPosition - exFragmentPosition);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-	vec3 specular = specularStrength * spec * lightColor;
+	vec3 halfwayDir = normalize(lightDir + viewDir);
 
-	vec3 result = (ambient + diffuse + specular) * objectColor;
+	float spec = pow(max(dot(norm, halfwayDir), 0.0), material.shininess);
+	vec3 specular = light.specular * (spec * material.specular);
+
+	vec3 result = (ambient + diffuse + specular) + material.emissive;
 	FragmentColor = vec4(result, 1.0);
 }

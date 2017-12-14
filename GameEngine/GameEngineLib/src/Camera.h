@@ -54,6 +54,7 @@ class Camera
 		void setCamera();
 		Vector3 getFront() { return view; };
 		Vector3 getSide() { return side; };
+		Vector3 getEye() { return eye; };
 };
 
 #endif // !__CAMERA_H__
