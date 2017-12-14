@@ -2,21 +2,25 @@
 #define __OBJ_LOADER_H__
 
 #include <vector>
+#include <map>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include "MathAux.h"
+#include "Mesh.h"
 
 class Obj_Loader
 {
 	private:
-		std::vector <Vector3> vertexData, normalData, vertexAux, normalAux;
-		std::vector <Vector2> texCoordData, texCoordAux;
+		std::vector <Vector3> vertexData, normalData;
+		std::vector <Vector2> texCoordData;
 		std::vector <unsigned int> vertexIdx, texCoordIdx, normalIdx;
 		bool texcoordsLoaded = false, normalsLoaded = false;
-		std::string material;
+		std::string meshName;
 		bool smoothedFace = false;
+		Mesh *createdMesh;
+		std::map<std::string, Mesh*> *newMeshes;
 		
 		void parseVertex(std::stringstream& sin);
 		void parseTexcoord(std::stringstream& sin);
@@ -25,12 +29,9 @@ class Obj_Loader
 		void parseLine(std::stringstream& sin);
 		void parseMesh(std::stringstream& sin);
 		void loadMeshData(std::string& filename);
-		std::vector <Vector3> getVertices() { return vertexAux; };
-		std::vector <Vector3> getNormals() { return normalAux; };
-		std::vector <Vector3> getTextures() { return normalAux; };
 
 	public:
-		Obj_Loader(std::string& filename);
+		Obj_Loader(std::string& filename, std::map<std::string, Mesh*> *meshes);
 		~Obj_Loader();
 		void processMeshData(std::vector<Vector3> &vertices, std::vector<Vector3> &normals, std::vector<Vector2> &texCoords);
 };

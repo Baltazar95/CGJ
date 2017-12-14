@@ -13,6 +13,8 @@ float quadVertices[] = { // vertex attributes for a quad that fills the entire s
 
 SceneManager::SceneManager()
 {
+	meshes = new std::map<std::string, Mesh*>();
+
 	Matrix4 S, R, T;
 
 	//shader creation

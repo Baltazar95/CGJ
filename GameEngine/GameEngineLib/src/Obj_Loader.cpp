@@ -1,6 +1,6 @@
 #include "Obj_Loader.h"
 
-Obj_Loader::Obj_Loader(std::string& filename)
+Obj_Loader::Obj_Loader(std::string& filename, std::map<std::string, Mesh*> *meshes)
 {
 	vertexData = std::vector<Vector3>();
 	normalData = std::vector<Vector3>();
@@ -9,6 +9,8 @@ Obj_Loader::Obj_Loader(std::string& filename)
 	normalIdx = std::vector<unsigned int>();
 	texCoordIdx = std::vector<unsigned int>();
 
+	newMeshes = meshes;
+	createdMesh = new Mesh();
 	loadMeshData(filename);
 }
 
@@ -77,12 +79,16 @@ void Obj_Loader::parseFace(std::stringstream& sin)
 
 void Obj_Loader::parseMesh(std::stringstream& sin)
 {
+	createdMesh = new Mesh();
+
 
 
 	std::string token;
 	token = sin.str();
 	std::string last_element(token.substr(token.rfind(" ") + 1));
 	if (last_element.size() > 0) material = last_element;
+
+	newMeshes[]
 
 	//NEW MESH
 
@@ -111,6 +117,20 @@ void Obj_Loader::loadMeshData(std::string& filename)
 	std::string line;
 	while (std::getline(ifile, line)) {
 		parseLine(std::stringstream(line));
+	}
+	if (meshName.compare(""))
+	{
+		std::string name;
+		for (int it = filename.find(std::string(".")); filename[it] != '/'; --it)
+		{
+			name = filename[it] + name;
+		}
+
+		newMeshes->insert(std::pair<std::string, Mesh*>(name, createdMesh));
+	}
+	else
+	{
+		newMeshes->insert(std::pair<std::string, Mesh*>(meshName, createdMesh));
 	}
 	texcoordsLoaded = (texCoordIdx.size() > 0);
 	normalsLoaded = (normalIdx.size() > 0);
