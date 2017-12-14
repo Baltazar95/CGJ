@@ -14,7 +14,7 @@ Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 	glBindBufferBase(GL_UNIFORM_BUFFER, UBO_BP, VboId);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	GlUtils::checkOpenGLError("ERROR: Could not buffer object.");
+	GlUtils::checkOpenGLError("ERROR: Could not create uniform buffer object.");
 }
 
 Camera::~Camera()
