@@ -18,10 +18,12 @@ public:
 
 	Texture() {};
 	Texture(std::string &sin);
-	std::string getName();
+	Texture(std::string name, char* data);
 	unsigned int getTexture() {
 		return texture;
 	};
+	std::string Texture::getName();
+	void setTexture(unsigned int tex) { texture = tex; }
 };
 
 #endif // !__TEXTURE_H__

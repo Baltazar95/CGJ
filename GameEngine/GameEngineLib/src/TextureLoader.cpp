@@ -9,6 +9,14 @@ void TextureLoader::loadTextureData(std::string &filename) {
 
 }
 
+unsigned int TextureLoader::addNullTexture(std::string &filename) {
+
+	Texture *text = new Texture(filename, NULL);
+
+	_textures[text->getName()] = text;
+
+	return text->getTexture();
+}
 
 std::map<std::string, Texture*> TextureLoader::getTextures() {
 

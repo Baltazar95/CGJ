@@ -36,6 +36,8 @@ SceneManager::SceneManager()
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
+	Texture *watertex = new Texture("water", NULL);
+	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
 
@@ -57,9 +59,10 @@ SceneManager::SceneManager()
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
 	water = new SceneNode(meshes["Cube"], nullptr, T*S, nullptr, textures["wood"]);
+
 	sceneGraph->addChild(water);
 
-/* * /
+/* */
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 	cube = new SceneNode(meshes["Cube"], nullptr, T, nullptr, textures["wood"]);
 	sceneGraph->addChild(cube);
@@ -89,7 +92,7 @@ SceneManager::SceneManager()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	fbo = new FrameBuffer(640, 480);
+	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
 
 SceneManager::~SceneManager()
@@ -196,6 +199,7 @@ ShaderProgram *SceneManager::createWaterShader()
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "position");
 	shader->linkProgram();
+	shader->addUniform("ModelMatrix");
 	shader->addUniform("screenTexture");
 
 	return shader;
@@ -231,22 +235,22 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 
 void SceneManager::drawScene()
 {
-	//if (frameType == REFLECTION)
-	//{
-	//	camera->setCamera();
+	if (frameType == REFLECTION)
+	{
+		camera->setCamera();
 
+		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
+		water->setIsIt();
+		frameType = BLOOM;
+	}
+	else if (frameType == BLOOM)
+	{
+		camera->setCamera();
 
-
-	//	frameType = BLOOM;
-	//}
-	//else if (frameType == BLOOM)
-	//{
-	//	camera->setCamera();
-
-
-
-	//	frameType = NORMAL;
-	//}
+		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
+		water->setIsIt();
+		frameType = REFLECTION;
+	}
 	//else if (frameType == NORMAL)
 	//{
 	//	camera->setCamera();
@@ -254,9 +258,9 @@ void SceneManager::drawScene()
 
 
 	//	frameType = REFLECTION;
-	//}
-	camera->setCamera();
-	sceneGraph->draw(nullptr, light->getWorldPosition());
+	////}
+	//camera->setCamera();
+	//sceneGraph->draw(nullptr, light->getWorldPosition());
 }
 
 void SceneManager::bindFrameBuffer() {
@@ -270,8 +274,10 @@ void SceneManager::unbindFrameBuffer() {
 void SceneManager::drawQuad()
 {
 	waterShader->useProgram();
+	glUniform4fv(waterShader->getUniform("ModelMatrix"), 1, mf.rotation(Vector3(1.0f, 0.0f, 0.0f), 45.0f).matrix);
 	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, fbo->getFrame());	// use the color attachment texture as the texture of the quad plane
+	glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	waterShader->disableProgram();
 }

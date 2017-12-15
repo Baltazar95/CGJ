@@ -6,7 +6,7 @@
 #include "GlUtils.h"
 #include "MathAux.h"
 #include "Obj_Loader.h"
-
+#include "Texture.h"
 
 class FrameBuffer
 {
@@ -18,7 +18,8 @@ private:
 	int SCR_HEIGHT;
 
 public:
-	FrameBuffer(int width, int height);
+	//FrameBuffer(int width, int height);
+	FrameBuffer(unsigned int renderedtext, int width, int height);
 	//FrameBuffer(std::string filename);
 	~FrameBuffer();
 	void createFrameBuffer();
@@ -30,7 +31,7 @@ public:
 	void FrameBufferSetup();
 	void unbindFrameBuffer();
 	void bindFrameBuffer();
-	unsigned int getFrame() { return renderedTexture; };
+	unsigned int getRenderedTex() { return renderedTexture; };
 };
 
 #endif // !__FRAMEBUFFER_H__

@@ -45,6 +45,10 @@ void SceneNode::setMesh(Mesh *newMesh)
 	mesh = newMesh;
 }
 
+void SceneNode::setTexture(unsigned int tex) {
+	texture->setTexture(tex);
+}
+
 void SceneNode::setModelMatrix(const Matrix4 &model)
 {
 	modelMatrix = model;
@@ -82,7 +86,7 @@ void SceneNode::update(const Matrix4 &model)
 	}
 }
 
-void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
+void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, FrameBuffer *fbo)
 {
 	MatrixFactory mf;
 	ShaderProgram *useShader = nullptr;
@@ -121,8 +125,16 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 			// bind Texture
 			glUniform1i(useShader->getUniform("tex"), 0);
 
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+			if (isIt)
+			{
+				glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());
+			}
+			else
+			{
+				//glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+			}
+
 
 			const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
 			glUniform3fv(useShader->getUniform("light.position"), 1, pos);
@@ -155,6 +167,6 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos)
 
 	for (std::vector<SceneNode*>::iterator it = children.begin(); it != children.end(); ++it) 
 	{
-		(*it)->draw(useShader, lightPos);
+		(*it)->draw(useShader, lightPos, fbo);
 	}
 }
