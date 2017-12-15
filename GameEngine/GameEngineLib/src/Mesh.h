@@ -30,6 +30,7 @@ class Mesh
 		std::vector<Vector3> *getNormals() { return &normals; };
 		std::vector<Vector2> *getTexCoords() { return &texCoords; };
 		void setMaterialName(std::string name) { materialName = name; };
+		std::string getMaterialName() { return materialName; };
 };
 
 #endif // !__MESH_H__

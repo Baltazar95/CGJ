@@ -108,16 +108,16 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, FrameBuffer
 
 		if (useShader->containsUniform("light.position"))
 		{
-			const GLfloat ambient[] = { /*material->getAmbient().x,  material->getAmbient().y,  material->getAmbient().z*/1.0f, 0.5f, 0.31f };
+			const GLfloat ambient[] = { material->getAmbient().x,  material->getAmbient().y,  material->getAmbient().z/*1.0f, 0.5f, 0.31f */};
 			glUniform3fv(useShader->getUniform("material.ambient"), 1, ambient);
 
-			const GLfloat diffuse[] = { /*material->getDiffuse().x,  material->getDiffuse().y,  material->getDiffuse().z*/1.0f, 0.5f, 0.31f };
+			const GLfloat diffuse[] = { material->getDiffuse().x,  material->getDiffuse().y,  material->getDiffuse().z/*1.0f, 0.5f, 0.31f*/ };
 			glUniform3fv(useShader->getUniform("material.diffuse"), 1, diffuse);
 
-			const GLfloat specular[] = { /*material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z*/0.5f, 0.5f, 0.5f };
+			const GLfloat specular[] = { material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z/*0.5f, 0.5f, 0.5f*/ };
 			glUniform3fv(useShader->getUniform("material.specular"), 1, specular);
 
-			const GLfloat emissive[] = { /*material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z*/0.5f, 0.05f, 0.05f };
+			const GLfloat emissive[] = { material->getSpecular().x,  material->getSpecular().y,  material->getSpecular().z/*0.5f, 0.05f, 0.05f*/ };
 			glUniform3fv(useShader->getUniform("material.emissive"), 1, emissive);
 
 			glUniform1f(useShader->getUniform("material.shininess"), /*material->getShininess()*/32.0f);
