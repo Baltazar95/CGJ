@@ -2,7 +2,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-
 Texture::Texture(std::string &sin) {
 
 	std::string last_element(sin.substr(sin.rfind("/") + 1));

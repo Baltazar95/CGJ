@@ -35,6 +35,9 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+	//texture SKY
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
+	//textures = tl.getTextures();
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
@@ -50,26 +53,36 @@ SceneManager::SceneManager()
 	//setup cameras
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
-	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 50.0f);
+	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 100.0f);
 
 /* */
 	//setup scene
 	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
-	T = mf.translation(-25.0f, -20.0f, 0.0f);
+	T = mf.translation(-25.0f, -4.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert4SG"], textures["wood"]);
+	water = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
 
 	sceneGraph->addChild(water);
 
-/* */
+/* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 	cube = new SceneNode(meshes["Cube"], nullptr, T, materials["lambert4SG"], textures["wood"]);
 	sceneGraph->addChild(cube);
 
 /* */
-	T = mf.translation(-1.0f, -1.0f, 0.0f);
+
+
+	T = mf.translation(-25.0f, -25.0f, 10.0f);
+	S = mf.scale(25.0f, 25.0f, 25.0f, 3.0f);
+	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"]);
+
+	sceneGraph->addChild(sky);
+
+/* */
+
+	T = mf.translation(-1.0f, -5.0f, 0.0f);
 	for (auto member : meshes)
 	{
 		if (member.first.find("Bridge") != std::string::npos)
@@ -79,7 +92,7 @@ SceneManager::SceneManager()
 	}
 
 /* */
-	T = mf.translation(1.5f, 1.5f, 3.0f);
+	T = mf.translation(1.5f, 0.0f, 3.0f);
 	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
@@ -248,6 +261,20 @@ void SceneManager::drawScene()
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = BLOOM;
+
+
+
+		//textureShader->useProgram();
+		
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
+
+		//camera->specialSetCamera();
+		//sky->draw(nullptr, light->getWorldPosition(), fbo);
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
+		//textureShader->disableProgram();
 	}
 	else if (frameType == BLOOM)
 	{
@@ -256,6 +283,8 @@ void SceneManager::drawScene()
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = REFLECTION;
+
+		
 	}
 	//else if (frameType == NORMAL)
 	//{

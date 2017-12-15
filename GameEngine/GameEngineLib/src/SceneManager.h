@@ -28,7 +28,7 @@ class SceneManager
 		Camera *camera;
 		const GLuint UBO_BP = 0;
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		SceneNode *cube, *light, *water, *bridge;
+		SceneNode *cube, *light, *water, *bridge, *sky;
 		MatrixFactory mf;
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
@@ -37,8 +37,6 @@ class SceneManager
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
 		std::map<std::string, Mesh*> meshes;
-
-
 	public:
 		SceneManager();
 		~SceneManager();
@@ -53,5 +51,6 @@ class SceneManager
 		void unbindFrameBuffer();
 		void drawQuad();
 };
+
 
 #endif // !__SCENEMANAGER_H__

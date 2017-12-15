@@ -180,3 +180,36 @@ void Camera::setCamera()
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
+
+void Camera::specialSetCamera()
+{
+	rotationView = toGlMatrix(qtrn);
+
+	/*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
+	{
+	viewMatrix = mf.viewMatrix(eye, eye + view, up);
+	}
+	else */
+	if (cameraType == ARCBALL)
+	{
+		viewMatrix = /*translation **/ rotationView;
+	}
+	else
+	{
+		viewMatrix = rotationView /** translation*/;
+	}
+
+	if (projectionMode == ORTHOGRAPHIC)
+	{
+		projection = orthographic;
+	}
+	else
+	{
+		projection = perspective;
+	}
+
+	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), viewMatrix.matrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}

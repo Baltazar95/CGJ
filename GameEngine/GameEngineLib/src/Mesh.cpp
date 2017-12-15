@@ -49,7 +49,6 @@ void Mesh::createBufferObjects()
 			glEnableVertexAttribArray(TEXCOORDS);
 			glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), 0);
 		}
-
 		if (!normals.empty())
 		{
 			glGenBuffers(1, &vboNormals);
@@ -65,6 +64,7 @@ void Mesh::createBufferObjects()
 
 	GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
 }
+
 
 void Mesh::destroyBufferObjects()
 {

@@ -5,7 +5,6 @@
 #include "GlUtils.h"
 #include "stb_image.h"
 
-
 class Texture {
 
 private:
@@ -22,6 +21,7 @@ public:
 	unsigned int getTexture() {
 		return texture;
 	};
+
 	std::string Texture::getName();
 	void setTexture(unsigned int tex) { texture = tex; }
 };
