@@ -6,6 +6,7 @@
 #include "MathAux.h"
 #include "Texture.h"
 #include "Materials.h"
+#include "FrameBuffer.h"
 
 class SceneNode
 {
@@ -17,6 +18,7 @@ class SceneNode
 		Materials *material;
 		Matrix4 modelMatrix, worldModel;
 		Texture *texture;
+		bool isIt = false;
 
 	public:
 		SceneNode();
@@ -26,11 +28,17 @@ class SceneNode
 		void setShader(ShaderProgram *shader);
 		void setMesh(Mesh *mesh);
 		void setModelMatrix(const Matrix4 &model);
+		void setTexture(unsigned int tex);
 		Vector3 getWorldPosition();
 		void addChild(SceneNode *child);
 		void removeChild(SceneNode *child);
 		void update(const Matrix4 &model);
-		void draw(ShaderProgram *shader, const Vector3 &lightPos);
+		void draw(ShaderProgram *shader, const Vector3 &lightPos, FrameBuffer *fbo);
+		void setIsIt() {
+			if (isIt)
+				isIt = false;
+			else isIt = true;
+		};
 };
 
 #endif // !__SCENENODE_H__

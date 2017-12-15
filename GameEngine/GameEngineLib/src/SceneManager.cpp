@@ -31,11 +31,12 @@ SceneManager::SceneManager()
 	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
-	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
+	Texture *watertex = new Texture("water", NULL);
+	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
-
 
 /* */
 	//setup cameras
@@ -48,8 +49,8 @@ SceneManager::SceneManager()
 	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
-	T = mf.translation(-25.0f, -20.0f, 0.0f);
-	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
+	T = mf.translation(-5.0f, -5.0f, 0.0f);
+	S = mf.scale(5.0f, 0.1f, 5.0f, 1.0f);
 	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr, textures["wood"]);
 	sceneGraph->addChild(water);
 
@@ -68,7 +69,7 @@ SceneManager::SceneManager()
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
 	waterShader->disableProgram();
 
-	glGenVertexArrays(1, &quadVAO);
+	/*glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &quadVBO);
 	glBindVertexArray(quadVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
@@ -76,9 +77,9 @@ SceneManager::SceneManager()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));*/
 
-	fbo = new FrameBuffer(640, 480);
+	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
 
 SceneManager::~SceneManager()
@@ -220,22 +221,22 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 
 void SceneManager::drawScene()
 {
-	//if (frameType == REFLECTION)
-	//{
-	//	camera->setCamera();
+	if (frameType == REFLECTION)
+	{
+		camera->setCamera();
 
+		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
+		water->setIsIt();
+		frameType = BLOOM;
+	}
+	else if (frameType == BLOOM)
+	{
+		camera->setCamera();
 
-
-	//	frameType = BLOOM;
-	//}
-	//else if (frameType == BLOOM)
-	//{
-	//	camera->setCamera();
-
-
-
-	//	frameType = NORMAL;
-	//}
+		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
+		water->setIsIt();
+		frameType = REFLECTION;
+	}
 	//else if (frameType == NORMAL)
 	//{
 	//	camera->setCamera();
@@ -243,9 +244,9 @@ void SceneManager::drawScene()
 
 
 	//	frameType = REFLECTION;
-	//}
-	camera->setCamera();
-	sceneGraph->draw(nullptr, light->getWorldPosition());
+	////}
+	//camera->setCamera();
+	//sceneGraph->draw(nullptr, light->getWorldPosition());
 }
 
 void SceneManager::bindFrameBuffer() {
@@ -260,7 +261,8 @@ void SceneManager::drawQuad()
 {
 	waterShader->useProgram();
 	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, fbo->getFrame());	// use the color attachment texture as the texture of the quad plane
+	glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	waterShader->disableProgram();
 }

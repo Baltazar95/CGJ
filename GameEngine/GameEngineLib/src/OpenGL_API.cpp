@@ -22,15 +22,19 @@ void OpenGL_API::cleanup()
 void OpenGL_API::display()
 {
 	++FrameCount;
+	sm->bindFrameBuffer();
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//framebuffer
-	sm->bindFrameBuffer();
 	sm->drawScene();
 	sm->unbindFrameBuffer();
+
+
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//default buffer
-	//sm->drawScene();
-	sm->drawQuad();
+	sm->drawScene();
+	/*sm->drawQuad();*/
 	glutSwapBuffers();
 }
 

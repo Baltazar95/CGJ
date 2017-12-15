@@ -1,13 +1,16 @@
 #include "FrameBuffer.h"
 
-FrameBuffer::FrameBuffer(int width, int height){
-	SCR_WIDTH = width; SCR_HEIGHT = height; 
+FrameBuffer::FrameBuffer(unsigned int renderedtext, int width, int height){
+	SCR_WIDTH = width; SCR_HEIGHT = height;
+	//Texture *text = new Texture("water", NULL);
+	renderedTexture = renderedtext;
 	FrameBufferSetup();
 }
 
 void FrameBuffer::FrameBufferSetup() {
+
 	createFrameBuffer();
-	createRenderedTexture();
+	//createRenderedTexture();
 	attachTextureBuffer();
 	createRenderBuffer();
 	attachRenderBuffer();
