@@ -124,8 +124,28 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 		perspective = mf.perspectiveMatrix(fovy, aspect, zNear, zFar);
 	}
 
+	float astep = 0.05f * elapsed;
+	float vstep = 0.00025f * elapsed;
+	float mSpeed = 0.025f * elapsed;
 
+	if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
+	{
+		eye -= getFront() * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('s') || KeyBuffer::instance()->isPressed('S'))
+	{
+		eye += getFront() * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('a') || KeyBuffer::instance()->isPressed('A'))
+	{
+		eye += normalized(getSide()) * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('d') || KeyBuffer::instance()->isPressed('D'))
+	{
+		eye -= normalized(getSide()) * mSpeed;
+	}
 
+	translation = mf.translation(eye);
 }
 
 void Camera::setCamera()

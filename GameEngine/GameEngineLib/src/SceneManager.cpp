@@ -45,6 +45,7 @@ SceneManager::SceneManager()
 	textures = tl.getTextures();
 
 	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
+	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
 	//loader->processMeshData(vertices, normals, texCoords);
 	//delete loader;
 
@@ -59,15 +60,15 @@ SceneManager::SceneManager()
 	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
-	T = mf.translation(-25.0f, -20.0f, 0.0f);
+	T = mf.translation(-25.0f, -4.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(meshes["Cube"], nullptr, T*S, nullptr, textures["wood"]);
+	water = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
 
 	sceneGraph->addChild(water);
 
-/* */
+/* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(meshes["Cube"], nullptr, T, nullptr, textures["wood"]);
+	cube = new SceneNode(meshes["Cube"], nullptr, T, materials["lambert4SG"], textures["wood"]);
 	sceneGraph->addChild(cube);
 
 /* */
@@ -75,17 +76,23 @@ SceneManager::SceneManager()
 
 	T = mf.translation(-25.0f, -25.0f, 10.0f);
 	S = mf.scale(25.0f, 25.0f, 25.0f, 3.0f);
-	sky = new SceneNode(meshes["Cube"], nullptr, T*S, nullptr, textures["sky"]);
+	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"]);
 
 	sceneGraph->addChild(sky);
 
-/* * /
-	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	bridge = new SceneNode(meshes[""], nullptr, T, nullptr, textures["wood"]);
-	sceneGraph->addChild(bridge);
+/* */
+
+	T = mf.translation(-1.0f, -5.0f, 0.0f);
+	for (auto member : meshes)
+	{
+		if (member.first.find("Bridge") != std::string::npos)
+		{
+			sceneGraph->addChild(new SceneNode(meshes[member.first], nullptr, T, materials[member.second->getMaterialName()], textures["metal"]));
+		}
+	}
 
 /* */
-	T = mf.translation(1.5f, 1.5f, 3.0f);
+	T = mf.translation(1.5f, 0.0f, 3.0f);
 	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
@@ -225,22 +232,22 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 
 	camera->updateView(deltaAnglex, deltaAngley, fov, elapsed);
 
-	if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
-	{
-		position += camera->getFront() * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('s') || KeyBuffer::instance()->isPressed('S'))
-	{
-		position -= camera->getFront() * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('a') || KeyBuffer::instance()->isPressed('A'))
-	{
-		position -= normalized(camera->getSide()) * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('d') || KeyBuffer::instance()->isPressed('D'))
-	{
-		position += normalized(camera->getSide()) * mSpeed;
-	}
+	//if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
+	//{
+	//	position += camera->getFront() * mSpeed;
+	//}
+	//if (KeyBuffer::instance()->isPressed('s') || KeyBuffer::instance()->isPressed('S'))
+	//{
+	//	position -= camera->getFront() * mSpeed;
+	//}
+	//if (KeyBuffer::instance()->isPressed('a') || KeyBuffer::instance()->isPressed('A'))
+	//{
+	//	position -= normalized(camera->getSide()) * mSpeed;
+	//}
+	//if (KeyBuffer::instance()->isPressed('d') || KeyBuffer::instance()->isPressed('D'))
+	//{
+	//	position += normalized(camera->getSide()) * mSpeed;
+	//}
 
 	sceneGraph->update(mf.translation(position));
 }

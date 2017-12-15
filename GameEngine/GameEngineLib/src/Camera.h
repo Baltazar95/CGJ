@@ -29,7 +29,7 @@ class Camera
 		GLuint UBO_BP;
 		GLuint VboId;
 		ProjectionType projectionMode = PERSPECTIVE;
-		CameraType cameraType = ARCBALL;
+		CameraType cameraType = FREE;
 		float anglex = 0.0f, angley = 0.0f;
 		Vector3 eye = Vector3(0.0f, 0.0f, 3.0f), center = Vector3(0.0f, 0.0f, -1.0f), up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 view = center - eye, side = cross(center, up);
