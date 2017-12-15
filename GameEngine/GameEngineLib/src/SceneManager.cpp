@@ -78,6 +78,14 @@ SceneManager::SceneManager()
 	sceneGraph->addChild(light);
 
 /* */
+	//texture SKY
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
+	textures = tl.getTextures();
+	sky = new SceneNode(meshes["Cube"], textureShader, T, materials["lambert4SG"], textures["wood"]);
+
+
+
+/* */
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
 	waterShader->disableProgram();

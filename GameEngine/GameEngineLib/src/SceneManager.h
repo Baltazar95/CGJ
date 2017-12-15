@@ -28,7 +28,7 @@ class SceneManager
 		Camera *camera;
 		const GLuint UBO_BP = 0;
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		SceneNode *cube, *light, *water, *bridge;
+		SceneNode *cube, *light, *water, *bridge, *sky;
 		MatrixFactory mf;
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
