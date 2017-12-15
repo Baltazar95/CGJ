@@ -69,7 +69,7 @@ SceneManager::SceneManager()
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
 	waterShader->disableProgram();
 
-	/*glGenVertexArrays(1, &quadVAO);
+	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &quadVBO);
 	glBindVertexArray(quadVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
@@ -77,7 +77,7 @@ SceneManager::SceneManager()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));*/
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
@@ -186,6 +186,7 @@ ShaderProgram *SceneManager::createWaterShader()
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "position");
 	shader->linkProgram();
+	shader->addUniform("ModelMatrix");
 	shader->addUniform("screenTexture");
 
 	return shader;
@@ -260,6 +261,7 @@ void SceneManager::unbindFrameBuffer() {
 void SceneManager::drawQuad()
 {
 	waterShader->useProgram();
+	glUniform4fv(waterShader->getUniform("ModelMatrix"), 1, mf.rotation(Vector3(1.0f, 0.0f, 0.0f), 45.0f).matrix);
 	glBindVertexArray(quadVAO);
 	glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
