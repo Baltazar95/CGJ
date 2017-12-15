@@ -13,7 +13,7 @@ float quadVertices[] = { // vertex attributes for a quad that fills the entire s
 
 SceneManager::SceneManager()
 {
-	meshes = new std::map<std::string, Mesh*>();
+	meshes = std::map<std::string, Mesh*>();
 
 	Matrix4 S, R, T;
 
@@ -39,7 +39,7 @@ SceneManager::SceneManager()
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
 
-	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), meshes);
+	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
 	//loader->processMeshData(vertices, normals, texCoords);
 	//delete loader;
 
@@ -56,22 +56,22 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-25.0f, -20.0f, 0.0f);
 	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T*S, nullptr, textures["wood"]);
+	water = new SceneNode(meshes["Cube"], nullptr, T*S, nullptr, textures["wood"]);
 	sceneGraph->addChild(water);
 
-/* */
+/* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), nullptr, T, nullptr, textures["wood"]);
+	cube = new SceneNode(meshes["Cube"], nullptr, T, nullptr, textures["wood"]);
 	sceneGraph->addChild(cube);
 
-/* */
+/* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	bridge = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/bridge.obj"), nullptr, T, nullptr, textures["wood"]);
+	bridge = new SceneNode(meshes[""], nullptr, T, nullptr, textures["wood"]);
 	sceneGraph->addChild(bridge);
 
 /* */
 	T = mf.translation(1.5f, 1.5f, 3.0f);
-	light = new SceneNode(new Mesh("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), moonShader, T, materials["lambert4SG"], nullptr);
+	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
 /* */

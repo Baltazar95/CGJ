@@ -33,10 +33,10 @@ class SceneManager
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
-		std::map<std::string, Materials*> materials;
+		std::map<std::string, Material*> materials;
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
-		std::map<std::string, Mesh*> *meshes;
+		std::map<std::string, Mesh*> meshes;
 
 
 	public:

@@ -1,10 +1,10 @@
-#ifndef __MATERIALS_H__
-#define __MATERIALS_H__
+#ifndef __MATERIAL_H__
+#define __MATERIAL_H__
 
 #include <string>
 #include <sstream>
 #include "MathAux.h"
-class Materials {
+class Material {
 
 private:
 	std::string _mat_name;
@@ -20,8 +20,8 @@ private:
 
 public:
 
-	Materials() {};
-	Materials(std::stringstream &sin);
+	Material() {};
+	Material(std::stringstream &sin);
 	std::string getName();
 	Vector3 getAmbient();
 	Vector3 getDiffuse();
@@ -45,4 +45,4 @@ public:
 
 };
 
-#endif // !__MATERIALS_H__
+#endif // !__MATERIAL_H__

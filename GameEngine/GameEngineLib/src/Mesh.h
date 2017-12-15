@@ -14,9 +14,10 @@ class Mesh
 
 	private:
 		GLuint VaoId, vboVertices, vboTexCoords, vboNormals;
-		std::vector<Vector3> *vertices;
-		std::vector<Vector3> *normals;
-		std::vector<Vector2> *texCoords;
+		std::vector<Vector3> vertices;
+		std::vector<Vector3> normals;
+		std::vector<Vector2> texCoords;
+		std::string materialName;
 
 	public:
 		Mesh();
@@ -25,9 +26,10 @@ class Mesh
 		void createBufferObjects();
 		void destroyBufferObjects();
 		void draw();
-		std::vector<Vector3> *getVertices() { return vertices; };
-		std::vector<Vector3> *getNormals() { return normals; };
-		std::vector<Vector2> *getTexCoords() { return texCoords; };
+		std::vector<Vector3> *getVertices() { return &vertices; };
+		std::vector<Vector3> *getNormals() { return &normals; };
+		std::vector<Vector2> *getTexCoords() { return &texCoords; };
+		void setMaterialName(std::string name) { materialName = name; };
 };
 
 #endif // !__MESH_H__
