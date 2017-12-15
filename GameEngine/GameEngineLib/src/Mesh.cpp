@@ -20,9 +20,10 @@ Mesh::Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, 
 
 Mesh::~Mesh()
 {
-	vertices.clear();
-	normals.clear();
-	texCoords.clear();
+	//TODO: correct error
+	//vertices.clear();
+	//normals.clear();
+	//texCoords.clear();
 	destroyBufferObjects();
 }
 
