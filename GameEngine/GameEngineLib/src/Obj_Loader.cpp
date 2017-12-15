@@ -1,6 +1,6 @@
 #include "Obj_Loader.h"
 
-Obj_Loader::Obj_Loader(std::string& filename)
+Obj_Loader::Obj_Loader(std::string& filename, std::map<std::string, Mesh*> *meshes, std::string name)
 {
 	vertexData = std::vector<Vector3>();
 	normalData = std::vector<Vector3>();
@@ -9,6 +9,9 @@ Obj_Loader::Obj_Loader(std::string& filename)
 	normalIdx = std::vector<unsigned int>();
 	texCoordIdx = std::vector<unsigned int>();
 
+	meshName = name;
+	newMeshes = meshes;
+	createdMesh = new Mesh();
 	loadMeshData(filename);
 }
 
@@ -75,6 +78,48 @@ void Obj_Loader::parseFace(std::stringstream& sin)
 	}
 }
 
+void Obj_Loader::parseMesh(std::stringstream& sin)
+{
+	if (parts > 0)
+	{
+		texcoordsLoaded = (texCoordIdx.size() > 0);
+		normalsLoaded = (normalIdx.size() > 0);
+
+		for (unsigned int i = 0; i < vertexIdx.size(); i++) {
+			unsigned int vi = vertexIdx[i];
+			Vector3 v = vertexData[vi - 1];
+			createdMesh->getVertices()->push_back(v);
+			if (texcoordsLoaded) {
+				unsigned int ti = texCoordIdx[i];
+				Vector2 t = texCoordData[ti - 1];
+				createdMesh->getTexCoords()->push_back(t);
+			}
+			if (normalsLoaded) {
+				unsigned int ni = normalIdx[i];
+				Vector3 n = normalData[ni - 1];
+				createdMesh->getNormals()->push_back(n);
+			}
+		}
+
+		createdMesh->createBufferObjects();
+
+		newMeshes->insert(std::pair<std::string, Mesh*>(meshName + std::to_string(parts), createdMesh));
+
+		texcoordsLoaded = false;
+		normalsLoaded = false;
+	}
+	
+	createdMesh = new Mesh();
+
+	std::string token;
+	sin >> token;
+	//std::string last_element(token.substr(token.rfind(" ") + 1));
+	//if (last_element.size() > 0) material = last_element;
+	createdMesh->setMaterialName(token);
+
+	parts++;
+}
+
 void Obj_Loader::parseLine(std::stringstream& sin)
 {
 	std::string s;
@@ -82,7 +127,13 @@ void Obj_Loader::parseLine(std::stringstream& sin)
 	if (s.compare("v") == 0) parseVertex(sin);
 	else if (s.compare("vt") == 0) parseTexcoord(sin);
 	else if (s.compare("vn") == 0) parseNormal(sin);
-	else if (s.compare("f") == 0) parseFace(sin);
+	else if (s.compare("usemtl") == 0) parseMesh(sin);
+	else if (s.compare("s") == 0) {
+		sin >> s;
+		if (s.compare("1") == 0) smoothedFace = true;
+		else smoothedFace = false;
+	}
+	else if (s.compare("f") == 0 && smoothedFace) parseFace(sin);
 }
 
 void Obj_Loader::loadMeshData(std::string& filename)
@@ -92,6 +143,29 @@ void Obj_Loader::loadMeshData(std::string& filename)
 	while (std::getline(ifile, line)) {
 		parseLine(std::stringstream(line));
 	}
+
 	texcoordsLoaded = (texCoordIdx.size() > 0);
 	normalsLoaded = (normalIdx.size() > 0);
+
+	for (unsigned int i = 0; i < vertexIdx.size(); i++) {
+		unsigned int vi = vertexIdx[i];
+		Vector3 v = vertexData[vi - 1];
+		createdMesh->getVertices()->push_back(v);
+		if (texcoordsLoaded) {
+			unsigned int ti = texCoordIdx[i];
+			Vector2 t = texCoordData[ti - 1];
+			createdMesh->getTexCoords()->push_back(t);
+		}
+		if (normalsLoaded) {
+			unsigned int ni = normalIdx[i];
+			Vector3 n = normalData[ni - 1];
+			createdMesh->getNormals()->push_back(n);
+		}
+	}
+
+	createdMesh->createBufferObjects();
+
+	newMeshes->insert(std::pair<std::string, Mesh*>(meshName, createdMesh));
+
+	
 }

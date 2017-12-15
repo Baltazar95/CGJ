@@ -10,6 +10,7 @@
 #include "FrameBuffer.h"
 #include "MaterialLoader.h"
 #include "TextureLoader.h"
+#include "Obj_Loader.h"
 
 //// FRAME TYPE //////
 enum FrameType
@@ -27,14 +28,15 @@ class SceneManager
 		Camera *camera;
 		const GLuint UBO_BP = 0;
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		SceneNode *cube, *light, *water;
+		SceneNode *cube, *light, *water, *bridge;
 		MatrixFactory mf;
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
-		std::map<std::string, Materials*> materials;
+		std::map<std::string, Material*> materials;
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
+		std::map<std::string, Mesh*> meshes;
 
 
 	public:
