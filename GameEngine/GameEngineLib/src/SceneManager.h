@@ -52,4 +52,5 @@ class SceneManager
 		void drawQuad();
 };
 
+
 #endif // !__SCENEMANAGER_H__

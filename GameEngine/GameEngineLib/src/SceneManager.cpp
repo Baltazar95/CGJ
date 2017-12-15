@@ -89,7 +89,6 @@ SceneManager::SceneManager()
 	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
-	
 /* */
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);

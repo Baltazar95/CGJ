@@ -5,7 +5,6 @@
 #include "GlUtils.h"
 #include "stb_image.h"
 
-
 class Texture {
 
 private:

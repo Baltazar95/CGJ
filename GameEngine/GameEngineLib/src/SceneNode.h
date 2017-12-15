@@ -20,7 +20,6 @@ class SceneNode
 		Texture *texture;
 		bool isIt = false;
 
-
 	public:
 		SceneNode();
 		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture);

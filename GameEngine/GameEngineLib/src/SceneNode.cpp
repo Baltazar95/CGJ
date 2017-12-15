@@ -138,7 +138,6 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, FrameBuffer
 			glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(modelMatrix).matrix);
 			glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, modelMatrix.matrix);
 
-
 		}
 		else {
 			if (useShader->containsUniform("light.position"))

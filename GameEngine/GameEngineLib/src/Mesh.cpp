@@ -64,6 +64,7 @@ void Mesh::createBufferObjects()
 	GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
 }
 
+
 void Mesh::destroyBufferObjects()
 {
 	glBindVertexArray(VaoId);

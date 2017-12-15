@@ -18,7 +18,6 @@ Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 	GlUtils::checkOpenGLError("ERROR: Could not create uniform buffer object.");
 }
 
-
 Camera::~Camera()
 {
 	glDeleteBuffers(1, &VboId);
