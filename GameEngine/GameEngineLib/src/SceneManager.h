@@ -37,8 +37,6 @@ class SceneManager
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
 		std::map<std::string, Mesh*> meshes;
-
-
 	public:
 		SceneManager();
 		~SceneManager();

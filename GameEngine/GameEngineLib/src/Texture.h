@@ -22,6 +22,7 @@ public:
 	unsigned int getTexture() {
 		return texture;
 	};
+
 	std::string Texture::getName();
 	void setTexture(unsigned int tex) { texture = tex; }
 };

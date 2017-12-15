@@ -35,6 +35,9 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+	//texture SKY
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
+	//textures = tl.getTextures();
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
@@ -67,6 +70,15 @@ SceneManager::SceneManager()
 	cube = new SceneNode(meshes["Cube"], nullptr, T, nullptr, textures["wood"]);
 	sceneGraph->addChild(cube);
 
+/* */
+
+
+	T = mf.translation(-25.0f, -10.0f, 45.0f);
+	S = mf.scale(50.0f, 50.0f, 50.0f, 1.0f);
+	sky = new SceneNode(meshes["Cube"], nullptr, T*S, nullptr, textures["sky"]);
+
+	sceneGraph->addChild(sky);
+
 /* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 	bridge = new SceneNode(meshes[""], nullptr, T, nullptr, textures["wood"]);
@@ -77,14 +89,7 @@ SceneManager::SceneManager()
 	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
-/* */
-	//texture SKY
-	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
-	textures = tl.getTextures();
-	sky = new SceneNode(meshes["Cube"], textureShader, T, materials["lambert4SG"], textures["wood"]);
-
-
-
+	
 /* */
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
@@ -251,14 +256,19 @@ void SceneManager::drawScene()
 		water->setIsIt();
 		frameType = BLOOM;
 
+
+
+		//textureShader->useProgram();
+		
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_FRONT);
 
-		camera->specialSetCamera();
-		banan->draw(nullptr, light->getWorldPosition());
+		//camera->specialSetCamera();
+		//sky->draw(nullptr, light->getWorldPosition(), fbo);
 
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
+		//textureShader->disableProgram();
 	}
 	else if (frameType == BLOOM)
 	{
@@ -268,14 +278,7 @@ void SceneManager::drawScene()
 		water->setIsIt();
 		frameType = REFLECTION;
 
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_FRONT);
-
-		camera->specialSetCamera();
-		banan->draw(nullptr, light->getWorldPosition());
-
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
+		
 	}
 	//else if (frameType == NORMAL)
 	//{

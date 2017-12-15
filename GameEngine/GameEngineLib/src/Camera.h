@@ -21,6 +21,7 @@ enum CameraType
 };
 //////////////////////////
 
+
 class Camera
 {
 	private:
@@ -52,6 +53,7 @@ class Camera
 		void switchCameraType();
 		void updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed);
 		void setCamera();
+		void specialSetCamera();
 		Vector3 getFront() { return view; };
 		Vector3 getSide() { return side; };
 		Vector3 getEye() { return eye; };
