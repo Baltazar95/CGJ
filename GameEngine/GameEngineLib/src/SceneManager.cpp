@@ -250,6 +250,15 @@ void SceneManager::drawScene()
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = BLOOM;
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
+
+		camera->specialSetCamera();
+		banan->draw(nullptr, light->getWorldPosition());
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
 	}
 	else if (frameType == BLOOM)
 	{
@@ -258,6 +267,15 @@ void SceneManager::drawScene()
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = REFLECTION;
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
+
+		camera->specialSetCamera();
+		banan->draw(nullptr, light->getWorldPosition());
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
 	}
 	//else if (frameType == NORMAL)
 	//{
