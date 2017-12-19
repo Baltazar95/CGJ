@@ -39,15 +39,15 @@ class Camera
 		Matrix4 translation;
 		Matrix4 rx, ry, rotationView;
 		float fovy, aspect, zNear, zFar;
-		MatrixFactory mf;
 		bool updatebool;
 		int timeamount = 0;
 		const int maxtime = 150;
+
 	public:
 		Camera() {};
 		Camera(const GLuint &newUBO_BP, Vector3 position);
 		~Camera();
-		void setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &near, const float &far);
+		void setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &zNear, const float &zFar);
 		void setPerspective(const float &nfovy, const float &naspect, const float &nzNear, const float &nzFar);
 		void switchProjectionMode();
 		void switchCameraType();

@@ -180,7 +180,7 @@
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Obj_Loader.h" />
-    <ClInclude Include="src\OpenGL_Abstract_API.h" />
+    <ClInclude Include="src\Abstract_API.h" />
     <ClInclude Include="src\OpenGL_API.h" />
     <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\SceneManager.h" />

@@ -1,9 +1,9 @@
-#ifndef __OPENGL_ABSTRACT_API_H__
-#define __OPENGL_ABSTRACT_API_H__
+#ifndef __ABSTRACT_API_H__
+#define __ABSTRACT_API_H__
 
 #include "GlUtils.h"
 
-class OpenGL_Abstract_API
+class Abstract_API
 {
 	protected:
 		int argc;
@@ -16,4 +16,4 @@ class OpenGL_Abstract_API
 		virtual int run() = 0;
 };
 
-#endif // !__OPENGL_ABSTRACT_API_H__
+#endif // !__ABSTRACT_API_H__

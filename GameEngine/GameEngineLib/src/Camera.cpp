@@ -3,6 +3,8 @@
 //TODO create initial position for the camera
 Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 {
+	MatrixFactory mf;
+
 	UBO_BP = newUBO_BP;
 	timeamount = 0;
 	updatebool = true;
@@ -26,11 +28,15 @@ Camera::~Camera()
 
 void Camera::setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &zNear, const float &zFar)
 {
+	MatrixFactory mf;
+
 	orthographic = mf.orthographicMatrix(left, right, bottom, top, zNear, zFar);
 }
 
 void Camera::setPerspective(const float &nfovy, const float &naspect,const float &nzNear, const float &nzFar)
 {
+	MatrixFactory mf;
+
 	fovy = nfovy;
 	aspect = naspect;
 	zNear = nzNear;
@@ -65,6 +71,8 @@ void Camera::switchCameraType()
 
 void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed)
 {
+	MatrixFactory mf;
+
 	timeamount += elapsed;
 	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
 	{
@@ -94,11 +102,11 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 	////////////////////////////////////////////////
 
 	/////////////////////// RODRIGUES //////////////////////////
-	anglex += deltaAnglex;
-	angley += deltaAngley;
-	
-	rx = mf.rotation(Vector4(-1.0f, 0.0f, 0.0f, 1.0f), angley);
-	ry = mf.rotation(Vector4(0.0f, -1.0f, 0.0f, 1.0f), anglex);
+	//anglex += deltaAnglex;
+	//angley += deltaAngley;
+	//
+	//rx = mf.rotation(Vector4(-1.0f, 0.0f, 0.0f, 1.0f), angley);
+	//ry = mf.rotation(Vector4(0.0f, -1.0f, 0.0f, 1.0f), anglex);
 	////////////////////////////////////////////////////////////
 
 	///////////////////// QUATERNIONS //////////////////////////////
@@ -145,16 +153,13 @@ void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, cons
 		eye -= normalized(getSide()) * mSpeed;
 	}
 
-	translation = mf.translation(eye);
-}
-
-void Camera::setCamera()
-{
 	rotationView = toGlMatrix(qtrn);
 
-/*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
+	translation = mf.translation(eye);
+
+	/*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
 	{
-		viewMatrix = mf.viewMatrix(eye, eye + view, up);
+	viewMatrix = mf.viewMatrix(eye, eye + view, up);
 	}
 	else */
 	if (cameraType == ARCBALL)
@@ -175,6 +180,10 @@ void Camera::setCamera()
 		projection = perspective;
 	}
 
+}
+
+void Camera::setCamera()
+{
 	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), viewMatrix.matrix);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);

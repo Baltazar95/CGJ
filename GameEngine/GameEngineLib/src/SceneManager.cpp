@@ -15,6 +15,7 @@ SceneManager::SceneManager()
 {
 	meshes = std::map<std::string, Mesh*>();
 
+	MatrixFactory mf;
 	Matrix4 S, R, T;
 
 	//shader creation
@@ -226,6 +227,8 @@ ShaderProgram *SceneManager::createWaterShader()
 
 void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed)
 {
+	MatrixFactory mf;
+
 	float astep = 0.05f * elapsed;
 	float vstep = 0.00025f * elapsed;
 	float mSpeed = 0.025f * elapsed;
@@ -308,6 +311,8 @@ void SceneManager::unbindFrameBuffer() {
 
 void SceneManager::drawQuad()
 {
+	MatrixFactory mf;
+
 	waterShader->useProgram();
 	glUniform4fv(waterShader->getUniform("ModelMatrix"), 1, mf.rotation(Vector3(1.0f, 0.0f, 0.0f), 45.0f).matrix);
 	glBindVertexArray(quadVAO);
