@@ -1,16 +1,5 @@
 #include "SceneManager.h"
 
-float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-						 // positions   // texCoords
-	-1.0f,  1.0f,  0.0f, 1.0f,
-	-1.0f, -1.0f,  0.0f, 0.0f,
-	1.0f, -1.0f,  1.0f, 0.0f,
-
-	-1.0f,  1.0f,  0.0f, 1.0f,
-	1.0f, -1.0f,  1.0f, 0.0f,
-	1.0f,  1.0f,  1.0f, 1.0f
-};
-
 SceneManager::SceneManager()
 {
 	meshes = std::map<std::string, Mesh*>();
@@ -101,16 +90,6 @@ SceneManager::SceneManager()
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
 	waterShader->disableProgram();
-
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
@@ -307,17 +286,4 @@ void SceneManager::bindFrameBuffer() {
 
 void SceneManager::unbindFrameBuffer() {
 	fbo->unbindFrameBuffer();
-}
-
-void SceneManager::drawQuad()
-{
-	MatrixFactory mf;
-
-	waterShader->useProgram();
-	glUniform4fv(waterShader->getUniform("ModelMatrix"), 1, mf.rotation(Vector3(1.0f, 0.0f, 0.0f), 45.0f).matrix);
-	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());	// use the color attachment texture as the texture of the quad plane
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	waterShader->disableProgram();
 }

@@ -48,7 +48,6 @@ class SceneManager
 		void drawScene();
 		void bindFrameBuffer();
 		void unbindFrameBuffer();
-		void drawQuad();
 };
 
 
