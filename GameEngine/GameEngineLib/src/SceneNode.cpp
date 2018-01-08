@@ -72,6 +72,7 @@ void SceneNode::removeChild(SceneNode *child)
 		if ((*it) == child)
 		{
 			children.erase(it);
+			break;
 		}
 	}
 }

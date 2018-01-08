@@ -36,6 +36,7 @@ SceneManager::SceneManager()
 
 	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
 	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
+	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
 	//loader->processMeshData(vertices, normals, texCoords);
 	//delete loader;
 
@@ -50,12 +51,11 @@ SceneManager::SceneManager()
 	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
-	T = mf.translation(-25.0f, -4.0f, 0.0f);
-	S = mf.scale(50.0f, 0.1f, 50.0f, 1.0f);
-	water = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
+	T = mf.translation(-10.0f, -10.0f, 0.0f);
+	S = mf.scale(20.0f, 0.1f, 20.0f, 1.0f);
+	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
 
 	sceneGraph->addChild(water);
-
 /* * /
 	T = mf.translation(-1.0f, -1.0f, 0.0f);
 	cube = new SceneNode(meshes["Cube"], nullptr, T, materials["lambert4SG"], textures["wood"]);
@@ -238,11 +238,13 @@ void SceneManager::drawScene()
 {
 	if (frameType == REFLECTION)
 	{
+		sceneGraph->removeChild(water);
 		camera->setCamera();
 
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = BLOOM;
+		sceneGraph->addChild(water);
 
 
 
