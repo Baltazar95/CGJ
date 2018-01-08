@@ -42,4 +42,3 @@ class SceneNode
 };
 
 #endif // !__SCENENODE_H__
-

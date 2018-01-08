@@ -33,12 +33,11 @@ SceneManager::SceneManager()
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
-
-	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
-	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
-	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
-	//loader->processMeshData(vertices, normals, texCoords);
-	//delete loader;
+	
+	Obj_Loader loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Moon.obj"), &meshes, "Moon");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
 
 /* */
 	//setup cameras
@@ -53,7 +52,7 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-10.0f, -10.0f, 0.0f);
 	S = mf.scale(20.0f, 0.1f, 20.0f, 1.0f);
-	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
+	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], nullptr);
 
 	sceneGraph->addChild(water);
 /* * /
@@ -83,7 +82,7 @@ SceneManager::SceneManager()
 
 /* */
 	T = mf.translation(1.5f, 0.0f, 3.0f);
-	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
+	light = new SceneNode(meshes["Moon"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
 /* */
