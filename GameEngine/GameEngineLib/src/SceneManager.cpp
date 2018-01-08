@@ -1,20 +1,10 @@
 #include "SceneManager.h"
 
-float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-						 // positions   // texCoords
-	-1.0f,  1.0f,  0.0f, 1.0f,
-	-1.0f, -1.0f,  0.0f, 0.0f,
-	1.0f, -1.0f,  1.0f, 0.0f,
-
-	-1.0f,  1.0f,  0.0f, 1.0f,
-	1.0f, -1.0f,  1.0f, 0.0f,
-	1.0f,  1.0f,  1.0f, 1.0f
-};
-
 SceneManager::SceneManager()
 {
 	meshes = std::map<std::string, Mesh*>();
 
+	MatrixFactory mf;
 	Matrix4 S, R, T;
 
 	//shader creation
@@ -43,12 +33,11 @@ SceneManager::SceneManager()
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	materials = ml.getMaterials();
 	textures = tl.getTextures();
-
-	Obj_Loader loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
-	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
-	loaderCube = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
-	//loader->processMeshData(vertices, normals, texCoords);
-	//delete loader;
+	
+	Obj_Loader loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Moon.obj"), &meshes, "Moon");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
 
 /* */
 	//setup cameras
@@ -63,7 +52,7 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-10.0f, -10.0f, 0.0f);
 	S = mf.scale(20.0f, 0.1f, 20.0f, 1.0f);
-	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], textures["wood"]);
+	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], nullptr);
 
 	sceneGraph->addChild(water);
 /* * /
@@ -93,23 +82,13 @@ SceneManager::SceneManager()
 
 /* */
 	T = mf.translation(1.5f, 0.0f, 3.0f);
-	light = new SceneNode(meshes["Cube"], moonShader, T, materials["lambert4SG"], nullptr);
+	light = new SceneNode(meshes["Moon"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
 /* */
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("screenTexture"), 0);
 	waterShader->disableProgram();
-
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
@@ -226,6 +205,8 @@ ShaderProgram *SceneManager::createWaterShader()
 
 void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed)
 {
+	MatrixFactory mf;
+
 	float astep = 0.05f * elapsed;
 	float vstep = 0.00025f * elapsed;
 	float mSpeed = 0.025f * elapsed;
@@ -306,15 +287,4 @@ void SceneManager::bindFrameBuffer() {
 
 void SceneManager::unbindFrameBuffer() {
 	fbo->unbindFrameBuffer();
-}
-
-void SceneManager::drawQuad()
-{
-	waterShader->useProgram();
-	glUniform4fv(waterShader->getUniform("ModelMatrix"), 1, mf.rotation(Vector3(1.0f, 0.0f, 0.0f), 45.0f).matrix);
-	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, fbo->getRenderedTex());	// use the color attachment texture as the texture of the quad plane
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	waterShader->disableProgram();
 }

@@ -33,3 +33,18 @@ bool KeyBuffer::isPressed(unsigned char key)
 {
 	return keyBuffer[key];
 }
+
+void KeyBuffer::dragX(float xAmount)
+{
+	deltax = xAmount;
+}
+
+void KeyBuffer::dragY(float yAmount)
+{
+	deltax = yAmount;
+}
+
+void KeyBuffer::scroll(float scroll)
+{
+	scrollSign = scroll;
+}

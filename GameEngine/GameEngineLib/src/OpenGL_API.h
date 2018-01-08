@@ -1,18 +1,22 @@
 #ifndef __OPENGL_API__
 #define __OPENGL_API__
 
-#include "OpenGL_Abstract_API.h"
+#include "Abstract_API.h"
 #include "SceneManager.h"
 
-class OpenGL_API : OpenGL_Abstract_API
+class OpenGL_API : Abstract_API
 {
 	private:
 		void init();
+
+		////////////////////////// SETUPS ///////////////////////////////
 		void setupGLUT(int argc, char* argv[]);
 		void setupGLEW();
 		void setupOpenGL();
 		void checkOpenGLInfo();
 		void setupCallbacks();
+
+		//////////////////////// CALLBACKS //////////////////////////////
 		static void cleanup();
 		static void display();
 		static void keysPressed(unsigned char key, int x, int y);

@@ -6,8 +6,6 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-bool isOrtho = false, dragged = false, zoomed = false, keysThatPressed = false;
-
 float deltaAnglex = 0.0f, deltaAngley = 0.0f, fov = 30.0f;
 int xOrigin = -1, yOrigin = -1, elapsed = glutGet(GLUT_ELAPSED_TIME);
 
@@ -41,13 +39,11 @@ void OpenGL_API::display()
 void OpenGL_API::keysPressed(unsigned char key, int x, int y)
 {
 	KeyBuffer::instance()->pressKey(key);
-	keysThatPressed = true;
 }
 
 void OpenGL_API::keysReleased(unsigned char key, int x, int y)
 {
 	KeyBuffer::instance()->releaseKey(key);
-	keysThatPressed = true;
 }
 
 void OpenGL_API::mouseButton(int button, int state, int x, int y)
@@ -82,8 +78,6 @@ void OpenGL_API::mouseMovement(int x, int y)
 		// update deltaAngley
 		deltaAngley = (yOrigin - y) * 0.2f;
 		yOrigin = y;
-
-		dragged = true;
 	}
 }
 
@@ -92,12 +86,10 @@ void OpenGL_API::mouseWheel(int button, int direction, int x, int y)
 	if (direction > 0)
 	{
 		fov = -5.0f;
-		zoomed = true;
 	}
 	else
 	{
 		fov = 5.0f;
-		zoomed = true;
 	}
 }
 

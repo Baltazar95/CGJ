@@ -29,7 +29,6 @@ class SceneManager
 		const GLuint UBO_BP = 0;
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 		SceneNode *cube, *light, *water, *bridge, *sky;
-		MatrixFactory mf;
 		FrameBuffer *fbo;
 		ShaderProgram *waterShader;
 		unsigned int quadVAO, quadVBO;
@@ -49,7 +48,6 @@ class SceneManager
 		void drawScene();
 		void bindFrameBuffer();
 		void unbindFrameBuffer();
-		void drawQuad();
 };
 
 
