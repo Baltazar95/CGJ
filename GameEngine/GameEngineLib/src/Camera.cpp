@@ -1,15 +1,11 @@
 #include "Camera.h"
 
-//TODO create initial position for the camera
-Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
-{
-	MatrixFactory mf;
 
+Camera::Camera(const GLuint &newUBO_BP)
+{
 	UBO_BP = newUBO_BP;
-	timeamount = 0;
-	updatebool = true;
-	translation = mf.translation(position);
-	eye = position;
+	up = Vector3(0.0f, 1.0f, 0.0f);
+	speed = 0.025f;
 
 	glGenBuffers(1, &VboId);
 	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
@@ -18,12 +14,23 @@ Camera::Camera(const GLuint &newUBO_BP, Vector3 position)
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	GlUtils::checkOpenGLError("ERROR: Could not create uniform buffer object.");
+
 }
 
 Camera::~Camera()
 {
 	glDeleteBuffers(1, &VboId);
 	GlUtils::checkOpenGLError("ERROR: Could not delete buffer object.");
+}
+
+void Camera::setPosition(Vector3 pos)
+{
+	position = pos;
+}
+
+void Camera::setLookAt(Vector3 pos)
+{
+	lookAt = pos;
 }
 
 void Camera::setOrthographic(const float &left, const float &right, const float &bottom, const float &top, const float &zNear, const float &zFar)
@@ -43,6 +50,86 @@ void Camera::setPerspective(const float &nfovy, const float &naspect,const float
 	zFar = nzFar;
 
 	perspective = mf.perspectiveMatrix(fovy, aspect, zNear, zFar);
+}
+
+void Camera::update(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed)
+{
+	MatrixFactory mf;
+	float mSpeed = speed * elapsed;
+	Vector3 cameraPositionDelta = Vector3(0.0f);
+
+	timeamount += elapsed;
+	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
+	{
+		if (updatebool) {
+			switchProjectionMode();
+			updatebool = false;
+			timeamount = 0;
+		}
+	}
+
+	if (timeamount >= maxtime) {								//CHECK WHY TIMEAMOUNT IS INITIALIZED AT -INFINITY
+		updatebool = true;
+	}
+
+	direction = normalized(lookAt - position);
+
+	Vector3 axis = cross(direction, up);
+	Quaternion pitchQuaternion = Quaternion(deltaAngley, axis);
+	Quaternion headingQuaternion = Quaternion(deltaAnglex, up);
+	Quaternion temp = pitchQuaternion * headingQuaternion;
+	temp.normalize();
+	direction = rotate(temp, direction);
+
+	if (projectionMode == PERSPECTIVE)
+	{
+		if (fovy >= 1.0f && fovy <= 45.0f)
+		{
+			fovy += fov;
+		}
+		if (fovy <= 1.0f)
+		{
+			fovy = 1.0f;
+		}
+		if (fovy >= 45.0f)
+		{
+			fovy = 45.0f;
+		}
+		perspective = mf.perspectiveMatrix(fovy, aspect, zNear, zFar);
+	}
+
+	if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
+	{
+		cameraPositionDelta += direction * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('s') || KeyBuffer::instance()->isPressed('S'))
+	{
+		cameraPositionDelta -= direction * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('a') || KeyBuffer::instance()->isPressed('A'))
+	{
+		cameraPositionDelta -= cross(direction, up) * mSpeed;
+	}
+	if (KeyBuffer::instance()->isPressed('d') || KeyBuffer::instance()->isPressed('D'))
+	{
+		cameraPositionDelta += cross(direction, up) * mSpeed;
+	}
+
+	//add the camera delta
+	position += cameraPositionDelta;
+	//set the look at to be infront of the camera
+	lookAt = position + direction * 1.0f;
+
+	viewMatrix = mf.viewMatrix(position, lookAt, up);
+
+	if (projectionMode == ORTHOGRAPHIC)
+	{
+		projection = orthographic;
+	}
+	else
+	{
+		projection = perspective;
+	}
 }
 
 void Camera::switchProjectionMode()
@@ -69,154 +156,8 @@ void Camera::switchCameraType()
 	}
 }
 
-void Camera::updateView(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed)
-{
-	MatrixFactory mf;
-
-	timeamount += elapsed;
-	if (KeyBuffer::instance()->isPressed('p') || KeyBuffer::instance()->isPressed('P'))
-	{
-		if (updatebool) {
-			switchProjectionMode();
-			updatebool = false;
-			timeamount = 0;
-		}
-	}
-
-	if (timeamount >= maxtime) {								//CHECK WHY TIMEAMOUNT IS INITIALIZED AT -INFINITY
-		updatebool = true;
-	}
-
-	Quaternion qx, qy;
-
-	////////////////// EULER ///////////////////////
-	view = mf.rotation(up, deltaAnglex) * view;
-	view.normalize();
-	side = mf.rotation(up, deltaAnglex) * side;
-	side.normalize();
-
-	view = mf.rotation(side, deltaAngley) * view;
-	view.normalize();
-	up = mf.rotation(side, deltaAngley) * up;
-	up.normalize();
-	////////////////////////////////////////////////
-
-	/////////////////////// RODRIGUES //////////////////////////
-	//anglex += deltaAnglex;
-	//angley += deltaAngley;
-	//
-	//rx = mf.rotation(Vector4(-1.0f, 0.0f, 0.0f, 1.0f), angley);
-	//ry = mf.rotation(Vector4(0.0f, -1.0f, 0.0f, 1.0f), anglex);
-	////////////////////////////////////////////////////////////
-
-	///////////////////// QUATERNIONS //////////////////////////////
-	qx = Quaternion(deltaAngley, Vector4(-1.0f, 0.0f, 0.0f, 1.0f));
-	qy = Quaternion(deltaAnglex, Vector4(0.0f, -1.0f, 0.0f, 1.0f));
-	qtrn = qx * qy * qtrn;
-	////////////////////////////////////////////////////////////////
-
-	if (projectionMode == PERSPECTIVE)
-	{
-		if (fovy >= 1.0f && fovy <= 45.0f)
-		{
-			fovy += fov;
-		}
-		if (fovy <= 1.0f)
-		{
-			fovy = 1.0f;
-		}
-		if (fovy >= 45.0f)
-		{
-			fovy = 45.0f;
-		}
-		perspective = mf.perspectiveMatrix(fovy, aspect, zNear, zFar);
-	}
-
-	float astep = 0.05f * elapsed;
-	float vstep = 0.00025f * elapsed;
-	float mSpeed = 0.025f * elapsed;
-
-	if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
-	{
-		eye -= getFront() * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('s') || KeyBuffer::instance()->isPressed('S'))
-	{
-		eye += getFront() * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('a') || KeyBuffer::instance()->isPressed('A'))
-	{
-		eye += normalized(getSide()) * mSpeed;
-	}
-	if (KeyBuffer::instance()->isPressed('d') || KeyBuffer::instance()->isPressed('D'))
-	{
-		eye -= normalized(getSide()) * mSpeed;
-	}
-
-	rotationView = toGlMatrix(qtrn);
-
-	translation = mf.translation(eye);
-
-	/*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
-	{
-	viewMatrix = mf.viewMatrix(eye, eye + view, up);
-	}
-	else */
-	if (cameraType == ARCBALL)
-	{
-		viewMatrix = translation * rotationView;
-	}
-	else
-	{
-		viewMatrix = rotationView * translation;
-	}
-
-	if (projectionMode == ORTHOGRAPHIC)
-	{
-		projection = orthographic;
-	}
-	else
-	{
-		projection = perspective;
-	}
-
-}
-
 void Camera::setCamera()
 {
-	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), viewMatrix.matrix);
-	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
-
-void Camera::specialSetCamera()
-{
-	rotationView = toGlMatrix(qtrn);
-
-	/*	if (cameraType == ARCBALL && gimbalMode == RODRIGUES)
-	{
-	viewMatrix = mf.viewMatrix(eye, eye + view, up);
-	}
-	else */
-	if (cameraType == ARCBALL)
-	{
-		viewMatrix = /*translation **/ rotationView;
-	}
-	else
-	{
-		viewMatrix = rotationView /** translation*/;
-	}
-
-	if (projectionMode == ORTHOGRAPHIC)
-	{
-		projection = orthographic;
-	}
-	else
-	{
-		projection = perspective;
-	}
-
 	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), viewMatrix.matrix);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);

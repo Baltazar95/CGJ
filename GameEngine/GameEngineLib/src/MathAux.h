@@ -379,8 +379,9 @@
 		float t, x, y, z;
 
 		Quaternion();
-		Quaternion(float nt, float nx, float ny, float nz);
-		Quaternion(float angle, Vector4 axis);
+		Quaternion(const float &nt, const float &nx, const float &ny, const float &nz);
+		Quaternion(const float &angle, const Vector3 &axis);
+		Quaternion(const float &angle, const Vector4 &axis);
 
 		void operator += (const Quaternion &q);
 		void operator -= (const Quaternion &q);
@@ -410,6 +411,8 @@
 	Quaternion slerp(const Quaternion &q, const Quaternion &qt, float k);
 
 	Matrix4 toGlMatrix(const Quaternion &q);
+
+	Vector3 rotate(const Quaternion &q, const Vector3 &vec);
 
 	std::ostream &operator << (std::ostream &os, Quaternion &q);
 	std::istream &operator >> (std::istream &is, Quaternion &q);
