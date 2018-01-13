@@ -1,12 +1,39 @@
 #version 330 core
-out vec4 FragColor;
 
-in vec2 TexCoords;
+in vec3 exFragmentPosition;
+in vec3 exNormal;
+in vec2 exTexcoord;
 
-uniform sampler2D screenTexture;
+out vec4 FragmentColor;
+
+//TODO: pass these values from the engine
+uniform vec3 viewPosition;
+
+struct Material 
+{
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    vec3 emissive;
+
+    float shininess;
+};  
+uniform Material material;
+
+struct Light 
+{
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform Light light;
+
+uniform sampler2D tex;
 
 void main()
 {
-    vec3 col = texture(screenTexture, TexCoords).rgb;
-    FragColor = vec4(col, 1.0);
-} 
+    vec3 col = texture(tex, exTexcoord).rgb;
+    FragmentColor = vec4(col, 1.0);
+}

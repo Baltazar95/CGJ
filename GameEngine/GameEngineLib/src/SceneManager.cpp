@@ -18,9 +18,10 @@ SceneManager::SceneManager()
 	//import materials
 	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
+	materials = ml.getMaterials();
 
+	//import textures
 	TextureLoader tl;
-	//por aqui todas as texturas
 	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
@@ -31,7 +32,7 @@ SceneManager::SceneManager()
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
-	materials = ml.getMaterials();
+
 	textures = tl.getTextures();
 	
 	Obj_Loader loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Moon.obj"), &meshes, "Moon");
@@ -39,11 +40,6 @@ SceneManager::SceneManager()
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
 
-/* * /
-	//setup cameras
-	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
-	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
-	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 100.0f);
 /* */
 //setup cameras
 	camera = new Camera(UBO_BP);
@@ -60,7 +56,8 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-15.0f, -10.0f, -15.0f);
 	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
-	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], nullptr);
+	//TODO: missing water material
+	water = new SceneNode(meshes["Plane"], nullptr, T*S, nullptr, watertex);
 
 	sceneGraph->addChild(water);
 /* * /
@@ -95,7 +92,7 @@ SceneManager::SceneManager()
 
 /* */
 	waterShader->useProgram();
-	glUniform1i(waterShader->getUniform("screenTexture"), 0);
+	glUniform1i(waterShader->getUniform("tex"), 0);
 	waterShader->disableProgram();
 
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
@@ -137,9 +134,9 @@ ShaderProgram *SceneManager::createBlinnPhongShader()
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
 
-	//shader->addUniform("tex");
+	shader->addUniform("tex");
 
-	//shader->addUniform("ViewPosition");
+	shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	return shader;
@@ -153,10 +150,30 @@ ShaderProgram *SceneManager::createMoonShader()
 	shader->compileShaders();
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
-	shader->addUniform("ModelMatrix");
-	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
+	shader->addUniform("NormalMatrix");
+	shader->addUniform("ModelMatrix");
+
+	shader->addUniform("tex");
+
+	shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
 	return shader;
 }
 
@@ -190,7 +207,7 @@ ShaderProgram *SceneManager::createSimpleTextureShader()
 
 	shader->addUniform("tex");
 
-	//shader->addUniform("ViewPosition");
+	shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	return shader;
@@ -203,10 +220,31 @@ ShaderProgram *SceneManager::createWaterShader()
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/WaterFragmentShader.glsl", GL_FRAGMENT_SHADER);
 	shader->compileShaders();
 	shader->createShaderProgram();
-	shader->addAttribute(VERTICES, "position");
+	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
 	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
+	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
-	shader->addUniform("screenTexture");
+
+	shader->addUniform("tex");
+
+	shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
 	return shader;
 }
@@ -243,9 +281,10 @@ void SceneManager::drawScene()
 	if (frameType == REFLECTION)
 	{
 		sceneGraph->removeChild(water);
+		camera->setInvertedCamera();
 
-		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
-		water->setIsIt();
+		//TODO: create light objects and use it to get postions
+		sceneGraph->draw(nullptr, light->getWorldPosition(), camera->getPosition(), fbo);
 		frameType = BLOOM;
 		sceneGraph->addChild(water);
 	}
@@ -253,8 +292,7 @@ void SceneManager::drawScene()
 	{
 		camera->setCamera();
 
-		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
-		water->setIsIt();
+		sceneGraph->draw(nullptr, light->getWorldPosition(), camera->getPosition(), fbo);
 		frameType = REFLECTION;
 
 		

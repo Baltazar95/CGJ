@@ -7,7 +7,7 @@ in vec2 exTexcoord;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition = vec3(0.0, 0.0, 20.0);
+uniform vec3 viewPosition;
 
 struct Material 
 {

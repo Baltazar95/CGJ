@@ -51,6 +51,7 @@ class Camera
 		void switchCameraType();
 		void setCamera();
 		void setInvertedCamera();
+		Vector3 getPosition() { return position; };
 };
 
 #endif // !__CAMERA_H__
