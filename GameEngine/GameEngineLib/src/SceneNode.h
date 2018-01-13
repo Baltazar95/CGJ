@@ -18,7 +18,6 @@ class SceneNode
 		Material *material;
 		Matrix4 modelMatrix, worldModel;
 		Texture *texture;
-		bool isIt = false;
 
 	public:
 		SceneNode();
@@ -33,12 +32,7 @@ class SceneNode
 		void addChild(SceneNode *child);
 		void removeChild(SceneNode *child);
 		void update(const Matrix4 &model);
-		void draw(ShaderProgram *shader, const Vector3 &lightPos, FrameBuffer *fbo);
-		void setIsIt() {
-			if (isIt)
-				isIt = false;
-			else isIt = true;
-		};
+		void draw(ShaderProgram *shader, const Vector3 &lightPos, const Vector3 &cameraPosition, FrameBuffer *fbo);
 };
 
 #endif // !__SCENENODE_H__

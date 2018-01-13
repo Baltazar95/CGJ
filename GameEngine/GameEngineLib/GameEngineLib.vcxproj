@@ -176,6 +176,7 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GlUtils.h" />
     <ClInclude Include="src\KeyBuffer.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\MaterialLoader.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\MathAux.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
