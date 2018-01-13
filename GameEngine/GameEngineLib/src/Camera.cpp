@@ -119,19 +119,17 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 	//add the camera delta
 	position += cameraPositionDelta;
 	invposition = position;
-	invposition.z = -position.z;
-
-	//set inverted direction
-	invdirection = direction;
-	invdirection.z = -direction.z;
+	invposition.y = -position.y;
 
 	//set the look at to be infront of the camera
 	lookAt = position + direction;
-	invlookAt = invposition + invdirection;
+	invlookAt.y = -invlookAt.y;
 
 	//set inverted up
 	invup = up;
+	//invup.x = -up.x;
 	invup.y = -up.y;
+	//invup.z = -up.z;
 
 	viewMatrix = mf.viewMatrix(position, lookAt, up);
 	invviewMatrix = mf.viewMatrix(invposition, invlookAt, invup);

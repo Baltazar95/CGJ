@@ -45,8 +45,8 @@ SceneManager::SceneManager()
 	camera = new Camera(UBO_BP);
 	camera->setPosition(Vector3(0.0f, 0.0f, 20.0f));
 	camera->setLookAt(Vector3(0.0f, 0.0f, 0.0f));
-	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
-	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 100.0f);
+	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 150.0f);
+	camera->setPerspective(45.0f, (640.0f / 480.0f), 1.0f, 150.0f);
 
 
 /* */
@@ -57,7 +57,7 @@ SceneManager::SceneManager()
 	T = mf.translation(-15.0f, -10.0f, -15.0f);
 	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
 	//TODO: missing water material
-	water = new SceneNode(meshes["Plane"], nullptr, T*S, nullptr, watertex);
+	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex);
 
 	sceneGraph->addChild(water);
 /* * /
@@ -91,10 +91,6 @@ SceneManager::SceneManager()
 	sceneGraph->addChild(light);
 
 /* */
-	waterShader->useProgram();
-	glUniform1i(waterShader->getUniform("tex"), 0);
-	waterShader->disableProgram();
-
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
 }
 

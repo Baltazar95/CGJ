@@ -2,7 +2,7 @@
 
 in vec3 exFragmentPosition;
 in vec3 exNormal;
-in vec2 exTexcoord;
+in vec4 clipSpace;
 
 out vec4 FragmentColor;
 
@@ -34,6 +34,8 @@ uniform sampler2D tex;
 
 void main()
 {
-    vec3 col = texture(tex, exTexcoord).rgb;
-    FragmentColor = vec4(col, 1.0);
+    vec2 ndc = (clipSpace.xy/ clipSpace.w)/2.0 + 0.5;
+    vec2 reflectionCoords = vec2(-ndc.x, ndc.y);
+    vec4 col = texture(tex, reflectionCoords);
+    FragmentColor = col;
 }
