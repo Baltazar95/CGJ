@@ -50,8 +50,8 @@ SceneManager::SceneManager()
 	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
 
 /* */
-	T = mf.translation(-10.0f, -10.0f, 0.0f);
-	S = mf.scale(20.0f, 0.1f, 20.0f, 1.0f);
+	T = mf.translation(-15.0f, -10.0f, -15.0f);
+	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
 	water = new SceneNode(meshes["Plane"], nullptr, T*S, materials["lambert6SG"], nullptr);
 
 	sceneGraph->addChild(water);
@@ -63,15 +63,15 @@ SceneManager::SceneManager()
 /* */
 
 
-	T = mf.translation(-25.0f, -25.0f, 10.0f);
-	S = mf.scale(25.0f, 25.0f, 25.0f, 3.0f);
+	T = mf.translation(-15.0f, -15.0f, -15.0f);
+	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
 	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"]);
 
 	sceneGraph->addChild(sky);
 
 /* */
 
-	T = mf.translation(-1.0f, -5.0f, 0.0f);
+	T = mf.translation(15.0f, -10.0f, -15.0f);
 	for (auto member : meshes)
 	{
 		if (member.first.find("Bridge") != std::string::npos)
@@ -81,7 +81,7 @@ SceneManager::SceneManager()
 	}
 
 /* */
-	T = mf.translation(1.5f, 0.0f, 3.0f);
+	T = mf.translation(1.5f, 5.0f, 3.0f);
 	light = new SceneNode(meshes["Moon"], moonShader, T, materials["lambert4SG"], nullptr);
 	sceneGraph->addChild(light);
 
@@ -238,13 +238,12 @@ void SceneManager::drawScene()
 	if (frameType == REFLECTION)
 	{
 		sceneGraph->removeChild(water);
-		camera->setCamera();
+		camera->setInvertedCamera();
 
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = BLOOM;
 		sceneGraph->addChild(water);
-
 
 
 		//textureShader->useProgram();
