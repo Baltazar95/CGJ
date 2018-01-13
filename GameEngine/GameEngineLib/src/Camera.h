@@ -49,6 +49,7 @@ class Camera
 		void switchProjectionMode();
 		void switchCameraType();
 		void setCamera();	
+		Vector3 getPosition() { return position; };
 };
 
 #endif // !__CAMERA_H__

@@ -11,6 +11,7 @@
 #include "MaterialLoader.h"
 #include "TextureLoader.h"
 #include "Obj_Loader.h"
+#include "Light.h"
 
 //// FRAME TYPE //////
 enum FrameType
@@ -36,6 +37,7 @@ class SceneManager
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
 		std::map<std::string, Mesh*> meshes;
+
 	public:
 		SceneManager();
 		~SceneManager();

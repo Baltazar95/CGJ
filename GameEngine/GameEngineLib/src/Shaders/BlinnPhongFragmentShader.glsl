@@ -7,7 +7,7 @@ in vec2 exTexcoord;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition = vec3(0.0, 0.0, 20.0);
+uniform vec3 viewPosition;
 
 struct Material 
 {
@@ -29,6 +29,8 @@ struct Light
     vec3 specular;
 };
 uniform Light light;
+
+uniform sampler2D tex;
 
 void main(void)
 {
@@ -53,4 +55,5 @@ void main(void)
 
 	vec3 result = (ambient + diffuse + specular) + material.emissive;
 	FragmentColor = vec4(result, 1.0);
+	//FragmentColor = texture(tex, exTexcoord);
 }
