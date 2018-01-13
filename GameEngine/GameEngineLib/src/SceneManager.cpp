@@ -39,11 +39,19 @@ SceneManager::SceneManager()
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
 
-/* */
+/* * /
 	//setup cameras
 	camera = new Camera(UBO_BP, Vector3(0.0f, 0.0f, -20.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
 	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 100.0f);
+/* */
+//setup cameras
+	camera = new Camera(UBO_BP);
+	camera->setPosition(Vector3(0.0f, 0.0f, 20.0f));
+	camera->setLookAt(Vector3(0.0f, 0.0f, 0.0f));
+	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
+	camera->setPerspective(30.0f, (640.0f / 480.0f), 1.0f, 100.0f);
+
 
 /* */
 	//setup scene
@@ -207,12 +215,7 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 {
 	MatrixFactory mf;
 
-	float astep = 0.05f * elapsed;
-	float vstep = 0.00025f * elapsed;
-	float mSpeed = 0.025f * elapsed;
-
-	camera->updateView(deltaAnglex, deltaAngley, fov, elapsed);
-
+	//float mSpeed = 0.025f * elapsed;
 	//if (KeyBuffer::instance()->isPressed('w') || KeyBuffer::instance()->isPressed('W'))
 	//{
 	//	position += camera->getFront() * mSpeed;
@@ -230,6 +233,8 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 	//	position += normalized(camera->getSide()) * mSpeed;
 	//}
 
+	camera->update(deltaAnglex, deltaAngley, fov, elapsed);
+
 	sceneGraph->update(mf.translation(position));
 }
 
@@ -238,25 +243,11 @@ void SceneManager::drawScene()
 	if (frameType == REFLECTION)
 	{
 		sceneGraph->removeChild(water);
-		camera->setInvertedCamera();
 
 		sceneGraph->draw(nullptr, light->getWorldPosition(), fbo);
 		water->setIsIt();
 		frameType = BLOOM;
 		sceneGraph->addChild(water);
-
-
-		//textureShader->useProgram();
-		
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_FRONT);
-
-		//camera->specialSetCamera();
-		//sky->draw(nullptr, light->getWorldPosition(), fbo);
-
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
-		//textureShader->disableProgram();
 	}
 	else if (frameType == BLOOM)
 	{

@@ -1708,7 +1708,7 @@ Quaternion::Quaternion()
 	z = 0.0f;
 }
 
-Quaternion::Quaternion(float nt, float nx, float ny, float nz)
+Quaternion::Quaternion(const float &nt, const float &nx, const float &ny, const float &nz)
 {
 	t = nt;
 	x = nx;
@@ -1716,15 +1716,32 @@ Quaternion::Quaternion(float nt, float nx, float ny, float nz)
 	z = nz;
 }
 
-Quaternion::Quaternion(float angle, Vector4 axis)
+Quaternion::Quaternion(const float &angle, const Vector3 &axis)
+{
+	Vector3 axis3 = axis;
+	axis3.normalize();
+
+	float radians = degreesToRadians(angle);
+
+	t = cos(radians / 2);
+	float s = sin(radians / 2);
+	x = axis3.x * s;
+	y = axis3.y * s;
+	z = axis3.z * s;
+
+	//Quaternion::clean();
+	Quaternion::normalize();
+}
+
+Quaternion::Quaternion(const float &angle, const Vector4 &axis)
 {
 	Vector3 axis3 = Vector3(axis.x, axis.y, axis.z);
 	axis3.normalize();
 
-	angle = degreesToRadians(angle);
+	float radians = degreesToRadians(angle);
 
-	t = cos(angle / 2);
-	float s = sin(angle / 2);
+	t = cos(radians / 2);
+	float s = sin(radians / 2);
 	x = axis3.x * s;
 	y = axis3.y * s;
 	z = axis3.z * s;
@@ -1949,6 +1966,20 @@ Matrix4 toGlMatrix(const Quaternion &q)
 					2.0f * (xy + zt), 1.0f - 2.0f * (xx + zz), 2.0f * (yz - xt), 0.0f,
 					2.0f * (xz - yt), 2.0f * (yz + xt), 1.0f - 2.0f * (xx + yy), 0.0f,
 					0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+Vector3 rotate(const Quaternion &q, const Vector3 &v)
+{
+	// Extract the vector part of the quaternion
+	Vector3 u(q.x, q.y, q.z);
+
+	// Extract the scalar part of the quaternion
+	float s = q.t;
+
+	// Do the math
+	return 2.0f * dot(u, v) * u
+		+ (s*s - dot(u, u)) * v
+		+ 2.0f * s * cross(u, v);
 }
 
 std::ostream &operator << (std::ostream &os, Quaternion &q)
