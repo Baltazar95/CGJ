@@ -164,8 +164,8 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 
 
 		if (texture == nullptr && !manyTextures.empty()) {
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
+			//glEnable(GL_CULL_FACE);
+			//glCullFace(GL_FRONT);
 			mesh->drawSkybox(manyTextures);
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);

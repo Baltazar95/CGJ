@@ -104,60 +104,88 @@ void Mesh::drawSkybox(std::vector<Texture*> texture)
 	float length = 100;
 	// Bind the BACK texture of the sky map to the BACK side of the cube
 
-	std::string te = texture[0]->getName();
-	
-	GLuint t0 = texture[0]->getTexture();
 
-	glBindTexture(GL_TEXTURE_2D, t0);
+	glBindTexture(GL_TEXTURE_2D, texture[0]->getTexture());
 
 
 	// Center the skybox
 	x = x - width / 2;
 	y = y - height / 2;
 	z = z - length / 2;
+
+
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x, y, z);
 	glEnd();
+
+
 	glBindTexture(GL_TEXTURE_2D, texture[1]->getTexture());
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x + width, y, z + length);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, texture[4]->getTexture());
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x, y, z + length);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x + width, y, z + length);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x + width, y, z);
 	glEnd();
+
 	glBindTexture(GL_TEXTURE_2D, texture[5]->getTexture());
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x, y + height, z);
 	glEnd();
+
+
 	glBindTexture(GL_TEXTURE_2D, texture[2]->getTexture());
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x, y, z);
 
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, texture[3]->getTexture());
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); 
+	glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 0.0f); 
+	glVertex3f(x + width, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); 
+	glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); 
+	glVertex3f(x + width, y + height, z);
 	glEnd();
 
 	glBindVertexArray(0);
