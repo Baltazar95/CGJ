@@ -19,8 +19,8 @@ private:
 	std::string _map_Kd; //path to texture, looks like
 
 public:
-
 	Material() {};
+	Material(Vector3 amb, Vector3 diff, Vector3 spec, Vector3 emi, float shine);
 	Material(std::stringstream &sin);
 	std::string getName();
 	Vector3 getAmbient();

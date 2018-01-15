@@ -11,6 +11,7 @@ SceneManager::SceneManager()
 	ShaderProgram *blShader = createBlinnPhongShader();
 	ShaderProgram *moonShader = createMoonShader();
 	ShaderProgram *textureShader = createSimpleTextureShader();
+	ShaderProgram *skyboxShader = createSkyboxShader();
 	waterShader = createWaterShader();
 
 
@@ -19,6 +20,7 @@ SceneManager::SceneManager()
 	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
 	materials = ml.getMaterials();
+	materials["test"] = new Material(Vector3(1.0f, 0.5f, 0.31f), Vector3(1.0f, 0.5f, 0.31f), Vector3(0.5f, 0.5f, 0.5f), Vector3(0.5f, 0.5f, 0.5f), 32.0f);
 
 	//import textures
 	TextureLoader tl;
@@ -29,6 +31,8 @@ SceneManager::SceneManager()
 	//texture SKY
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
 	//textures = tl.getTextures();
+	//container
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/container.jpg"));
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
@@ -60,17 +64,16 @@ SceneManager::SceneManager()
 	water = new SceneNode(meshes["Plane"], nullptr, T*S, nullptr, watertex);
 
 	sceneGraph->addChild(water);
+
 /* * /
-	T = mf.translation(-1.0f, -1.0f, 0.0f);
-	cube = new SceneNode(meshes["Cube"], nullptr, T, materials["lambert4SG"], textures["wood"]);
+	T = mf.translation(-2.0f, 0.0f, 0.0f);
+	cube = new SceneNode(meshes["Cube"], blShader, T, materials["test"], textures["container"]);
 	sceneGraph->addChild(cube);
 
 /* */
-
-
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"]);
+	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"]);
 
 	sceneGraph->addChild(sky);
 
@@ -218,6 +221,42 @@ ShaderProgram *SceneManager::createWaterShader()
 	ShaderProgram *shader = new ShaderProgram();
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/WaterVertexShader.glsl", GL_VERTEX_SHADER);
 	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/WaterFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->compileShaders();
+	shader->createShaderProgram();
+	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
+	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
+
+	shader->addUniform("NormalMatrix");
+	shader->addUniform("ModelMatrix");
+
+	shader->addUniform("tex");
+
+	shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
+
+	return shader;
+}
+
+ShaderProgram *SceneManager::createSkyboxShader()
+{
+	ShaderProgram *shader = new ShaderProgram();
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SkyboxVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SkyboxFragmentShader.glsl", GL_FRAGMENT_SHADER);
 	shader->compileShaders();
 	shader->createShaderProgram();
 	shader->addAttribute(VERTICES, "inPosition");
