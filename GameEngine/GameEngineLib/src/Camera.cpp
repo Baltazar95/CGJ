@@ -5,6 +5,7 @@ Camera::Camera(const GLuint &newUBO_BP)
 {
 	UBO_BP = newUBO_BP;
 	up = Vector3(0.0f, 1.0f, 0.0f);
+	invup = Vector3(0.0f, -1.0f, 0.0f);
 	speed = 0.025f;
 
 	glGenBuffers(1, &VboId);
@@ -117,10 +118,23 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 
 	//add the camera delta
 	position += cameraPositionDelta;
+	invposition = position;
+	invposition.z = -position.z;
+
+	//set inverted direction
+	invdirection = direction;
+	invdirection.z = -direction.z;
+
 	//set the look at to be infront of the camera
-	lookAt = position + direction * 1.0f;
+	lookAt = position + direction;
+	invlookAt = invposition + invdirection;
+
+	//set inverted up
+	invup = up;
+	invup.y = -up.y;
 
 	viewMatrix = mf.viewMatrix(position, lookAt, up);
+	invviewMatrix = mf.viewMatrix(invposition, invlookAt, invup);
 
 	if (projectionMode == ORTHOGRAPHIC)
 	{
@@ -160,6 +174,14 @@ void Camera::setCamera()
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), viewMatrix.matrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void Camera::setInvertedCamera()
+{
+	glBindBuffer(GL_UNIFORM_BUFFER, VboId);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLfloat[16]), invviewMatrix.matrix);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(GLfloat[16]), sizeof(GLfloat[16]), projection.matrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

@@ -30,9 +30,10 @@ class Camera
 		ProjectionType projectionMode = PERSPECTIVE;
 		CameraType cameraType = FREE;
 		Vector3 position, lookAt, direction, up;
+		Vector3 invposition, invlookAt, invdirection, invup;
 		float fovy, aspect, zNear, zFar, speed;
 		Matrix4 projection, orthographic, perspective;
-		Matrix4 viewMatrix;
+		Matrix4 viewMatrix, invviewMatrix;
 		bool updatebool;
 		int timeamount = 0;
 		const int maxtime = 150;
@@ -48,7 +49,8 @@ class Camera
 		void update(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int elapsed);
 		void switchProjectionMode();
 		void switchCameraType();
-		void setCamera();	
+		void setCamera();
+		void setInvertedCamera();
 		Vector3 getPosition() { return position; };
 };
 

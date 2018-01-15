@@ -320,6 +320,7 @@ void SceneManager::drawScene()
 	if (frameType == REFLECTION)
 	{
 		sceneGraph->removeChild(water);
+		camera->setInvertedCamera();
 
 		//TODO: create light objects and use it to get postions
 		sceneGraph->draw(nullptr, light->getWorldPosition(), camera->getPosition(), fbo);
