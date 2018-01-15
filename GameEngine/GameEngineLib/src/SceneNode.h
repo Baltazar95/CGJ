@@ -18,12 +18,12 @@ class SceneNode
 		Material *material;
 		Matrix4 modelMatrix, worldModel;
 		Texture *texture;
-		std::vector<Texture*> *manyTextures;
+		std::vector<Texture*> manyTextures;
 
 	public:
 		SceneNode();
 		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture);
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, std::vector<Texture*> *newTextures, int nText);
+		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, std::vector<Texture*> &newTextures, int nText);
 		~SceneNode();
 		void setParent(SceneNode *parentNode);
 		void setShader(ShaderProgram *shader);
