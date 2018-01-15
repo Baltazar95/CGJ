@@ -7,6 +7,7 @@ in vec3 inNormal;
 out vec3 exFragmentPosition;
 out vec3 exNormal;
 out vec4 clipSpace;
+out vec3 toCameraVector;
 
 uniform mat4 NormalMatrix;
 uniform mat4 ModelMatrix;
@@ -18,6 +19,8 @@ uniform SharedMatrices
 
 void main()
 {
-    clipSpace = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inTexcoord.x, inTexcoord.y, 0.0, 1.0);
+    vec4 worldPosition = ModelMatrix * vec4(inPosition, 1.0);
+    clipSpace = ProjectionMatrix * ViewMatrix * worldPosition;
     gl_Position = clipSpace;
+    toCameraVector = inPosition - worldPosition.xyz;
 }
