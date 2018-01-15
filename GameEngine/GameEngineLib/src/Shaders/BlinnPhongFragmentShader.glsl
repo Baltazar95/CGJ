@@ -7,12 +7,12 @@ in vec2 exTexcoord;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition;
+uniform vec3 ViewPosition;
 
 struct Material 
 {
     vec3 ambient;
-    vec3 diffuse;
+    sampler2D diffuse;
     vec3 specular;
     vec3 emissive;
 
@@ -35,17 +35,22 @@ uniform sampler2D tex;
 void main(void)
 {
 	//ambient
-    vec3 ambient = light.ambient * material.ambient;
+    //vec3 ambient = light.ambient * material.ambient;
+
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, exTexcoord));
+
 
     //diffuse
 	vec3 norm = normalize(exNormal);
 	vec3 lightDir = normalize(light.position - exFragmentPosition); 
 
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = light.diffuse * (diff * material.diffuse);
+	float diff = max(dot(lightDir, norm), 0.0);
+	//vec3 diffuse = light.diffuse * (diff * material.diffuse);
+
+	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, exTexcoord));  
 
 	//specular
-	vec3 viewDir = normalize(viewPosition - exFragmentPosition);
+	vec3 viewDir = normalize(ViewPosition - exFragmentPosition);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
 	vec3 halfwayDir = normalize(lightDir + viewDir);
@@ -53,7 +58,6 @@ void main(void)
 	float spec = pow(max(dot(norm, halfwayDir), 0.0), material.shininess);
 	vec3 specular = light.specular * (spec * material.specular);
 
-	vec3 result = (ambient + diffuse + specular) + material.emissive;
+	vec3 result = (ambient + diffuse + specular) /*+ material.emissive*/;
 	FragmentColor = vec4(result, 1.0);
-	//FragmentColor = texture(tex, exTexcoord);
 }
