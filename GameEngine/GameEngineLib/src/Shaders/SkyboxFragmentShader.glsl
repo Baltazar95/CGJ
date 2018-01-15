@@ -1,11 +1,38 @@
 #version 330 core
 
-in vec3 textureCoords;
-out vec4 out_Color;
+in vec3 exFragmentPosition;
+in vec3 exNormal;
+in vec2 exTexcoord;
 
-uniform samplerCube cubeMap;
+out vec4 FragmentColor;
 
-void main(void){
+//TODO: pass these values from the engine
+uniform vec3 ViewPosition;
 
-	out_Color = texture(cubeMap, textureCoords);
+struct Material 
+{
+    vec3 ambient;
+    sampler2D diffuse;
+    vec3 specular;
+    vec3 emissive;
+
+    float shininess;
+};  
+uniform Material material;
+
+struct Light 
+{
+    vec3 position;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform Light light;
+
+uniform sampler2D tex;
+
+void main(void)
+{
+	FragmentColor = texture(tex, exTexcoord);
 }

@@ -1,5 +1,13 @@
 #include "Material.h"
 
+Material::Material(Vector3 amb, Vector3 diff, Vector3 spec, Vector3 emi, float shine)
+{
+	_ambient = amb;
+	_diffuse = diff;
+	_specular = spec;
+	_emission = emi;
+	_shininess = shine;
+}
 
 Material::Material(std::stringstream &sin) {
 	parseName(sin);

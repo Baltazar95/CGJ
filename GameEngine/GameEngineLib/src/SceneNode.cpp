@@ -137,6 +137,9 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(modelMatrix).matrix);
 		glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, modelMatrix.matrix);
 
+		const GLfloat camPos[] = { cameraPosition.x, cameraPosition.y, cameraPosition.z };
+		glUniform3fv(useShader->getUniform("ViewPosition"), 1, camPos);
+
 		// bind Texture
 		if (texture != nullptr)
 		{

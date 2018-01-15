@@ -7,7 +7,7 @@ in vec2 exTexcoord;
 out vec4 FragmentColor;
 
 //TODO: pass these values from the engine
-uniform vec3 viewPosition;
+uniform vec3 ViewPosition;
 
 struct Material 
 {
@@ -45,7 +45,7 @@ void main(void)
 	vec3 diffuse = light.diffuse * (diff * material.diffuse);
 
 	//specular
-	vec3 viewDir = normalize(viewPosition - exFragmentPosition);
+	vec3 viewDir = normalize(ViewPosition - exFragmentPosition);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
 	vec3 halfwayDir = normalize(lightDir + viewDir);

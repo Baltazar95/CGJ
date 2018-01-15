@@ -45,6 +45,7 @@ class SceneManager
 		ShaderProgram *createMoonShader();
 		ShaderProgram *createSimpleTextureShader();
 		ShaderProgram *createWaterShader();
+		ShaderProgram *createSkyboxShader();
 		//TODO missing parameters to update
 		void updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed);
 		void drawScene();
