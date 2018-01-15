@@ -104,9 +104,11 @@ void Mesh::drawSkybox(std::vector<Texture*> texture)
 	float length = 100;
 	// Bind the BACK texture of the sky map to the BACK side of the cube
 
+	std::string te = texture[0]->getName();
 	
+	GLuint t0 = texture[0]->getTexture();
 
-	glBindTexture(GL_TEXTURE_2D, texture[0]->getTexture());
+	glBindTexture(GL_TEXTURE_2D, t0);
 
 
 	// Center the skybox

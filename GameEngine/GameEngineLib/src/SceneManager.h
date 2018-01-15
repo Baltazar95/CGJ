@@ -36,7 +36,6 @@ class SceneManager
 		std::map<std::string, Material*> materials;
 		FrameType frameType = REFLECTION;
 		std::map<std::string, Texture*> textures;
-		std::vector<Texture*> skyTextures;
 		std::map<std::string, Mesh*> meshes;
 
 	public:

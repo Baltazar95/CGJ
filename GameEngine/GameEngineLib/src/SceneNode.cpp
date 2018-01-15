@@ -30,6 +30,8 @@ SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model,
 	texture = nullptr;
 	material = m;
 	worldModel = mf.identity4();
+
+	manyTextures->data();
 }
 
 SceneNode::~SceneNode()
