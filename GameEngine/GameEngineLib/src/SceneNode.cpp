@@ -16,6 +16,20 @@ SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model,
 	texture = newTexture;
 	material = m;
 	worldModel = mf.identity4();
+	manyTextures = nullptr;
+}
+
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, std::vector<Texture*> *newTextures, int nText)
+{
+	MatrixFactory mf;
+
+	mesh = newMesh;
+	sh = shader;
+	modelMatrix = model;
+	manyTextures = newTextures;
+	texture = nullptr;
+	material = m;
+	worldModel = mf.identity4();
 }
 
 SceneNode::~SceneNode()
@@ -141,16 +155,17 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform3fv(useShader->getUniform("ViewPosition"), 1, camPos);
 
 		// bind Texture
-		if (texture != nullptr)
+		if (texture != nullptr && manyTextures == nullptr)
 		{
 			glUniform1i(useShader->getUniform("tex"), 0);
 			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
 		}
 
-		if (texture != nullptr && (texture->getName()).compare("sky") == 0) {
+
+		if (texture == nullptr && manyTextures != nullptr) {
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
-			mesh->draw();
+			mesh->drawSkybox(*manyTextures);
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 		}

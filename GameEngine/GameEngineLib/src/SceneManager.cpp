@@ -29,10 +29,20 @@ SceneManager::SceneManager()
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	//texture SKY
-	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
+	//tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
 	//textures = tl.getTextures();
 	//container
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/container.jpg"));
+
+
+	//skybox textures
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyfront.png"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyback.png"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyup.png"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skydown.png"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyleft.png"));
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyright.png"));
+
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
@@ -71,9 +81,17 @@ SceneManager::SceneManager()
 	sceneGraph->addChild(cube);
 
 /* */
+	skyTextures[0] = textures["skyback"];
+	skyTextures[1] = textures["skyfront"];
+	skyTextures[2] = textures["skyleft"];
+	skyTextures[3] = textures["skyright"];
+	skyTextures[4] = textures["skydown"];
+	skyTextures[5] = textures["skyup"];
+
+
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"]);
+	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], &skyTextures, 6);
 
 	sceneGraph->addChild(sky);
 

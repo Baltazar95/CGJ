@@ -4,6 +4,7 @@
 #include <vector>
 #include "GlUtils.h"
 #include "MathAux.h"
+#include "Texture.h"
 
 #define VERTICES 0
 #define TEXCOORDS 1
@@ -26,6 +27,7 @@ class Mesh
 		void createBufferObjects();
 		void destroyBufferObjects();
 		void draw();
+		void drawSkybox(std::vector<Texture*> texture);
 		std::vector<Vector3> *getVertices() { return &vertices; };
 		std::vector<Vector3> *getNormals() { return &normals; };
 		std::vector<Vector2> *getTexCoords() { return &texCoords; };

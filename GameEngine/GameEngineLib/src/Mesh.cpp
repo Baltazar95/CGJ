@@ -90,3 +90,76 @@ void Mesh::draw()
 	//TODO: well this function blocks the framebuffer, why?
 	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
 }
+
+void Mesh::drawSkybox(std::vector<Texture*> texture)
+{
+
+	glBindVertexArray(VaoId);
+
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	float width = 100;
+	float height = 100;
+	float length = 100;
+	// Bind the BACK texture of the sky map to the BACK side of the cube
+
+	
+
+	glBindTexture(GL_TEXTURE_2D, texture[0]->getTexture());
+
+
+	// Center the skybox
+	x = x - width / 2;
+	y = y - height / 2;
+	z = z - length / 2;
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, texture[1]->getTexture());
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, texture[4]->getTexture());
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, texture[5]->getTexture());
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, texture[2]->getTexture());
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z);
+
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, texture[3]->getTexture());
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glEnd();
+
+	glBindVertexArray(0);
+
+	//TODO: well this function blocks the framebuffer, why?
+	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
+}
