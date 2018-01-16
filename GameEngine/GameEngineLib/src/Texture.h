@@ -32,7 +32,7 @@ public:
 	std::string Texture::getName();
 	void setTexture(unsigned int tex) { texture = tex; }
 	bool load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name);
-	void create_cube_map(const char* front, const char* back, const char* top, const char* bottom, const char* left, const char* right, GLuint* tex_cube);
+	void create_cube_map(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile, GLuint* tex_cube);
 
 
 };

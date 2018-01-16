@@ -88,7 +88,25 @@ bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char*
 }
 
 
-void Texture::create_cube_map(const char* front, const char* back, const char* top, const char* bottom, const char* left, const char* right, GLuint* tex_cube) {
+void Texture::create_cube_map(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile, GLuint* tex_cube) {
+
+
+	std::string myFiles[] = { frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
+
+
+	for each (std::string file in myFiles)
+	{
+		std::string last_element(file.substr(file.rfind("/") + 1));
+		std::string no_extension(last_element.substr(0, last_element.rfind(".")));
+
+		_texture_name = no_extension;
+
+		if(_texture_name.compare(""))
+
+		const char* cstr = sin.c_str();
+	}
+
+	
 
 	// generate a cube-map texture to hold all the sides
 	glActiveTexture(GL_TEXTURE0);
