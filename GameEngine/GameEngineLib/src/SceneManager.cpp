@@ -62,7 +62,7 @@ SceneManager::SceneManager()
 	T = mf.translation(-15.0f, -10.0f, -15.0f);
 	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
 	//TODO: missing water material
-	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex,textures["dudvmap"]);
+	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex, nullptr);
 
 	sceneGraph->addChild(water);
 /* * /
