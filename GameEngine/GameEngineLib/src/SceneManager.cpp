@@ -282,7 +282,7 @@ ShaderProgram *SceneManager::createSkyboxShader()
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
 
-	shader->addUniform("tex");
+	shader->addUniform("cube_texture");
 
 	shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);

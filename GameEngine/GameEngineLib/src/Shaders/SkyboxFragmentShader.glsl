@@ -30,9 +30,9 @@ struct Light
 };
 uniform Light light;
 
-uniform sampler2D tex;
+uniform samplerCube cube_texture;
 
 void main(void)
 {
-	FragmentColor = texture(tex, exTexcoord);
+	FragmentColor = texture(cube_texture, exTexcoord);
 }
