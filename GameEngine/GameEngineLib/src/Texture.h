@@ -18,13 +18,15 @@ private:
 	const char* bottom = "";
 	const char* left = "";
 	const char* right = "";
-	GLuint* tex_cube;
+	//GLuint* tex_cube;
 
 public:
 
 	Texture() {};
 	Texture(std::string &sin);
 	Texture(std::string name, char* data);
+	Texture(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile);
+
 	unsigned int getTexture() {
 		return texture;
 	};
@@ -32,7 +34,6 @@ public:
 	std::string Texture::getName();
 	void setTexture(unsigned int tex) { texture = tex; }
 	bool load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name);
-	void create_cube_map(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile, GLuint* tex_cube);
 
 
 };

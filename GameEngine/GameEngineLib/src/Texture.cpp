@@ -36,6 +36,74 @@ Texture::Texture(std::string &sin) {
 	stbi_image_free(data);
 }
 
+Texture::Texture(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile) {
+
+	std::string myFiles[] = { frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
+
+
+	for each (std::string file in myFiles)
+	{
+		std::string last_element(file.substr(file.rfind("/") + 1));
+		std::string no_extension(last_element.substr(0, last_element.rfind(".")));
+
+		_texture_name = no_extension;
+
+		const char* cstr = file.c_str();
+
+
+		if (_texture_name.compare("skyfront")) {
+
+			Texture::front = cstr;
+
+		}
+		else if (_texture_name.compare("skyback")) {
+
+			Texture::back = cstr;
+
+		}
+		else if (_texture_name.compare("skyright")) {
+
+			Texture::right = cstr;
+
+		}
+		else if (_texture_name.compare("skyback")) {
+
+			Texture::back = cstr;
+
+		}
+		else if (_texture_name.compare("skydown")) {
+
+			Texture::bottom = cstr;
+
+		}
+		else if (_texture_name.compare("skyup")) {
+
+			Texture::top = cstr;
+
+		}
+
+	}
+
+
+	// generate a cube-map texture to hold all the sides
+	glActiveTexture(GL_TEXTURE0);
+	glGenTextures(1, &texture);
+
+	// load each image and copy into a side of the cube-map texture
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, top);
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, bottom);
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, left);
+	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_X, right);
+	// format cube map texture
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+}
 
 Texture::Texture(std::string name, char* data) {
 
@@ -62,8 +130,6 @@ std::string Texture::getName() {
 	return _texture_name;
 }
 
-
-
 bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name) {
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
@@ -88,42 +154,3 @@ bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char*
 }
 
 
-void Texture::create_cube_map(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile, GLuint* tex_cube) {
-
-
-	std::string myFiles[] = { frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
-
-
-	for each (std::string file in myFiles)
-	{
-		std::string last_element(file.substr(file.rfind("/") + 1));
-		std::string no_extension(last_element.substr(0, last_element.rfind(".")));
-
-		_texture_name = no_extension;
-
-		if(_texture_name.compare(""))
-
-		const char* cstr = sin.c_str();
-	}
-
-	
-
-	// generate a cube-map texture to hold all the sides
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, tex_cube);
-
-	// load each image and copy into a side of the cube-map texture
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, top);
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, bottom);
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, left);
-	load_cube_map_side(*tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_X, right);
-	// format cube map texture
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-}

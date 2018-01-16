@@ -12,7 +12,7 @@ void TextureLoader::loadTextureData(std::string &filename) {
 
 void TextureLoader::loadCubeMapData(std::string &front, std::string &back, std::string &up, std::string &down, std::string &left, std::string &right) {
 
-	Texture *text = new Texture(filename);
+	Texture *text = new Texture(front, back, up, down, left, right);
 
 	_textures[text->getName()] = text;
 
