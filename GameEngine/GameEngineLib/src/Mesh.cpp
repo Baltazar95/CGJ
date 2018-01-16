@@ -62,7 +62,7 @@ void Mesh::createBufferObjects()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
+	//GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
 }
 
 
@@ -190,6 +190,5 @@ void Mesh::drawSkybox(std::vector<Texture*> texture)
 
 	glBindVertexArray(0);
 
-	//TODO: well this function blocks the framebuffer, why?
-	//GlUtils::checkOpenGLError("ERROR: Could not draw mesh");
+
 }

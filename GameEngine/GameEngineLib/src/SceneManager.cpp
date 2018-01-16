@@ -77,15 +77,7 @@ SceneManager::SceneManager()
 	cube = new SceneNode(meshes["Cube"], blShader, T, materials["test"], textures["container"]);
 	sceneGraph->addChild(cube);
 
-/* 
-	
-	skyTextures[0] = textures["skyback"];
-	skyTextures[1] = textures["skyfront"];
-	skyTextures[2] = textures["skyleft"];
-	skyTextures[3] = textures["skyright"];
-	skyTextures[4] = textures["skydown"];
-	skyTextures[5] = textures["skyup"];
-	*/
+/* */
 
 	std::vector<Texture*> skyTextures{ textures["skyback"], textures["skyfront"], textures["skyleft"], textures["skyright"], textures["skydown"], textures["skyup"] };
 
