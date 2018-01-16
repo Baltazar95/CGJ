@@ -9,6 +9,14 @@ void TextureLoader::loadTextureData(std::string &filename) {
 
 }
 
+void TextureLoader::loadCubeMapData(std::string &filename, std::string &filename, std::string &filename, std::string &filename, std::string &filename, std::string &filename) {
+
+	Texture *text = new Texture(filename);
+
+	_textures[text->getName()] = text;
+
+}
+
 unsigned int TextureLoader::addNullTexture(std::string &filename) {
 
 	Texture *text = new Texture(filename, NULL);

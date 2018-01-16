@@ -28,8 +28,16 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
+
+	
+
+
 	//texture SKY
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
+
+
+
+
 	//textures = tl.getTextures();
 	//container
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/container.jpg"));

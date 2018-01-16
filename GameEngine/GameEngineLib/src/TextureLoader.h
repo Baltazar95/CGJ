@@ -13,6 +13,7 @@ private:
 
 public:
 
+	void loadCubeMapData(std::string &filename, std::string &filename, std::string &filename, std::string &filename, std::string &filename, std::string &filename);
 	void loadTextureData(std::string &filename);
 	unsigned int addNullTexture(std::string &filename);
 	std::map<std::string, Texture*> getTextures();
