@@ -17,11 +17,11 @@ class SceneNode
 		Mesh *mesh;
 		Material *material;
 		Matrix4 modelMatrix, worldModel;
-		Texture *texture;
+		Texture *texture1, *texture2;
 
 	public:
 		SceneNode();
-		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture);
+		SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture, Texture *t2);
 		~SceneNode();
 		void setParent(SceneNode *parentNode);
 		void setShader(ShaderProgram *shader);

@@ -131,6 +131,7 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 
 	viewMatrix = mf.viewMatrix(position, lookAt, up);
 	invviewMatrix = mf.viewMatrix(invposition, invlookAt, invup);
+	//invviewMatrix = mf.translation(direction.x, direction.y, direction.z) * invviewMatrix;
 
 	if (projectionMode == ORTHOGRAPHIC)
 	{

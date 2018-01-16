@@ -18,24 +18,29 @@ SceneManager::SceneManager()
 	//import materials
 	MaterialLoader ml;
 	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/bridge.mtl"));
+	ml.loadMaterialData(std::string("../../GameEngine/GameEngineLib/src/Meshes/moon.mtl"));
+
 	materials = ml.getMaterials();
 
 	//import textures
 	TextureLoader tl;
 	//texture 1 - wood
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
+
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/moon_unwrap.jpg"));
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	//texture SKY
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky.jpg"));
 	//textures = tl.getTextures();
+	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/dudvmap.jpg"));
 
 	Texture *watertex = new Texture("water", NULL);
 	//Texture *watertex = new Texture(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 
 	textures = tl.getTextures();
 	
-	Obj_Loader loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Moon.obj"), &meshes, "Moon");
+	Obj_Loader loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/moon.obj"), &meshes, "Moon");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
@@ -51,13 +56,13 @@ SceneManager::SceneManager()
 
 /* */
 	//setup scene
-	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr);
+	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr, nullptr);
 
 /* */
 	T = mf.translation(-15.0f, -10.0f, -15.0f);
 	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
 	//TODO: missing water material
-	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex);
+	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex,textures["dudvmap"]);
 
 	sceneGraph->addChild(water);
 /* * /
@@ -70,24 +75,26 @@ SceneManager::SceneManager()
 
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"]);
+	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"],nullptr);
 
 	sceneGraph->addChild(sky);
 
 /* */
 
-	T = mf.translation(15.0f, -10.0f, -15.0f);
+	T = mf.translation(15.0f, -9.0f, -15.0f);
+	S = mf.scale(0.3f, 0.3f, 0.3f,1.0f);
 	for (auto member : meshes)
 	{
 		if (member.first.find("Bridge") != std::string::npos)
 		{
-			sceneGraph->addChild(new SceneNode(meshes[member.first], nullptr, T, materials[member.second->getMaterialName()], textures["metal"]));
+			sceneGraph->addChild(new SceneNode(meshes[member.first], nullptr, T, materials[member.second->getMaterialName()], textures["metal"], nullptr));
 		}
 	}
 
 /* */
-	T = mf.translation(1.5f, 5.0f, 3.0f);
-	light = new SceneNode(meshes["Moon"], moonShader, T, materials["lambert4SG"], nullptr);
+	T = mf.translation(1.5f, 8.0f, 3.0f);
+	S = mf.scale(2.0f, 2.0f, 2.0f,1.0f);
+	light = new SceneNode(meshes["Moon"], moonShader, T*S, materials["Material.001"], textures["moon_unwrap"], nullptr);
 	sceneGraph->addChild(light);
 
 /* */
@@ -237,7 +244,9 @@ ShaderProgram *SceneManager::createWaterShader()
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");
 
+
 	shader->addUniform("tex");
+	shader->addUniform("dudvMap");
 
 	shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
