@@ -141,18 +141,27 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform3fv(useShader->getUniform("ViewPosition"), 1, camPos);
 
 		// bind Texture
-		if (texture != nullptr)
+		if (texture != nullptr && !((texture->getName()).compare("sky") == 0))
 		{
 			glUniform1i(useShader->getUniform("tex"), 0);
 			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
 		}
 
 		if (texture != nullptr && (texture->getName()).compare("sky") == 0) {
+
+			glDepthMask(GL_FALSE);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, texture->getTexture());
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
+
 			mesh->draw();
+
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
+			glDepthMask(GL_TRUE);
+
+			
 		}
 		else {
 			mesh->draw();

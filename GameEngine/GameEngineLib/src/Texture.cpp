@@ -84,6 +84,7 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 
 	}
 
+	_texture_name = "sky";
 
 	// generate a cube-map texture to hold all the sides
 	glActiveTexture(GL_TEXTURE0);

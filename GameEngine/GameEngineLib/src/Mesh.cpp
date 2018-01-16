@@ -82,7 +82,7 @@ void Mesh::destroyBufferObjects()
 
 void Mesh::draw()
 {
-
+	
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
 	glBindVertexArray(0);

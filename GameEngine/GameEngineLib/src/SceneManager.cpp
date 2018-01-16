@@ -28,14 +28,9 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/wood.jpg"));
 	//texture 2
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
-
-	
-
-
 	//texture SKY
 	//front  back  up  down left right
 	tl.loadCubeMapData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyfront.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyback.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyup.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skydown.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyleft.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyright.png"));
-
 
 	//textures = tl.getTextures();
 	//container
