@@ -13,6 +13,7 @@ SceneManager::SceneManager()
 	ShaderProgram *textureShader = createSimpleTextureShader();
 	ShaderProgram *skyboxShader = createSkyboxShader();
 	ShaderProgram *multipleLightsShader = createMutipleShader();
+	ShaderProgram *pointLightShader = createPointLightShader();
 	waterShader = createWaterShader();
 
 
@@ -81,19 +82,19 @@ SceneManager::SceneManager()
 	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["test"], textures["container"]);
 	sceneGraph->addChild(cube);
 
-/* */
+/* * /
 	T = mf.translation(0.0f, 3.0f, -20.0f);
-	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["orange"], nullptr, nullptr);
+	cube = new SceneNode(meshes["Cube"], pointLightShader, T, materials["orange"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
-/* */
+/* * /
 	T = mf.translation(15.0f, 3.0f, -10.0f);
-	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["red"], nullptr, nullptr);
+	cube = new SceneNode(meshes["Cube"], pointLightShader, T, materials["red"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
-/* */
+/* * /
 	T = mf.translation(17.0f, 3.0f, -19.0f);
-	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["test2"], nullptr, nullptr);
+	cube = new SceneNode(meshes["Cube"], pointLightShader, T, materials["test2"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
 /* */
@@ -111,7 +112,7 @@ SceneManager::SceneManager()
 	{
 		if (member.first.find("Bridge") != std::string::npos)
 		{
-			sceneGraph->addChild(new SceneNode(meshes[member.first], textureShader, T*S, materials[member.second->getMaterialName()], textures["metal"], nullptr));
+			sceneGraph->addChild(new SceneNode(meshes[member.first], nullptr, T*S, materials[member.second->getMaterialName()], textures["metal"], nullptr));
 		}
 	}
 
@@ -374,6 +375,42 @@ ShaderProgram *SceneManager::createMutipleShader()
 	shader->addUniform("pointLights[3].constant");
 	shader->addUniform("pointLights[3].linear");
 	shader->addUniform("pointLights[3].quadratic");
+
+	shader->addUniform("NormalMatrix");
+	shader->addUniform("ModelMatrix");
+
+	shader->addUniform("tex");
+
+	shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
+
+	return shader;
+}
+
+ShaderProgram *SceneManager::createPointLightShader()
+{
+	ShaderProgram *shader = new ShaderProgram();
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SkyboxVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/SkyboxFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->compileShaders();
+	shader->createShaderProgram();
+	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
+	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("light.position");
+	shader->addUniform("light.ambient");
+	shader->addUniform("light.diffuse");
+	shader->addUniform("light.specular");
 
 	shader->addUniform("NormalMatrix");
 	shader->addUniform("ModelMatrix");

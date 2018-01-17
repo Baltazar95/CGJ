@@ -13,7 +13,7 @@ uniform sampler2D tex;
 struct Material 
 {
     vec3 ambient;
-    vec3 diffuse;
+    sampler2D diffuse;
     vec3 specular;
     vec3 emissive;
 
@@ -96,8 +96,8 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
     // combine results
-    vec3 ambient  = light.ambient * material.ambient;
-    vec3 diffuse  = light.diffuse * (diff * material.diffuse);
+    vec3 ambient  = light.ambient * texture(material.diffuse, exTexcoord).rgb;
+    vec3 diffuse  = light.diffuse * (diff * texture(material.diffuse, exTexcoord).rgb);
     vec3 specular = light.specular * (spec * material.specular);
     return (ambient + diffuse + specular);
 }
@@ -115,8 +115,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance    = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     // combine results
-    vec3 ambient  = light.ambient * material.ambient;
-    vec3 diffuse  = light.diffuse * (diff * material.diffuse);
+    vec3 ambient  = light.ambient * texture(material.diffuse, exTexcoord).rgb;
+    vec3 diffuse  = light.diffuse * (diff * texture(material.diffuse, exTexcoord).rgb);
     vec3 specular = light.specular * (spec * material.specular);
     ambient  *= attenuation;
     diffuse  *= attenuation;
