@@ -5,7 +5,6 @@ Camera::Camera(const GLuint &newUBO_BP)
 {
 	UBO_BP = newUBO_BP;
 	up = Vector3(0.0f, 1.0f, 0.0f);
-	invup = Vector3(0.0f, -1.0f, 0.0f);
 	speed = 0.025f;
 
 	glGenBuffers(1, &VboId);
@@ -121,15 +120,12 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 	//add the camera delta
 	position += cameraPositionDelta;
 	invposition = position;
-	invposition.z = -position.z;
-
-	//set inverted direction
-	invdirection = direction;
-	invdirection.z = -direction.z;
+	invposition.y = -position.y;
 
 	//set the look at to be infront of the camera
 	lookAt = position + direction;
-	invlookAt = invposition + invdirection;
+	invlookAt = lookAt;
+	invlookAt.y = -lookAt.y;
 
 	//set inverted up
 	invup = up;
@@ -137,6 +133,7 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 
 	viewMatrix = mf.viewMatrix(position, lookAt, up);
 	invviewMatrix = mf.viewMatrix(invposition, invlookAt, invup);
+	//invviewMatrix = mf.translation(direction.x, direction.y, direction.z) * invviewMatrix;
 
 	if (projectionMode == ORTHOGRAPHIC)
 	{

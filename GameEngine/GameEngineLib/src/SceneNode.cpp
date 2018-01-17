@@ -6,14 +6,15 @@ SceneNode::SceneNode()
 	worldModel = modelMatrix = mf.identity4();
 }
 
-SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture)
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture, Texture  *t2)
 {
 	MatrixFactory mf;
 
 	mesh = newMesh;
 	sh = shader;
 	modelMatrix = model;
-	texture = newTexture;
+	texture1 = newTexture;
+	texture2 = t2;
 	material = m;
 	worldModel = mf.identity4();
 }
@@ -46,7 +47,7 @@ void SceneNode::setMesh(Mesh *newMesh)
 }
 
 void SceneNode::setTexture(unsigned int tex) {
-	texture->setTexture(tex);
+	texture1->setTexture(tex);
 }
 
 void SceneNode::setModelMatrix(const Matrix4 &model)
@@ -229,13 +230,20 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform3fv(useShader->getUniform("ViewPosition"), 1, camPos);
 
 		// bind Texture
-		if (texture != nullptr)
+		if (texture1 != nullptr)
 		{
 			glUniform1i(useShader->getUniform("tex"), 0);
-			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+			glBindTexture(GL_TEXTURE_2D, texture1->getTexture());
+
 		}
 
-		if (texture != nullptr && (texture->getName()).compare("sky") == 0) {
+		if (texture2 != nullptr) {
+
+			glUniform1i(useShader->getUniform("dudvMap"), 1);
+			glBindTexture(GL_TEXTURE_2D, texture2->getTexture());
+		}
+
+		if (texture1 != nullptr && (texture1->getName()).compare("sky") == 0) {
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			mesh->draw();

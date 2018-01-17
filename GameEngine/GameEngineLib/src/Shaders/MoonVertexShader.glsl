@@ -19,5 +19,6 @@ uniform SharedMatrices
 void main(void)
 {
 	vec4 MCPosition = vec4(inPosition, 1.0);
+	exTexcoord = inTexcoord;
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * MCPosition;
 }

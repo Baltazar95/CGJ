@@ -34,5 +34,5 @@ uniform sampler2D tex;
 
 void main(void)
 {
-	FragmentColor = vec4(1.0);
+	FragmentColor =  texture(tex, exTexcoord) * vec4(1.0);
 }
