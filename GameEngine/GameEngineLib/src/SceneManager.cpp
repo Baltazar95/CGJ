@@ -99,7 +99,7 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"], nullptr);
+	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"], nullptr);
 
 	sceneGraph->addChild(sky);
 
