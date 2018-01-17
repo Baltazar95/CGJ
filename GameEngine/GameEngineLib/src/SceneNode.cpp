@@ -6,14 +6,15 @@ SceneNode::SceneNode()
 	worldModel = modelMatrix = mf.identity4();
 }
 
-SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture)
+SceneNode::SceneNode(Mesh *newMesh, ShaderProgram *shader, const Matrix4 &model, Material *m, Texture *newTexture, Texture  *t2)
 {
 	MatrixFactory mf;
 
 	mesh = newMesh;
 	sh = shader;
 	modelMatrix = model;
-	texture = newTexture;
+	texture1 = newTexture;
+	texture2 = t2;
 	material = m;
 	worldModel = mf.identity4();
 }
@@ -46,7 +47,7 @@ void SceneNode::setMesh(Mesh *newMesh)
 }
 
 void SceneNode::setTexture(unsigned int tex) {
-	texture->setTexture(tex);
+	texture1->setTexture(tex);
 }
 
 void SceneNode::setModelMatrix(const Matrix4 &model)
@@ -77,14 +78,15 @@ void SceneNode::removeChild(SceneNode *child)
 	}
 }
 
-void SceneNode::update(const Matrix4 &model)
+void SceneNode::update(const Matrix4 &model, const int elapsed)
 {
 	worldModel =  model * modelMatrix;
 
 	for (std::vector<SceneNode*>::iterator it = children.begin(); it != children.end(); ++it)
 	{
-		(*it)->update(worldModel);
+		(*it)->update(worldModel, elapsed);
 	}
+	elapsedtime = elapsed;
 }
 
 void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vector3 &cameraPosition, FrameBuffer *fbo)
@@ -121,18 +123,107 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 
 			glUniform1f(useShader->getUniform("material.shininess"), material->getShininess());
 		}
+		const GLfloat dpos[] = { 10.0f, -10.0f, 0.0f };
+		glUniform3fv(useShader->getUniform("dirLight.direction"), 1, dpos);
+
+		const GLfloat dlambient[] = { 0.05f, 0.05f, 0.05f };
+		glUniform3fv(useShader->getUniform("dirLight.ambient"), 1, dlambient);
+
+		const GLfloat dldiffuse[] = { 0.4f, 0.4f, 0.4f };
+		glUniform3fv(useShader->getUniform("dirLight.diffuse"), 1, dldiffuse);
+
+		const GLfloat dlspecular[] = { 0.5f, 0.5f, 0.5f };
+		glUniform3fv(useShader->getUniform("dirLight.specular"), 1, dlspecular);
+		
 
 		const GLfloat pos[] = { lightPos.x, lightPos.y, lightPos.z };
-		glUniform3fv(useShader->getUniform("light.position"), 1, pos);
+		glUniform3fv(useShader->getUniform("pointLights[0].position"), 1, pos);
 
-		const GLfloat lambient[] = { 0.2f, 0.2f, 0.2f };
-		glUniform3fv(useShader->getUniform("light.ambient"), 1, lambient);
+		const GLfloat lambient[] = { 0.05f, 0.05f, 0.05f };
+		glUniform3fv(useShader->getUniform("pointLights[0].ambient"), 1, lambient);
 
-		const GLfloat ldiffuse[] = { 0.5f, 0.5f, 0.5f };
-		glUniform3fv(useShader->getUniform("light.diffuse"), 1, ldiffuse);
+		const GLfloat ldiffuse[] = { 0.8f, 0.8f, 0.8f };
+		glUniform3fv(useShader->getUniform("pointLights[0].diffuse"), 1, ldiffuse);
 
 		const GLfloat lspecular[] = { 1.0f, 1.0f, 1.0f };
-		glUniform3fv(useShader->getUniform("light.specular"), 1, lspecular);
+		glUniform3fv(useShader->getUniform("pointLights[0].specular"), 1, lspecular);
+
+		const GLfloat lconstant = 1.0f;
+		glUniform1f(useShader->getUniform("pointLights[0].constant"), lconstant);
+
+		const GLfloat llinear = 0.09f;
+		glUniform1f(useShader->getUniform("pointLights[0].linear"), llinear);
+
+		const GLfloat lquadratic = 0.0002f;
+		glUniform1f(useShader->getUniform("pointLights[0].quadratic"), lquadratic);
+
+
+		const GLfloat pos1[] = { 0.5f, 4.5f, -20.5f };
+		glUniform3fv(useShader->getUniform("pointLights[1].position"), 1, pos1);
+
+		const GLfloat lambient1[] = { 1.0f*0.1f, 0.6f*0.1f, 0.0f*0.1f };
+		glUniform3fv(useShader->getUniform("pointLights[1].ambient"), 1, lambient1);
+
+		const GLfloat ldiffuse1[] = { 1.0f, 0.6f, 0.0f };
+		glUniform3fv(useShader->getUniform("pointLights[1].diffuse"), 1, ldiffuse1);
+
+		const GLfloat lspecular1[] = { 1.0f, 0.6f, 0.0f };
+		glUniform3fv(useShader->getUniform("pointLights[1].specular"), 1, lspecular1);
+
+		const GLfloat lconstant1 = 1.0f;
+		glUniform1f(useShader->getUniform("pointLights[1].constant"), lconstant1);
+
+		const GLfloat llinear1 = 0.09f;
+		glUniform1f(useShader->getUniform("pointLights[1].linear"), llinear1);
+
+		const GLfloat lquadratic1 = 0.002f;
+		glUniform1f(useShader->getUniform("pointLights[1].quadratic"), lquadratic1);
+
+
+		const GLfloat pos2[] = { 15.5f, 4.5f, -10.5f };
+		glUniform3fv(useShader->getUniform("pointLights[2].position"), 1, pos2);
+
+		const GLfloat lambient2[] = { 1.0f*0.1f, 0.0f*0.1f, 0.0f*0.1f };
+		glUniform3fv(useShader->getUniform("pointLights[2].ambient"), 1, lambient2);
+
+		const GLfloat ldiffuse2[] = { 1.0f, 0.0f, 0.0f };
+		glUniform3fv(useShader->getUniform("pointLights[2].diffuse"), 1, ldiffuse2);
+
+		const GLfloat lspecular2[] = { 1.0f, 0.0f, 0.0f };
+		glUniform3fv(useShader->getUniform("pointLights[2].specular"), 1, lspecular2);
+
+		const GLfloat lconstant2 = 1.0f;
+		glUniform1f(useShader->getUniform("pointLights[2].constant"), lconstant2);
+
+		const GLfloat llinear2 = 0.09f;
+		glUniform1f(useShader->getUniform("pointLights[2].linear"), llinear2);
+
+		const GLfloat lquadratic2 = 0.002f;
+		glUniform1f(useShader->getUniform("pointLights[2].quadratic"), lquadratic2);
+
+
+		const GLfloat pos3[] = { 17.5f, 4.5f, -19.5f };
+		glUniform3fv(useShader->getUniform("pointLights[3].position"), 1, pos3);
+
+		const GLfloat lambient3[] = { 0.2f*0.1f, 0.2f*0.1f, 1.0f*0.1f };
+		glUniform3fv(useShader->getUniform("pointLights[3].ambient"), 1, lambient3);
+
+		const GLfloat ldiffuse3[] = { 0.2f, 0.2f, 1.0f };
+		glUniform3fv(useShader->getUniform("pointLights[3].diffuse"), 1, ldiffuse3);
+
+		const GLfloat lspecular3[] = { 0.2f, 0.2f, 1.0f };
+		glUniform3fv(useShader->getUniform("pointLights[3].specular"), 1, lspecular3);
+
+		const GLfloat lconstant3 = 1.0f;
+		glUniform1f(useShader->getUniform("pointLights[3].constant"), lconstant3);
+
+		const GLfloat llinear3 = 0.09f;
+		glUniform1f(useShader->getUniform("pointLights[3].linear"), llinear3);
+
+		const GLfloat lquadratic3 = 0.002f;
+		glUniform1f(useShader->getUniform("pointLights[3].quadratic"), lquadratic3);
+
+		glUniform1f(useShader->getUniform("moveFactor"), elapsedtime * 0.001);
 
 		glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(modelMatrix).matrix);
 		glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, modelMatrix.matrix);
@@ -141,13 +232,20 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform3fv(useShader->getUniform("ViewPosition"), 1, camPos);
 
 		// bind Texture
-		if (texture != nullptr)
+		if (texture1 != nullptr)
 		{
 			glUniform1i(useShader->getUniform("tex"), 0);
-			glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+			glBindTexture(GL_TEXTURE_2D, texture1->getTexture());
+
 		}
 
-		if (texture != nullptr && (texture->getName()).compare("sky") == 0) {
+		if (texture2 != nullptr) {
+
+			glUniform1i(useShader->getUniform("dudvMap"), 1);
+			glBindTexture(GL_TEXTURE_2D, texture2->getTexture());
+		}
+
+		if (texture1 != nullptr && (texture1->getName()).compare("sky") == 0) {
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			mesh->draw();

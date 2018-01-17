@@ -5,6 +5,7 @@ in vec3 exNormal;
 in vec2 exTexcoord;
 
 out vec4 FragmentColor;
+out vec4 BrightColor;
 
 uniform vec3 ViewPosition;
 

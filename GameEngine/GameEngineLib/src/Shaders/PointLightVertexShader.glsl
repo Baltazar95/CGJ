@@ -16,8 +16,10 @@ uniform SharedMatrices
 	mat4 ProjectionMatrix;
 };
 
-void main(void)
+void main()
 {
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition, 1.0);
+   	exFragmentPosition = vec3(ModelMatrix * vec4(inPosition, 1.0));
+	exNormal = mat3(NormalMatrix) * inNormal;
 	exTexcoord = inTexcoord;
+	gl_Position = ProjectionMatrix * ViewMatrix * vec4(exFragmentPosition, 1.0);
 }
