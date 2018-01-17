@@ -150,7 +150,7 @@ bool Texture::load_cube_map_side(GLuint tex_cube, GLenum side_target, std::strin
 
 	// copy image data into 'target' side of cube map
 	glTexImage2D(side_target, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	stbi_image_free(data);
+	free(data);
 	return true;
 
 }

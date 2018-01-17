@@ -149,6 +149,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 
 		if (texture != nullptr && (texture->getName()).compare("sky") == 0) {
 
+			//glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, modelMatrix.matrix);
 			glUniform1i(useShader->getUniform("cube_texture"), 0);
 			glDepthMask(GL_FALSE);
 			glActiveTexture(GL_TEXTURE0);
