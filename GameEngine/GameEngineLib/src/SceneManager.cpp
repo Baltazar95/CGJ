@@ -24,6 +24,9 @@ SceneManager::SceneManager()
 
 	materials = ml.getMaterials();
 	materials["test"] = new Material(Vector3(1.0f, 0.5f, 0.31f), Vector3(1.0f, 0.5f, 0.31f), Vector3(0.5f, 0.5f, 0.5f), Vector3(0.5f, 0.5f, 0.5f), 32.0f);
+	materials["orange"] = new Material(Vector3(1.0f, 0.6f, 0.0f), Vector3(1.0f, 0.6f, 0.0f), Vector3(1.0f, 0.6f, 0.0f), Vector3(1.0f, 0.6f, 0.0f), 32.0f);
+	materials["red"] = new Material(Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), 32.0f);
+	materials["test2"] = new Material(Vector3(0.2f, 0.2f, 1.0f), Vector3(0.2f, 0.2f, 1.0f), Vector3(0.2f, 0.2f, 1.0f), Vector3(0.2f, 0.2f, 1.0f), 32.0f);
 
 	//import textures
 	TextureLoader tl;
@@ -63,7 +66,7 @@ SceneManager::SceneManager()
 
 /* */
 	//setup scene
-	sceneGraph = new SceneNode(nullptr, /*blShader*/textureShader, mf.identity4(), nullptr, nullptr, nullptr);
+	sceneGraph = new SceneNode(nullptr, /*blShader*/multipleLightsShader, mf.identity4(), nullptr, nullptr, nullptr);
 
 /* */
 	T = mf.translation(-15.0f, -10.0f, -15.0f);
@@ -79,9 +82,24 @@ SceneManager::SceneManager()
 	sceneGraph->addChild(cube);
 
 /* */
+	T = mf.translation(0.0f, -7.0f, -20.0f);
+	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["orange"], nullptr, nullptr);
+	sceneGraph->addChild(cube);
+
+/* */
+	T = mf.translation(15.0f, -7.0f, -10.0f);
+	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["red"], nullptr, nullptr);
+	sceneGraph->addChild(cube);
+
+/* */
+	T = mf.translation(17.0f, -7.0f, -19.0f);
+	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["test2"], nullptr, nullptr);
+	sceneGraph->addChild(cube);
+
+/* */
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"],nullptr);
+	sky = new SceneNode(meshes["Cube"], nullptr, T*S, materials["lambert2SG"], textures["sky"], nullptr);
 
 	sceneGraph->addChild(sky);
 

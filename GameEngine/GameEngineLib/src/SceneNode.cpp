@@ -122,7 +122,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 
 			glUniform1f(useShader->getUniform("material.shininess"), material->getShininess());
 		}
-		const GLfloat dpos[] = { 0.2f, 1.0f, 0.3f };
+		const GLfloat dpos[] = { 10.0f, -10.0f, 0.0f };
 		glUniform3fv(useShader->getUniform("dirLight.direction"), 1, dpos);
 
 		const GLfloat dlambient[] = { 0.05f, 0.05f, 0.05f };
@@ -153,20 +153,20 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		const GLfloat llinear = 0.09f;
 		glUniform1f(useShader->getUniform("pointLights[0].linear"), llinear);
 
-		const GLfloat lquadratic = 0.032f;
+		const GLfloat lquadratic = 0.0002f;
 		glUniform1f(useShader->getUniform("pointLights[0].quadratic"), lquadratic);
 
 
-		const GLfloat pos1[] = { 1.0f, 0.0f, 0.0f };
+		const GLfloat pos1[] = { 0.5f, -6.5f, -20.5f };
 		glUniform3fv(useShader->getUniform("pointLights[1].position"), 1, pos1);
 
-		const GLfloat lambient1[] = { 0.05f, 0.05f, 0.05f };
+		const GLfloat lambient1[] = { 1.0f*0.1f, 0.6f*0.1f, 0.0f*0.1f };
 		glUniform3fv(useShader->getUniform("pointLights[1].ambient"), 1, lambient1);
 
-		const GLfloat ldiffuse1[] = { 0.8f, 0.8f, 0.8f };
+		const GLfloat ldiffuse1[] = { 1.0f, 0.6f, 0.0f };
 		glUniform3fv(useShader->getUniform("pointLights[1].diffuse"), 1, ldiffuse1);
 
-		const GLfloat lspecular1[] = { 1.0f, 1.0f, 1.0f };
+		const GLfloat lspecular1[] = { 1.0f, 0.6f, 0.0f };
 		glUniform3fv(useShader->getUniform("pointLights[1].specular"), 1, lspecular1);
 
 		const GLfloat lconstant1 = 1.0f;
@@ -175,20 +175,20 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		const GLfloat llinear1 = 0.09f;
 		glUniform1f(useShader->getUniform("pointLights[1].linear"), llinear1);
 
-		const GLfloat lquadratic1 = 0.032f;
+		const GLfloat lquadratic1 = 0.002f;
 		glUniform1f(useShader->getUniform("pointLights[1].quadratic"), lquadratic1);
 
 
-		const GLfloat pos2[] = { 0.0f, 0.0f, -1.0f };
+		const GLfloat pos2[] = { 15.5f, -6.5f, -10.5f };
 		glUniform3fv(useShader->getUniform("pointLights[2].position"), 1, pos2);
 
-		const GLfloat lambient2[] = { 0.05f, 0.05f, 0.05f };
+		const GLfloat lambient2[] = { 1.0f*0.1f, 0.0f*0.1f, 0.0f*0.1f };
 		glUniform3fv(useShader->getUniform("pointLights[2].ambient"), 1, lambient2);
 
-		const GLfloat ldiffuse2[] = { 0.8f, 0.8f, 0.8f };
+		const GLfloat ldiffuse2[] = { 1.0f, 0.0f, 0.0f };
 		glUniform3fv(useShader->getUniform("pointLights[2].diffuse"), 1, ldiffuse2);
 
-		const GLfloat lspecular2[] = { 1.0f, 1.0f, 1.0f };
+		const GLfloat lspecular2[] = { 1.0f, 0.0f, 0.0f };
 		glUniform3fv(useShader->getUniform("pointLights[2].specular"), 1, lspecular2);
 
 		const GLfloat lconstant2 = 1.0f;
@@ -197,20 +197,20 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		const GLfloat llinear2 = 0.09f;
 		glUniform1f(useShader->getUniform("pointLights[2].linear"), llinear2);
 
-		const GLfloat lquadratic2 = 0.032f;
+		const GLfloat lquadratic2 = 0.002f;
 		glUniform1f(useShader->getUniform("pointLights[2].quadratic"), lquadratic2);
 
 
-		const GLfloat pos3[] = { 0.0f, 4.0f, 0.0f };
+		const GLfloat pos3[] = { 17.5f, -6.5f, -19.5f };
 		glUniform3fv(useShader->getUniform("pointLights[3].position"), 1, pos3);
 
-		const GLfloat lambient3[] = { 0.05f, 0.05f, 0.05f };
+		const GLfloat lambient3[] = { 0.2f*0.1f, 0.2f*0.1f, 1.0f*0.1f };
 		glUniform3fv(useShader->getUniform("pointLights[3].ambient"), 1, lambient3);
 
-		const GLfloat ldiffuse3[] = { 0.8f, 0.8f, 0.8f };
+		const GLfloat ldiffuse3[] = { 0.2f, 0.2f, 1.0f };
 		glUniform3fv(useShader->getUniform("pointLights[3].diffuse"), 1, ldiffuse3);
 
-		const GLfloat lspecular3[] = { 1.0f, 1.0f, 1.0f };
+		const GLfloat lspecular3[] = { 0.2f, 0.2f, 1.0f };
 		glUniform3fv(useShader->getUniform("pointLights[3].specular"), 1, lspecular3);
 
 		const GLfloat lconstant3 = 1.0f;
@@ -219,7 +219,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		const GLfloat llinear3 = 0.09f;
 		glUniform1f(useShader->getUniform("pointLights[3].linear"), llinear3);
 
-		const GLfloat lquadratic3 = 0.032f;
+		const GLfloat lquadratic3 = 0.002f;
 		glUniform1f(useShader->getUniform("pointLights[3].quadratic"), lquadratic3);
 
 

@@ -75,8 +75,8 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 	direction = normalized(lookAt - position);
 
 	Vector3 axis = cross(direction, up);
-	Quaternion pitchQuaternion = Quaternion(deltaAngley, axis);
-	Quaternion headingQuaternion = Quaternion(deltaAnglex, up);
+	Quaternion pitchQuaternion = Quaternion(deltaAngley * 0.5, axis);
+	Quaternion headingQuaternion = Quaternion(deltaAnglex * 0.5, up);
 	Quaternion temp = pitchQuaternion * headingQuaternion;
 	temp.normalize();
 	direction = rotate(temp, direction);
