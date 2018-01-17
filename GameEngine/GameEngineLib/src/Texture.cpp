@@ -38,8 +38,9 @@ Texture::Texture(std::string &sin) {
 
 Texture::Texture(std::string frontfile, std::string backfile, std::string topfile, std::string bottomfile, std::string leftfile, std::string rightfile) {
 
-	std::string myFiles[] = { frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
+	std::string myFiles[] = {frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
 
+	std::cout << "got my files" << std::endl;
 
 	for each (std::string file in myFiles)
 	{
@@ -48,37 +49,34 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 
 		_texture_name = no_extension;
 
-		const char* cstr = file.c_str();
+		if (_texture_name.compare("skyfront")==0) {
 
-
-		if (_texture_name.compare("skyfront")) {
-
-			Texture::front = cstr;
+			front = file.c_str();
 
 		}
-		else if (_texture_name.compare("skyback")) {
+		else if (_texture_name.compare("skyback") == 0) {
 
-			Texture::back = cstr;
-
-		}
-		else if (_texture_name.compare("skyright")) {
-
-			Texture::right = cstr;
+			back = file.c_str();
 
 		}
-		else if (_texture_name.compare("skyback")) {
+		else if (_texture_name.compare("skyright") == 0) {
 
-			Texture::back = cstr;
-
-		}
-		else if (_texture_name.compare("skydown")) {
-
-			Texture::bottom = cstr;
+			right = file.c_str();
 
 		}
-		else if (_texture_name.compare("skyup")) {
+		else if (_texture_name.compare("skyback") == 0) {
 
-			Texture::top = cstr;
+			back = file.c_str();
+
+		}
+		else if (_texture_name.compare("skydown") == 0) {
+
+			bottom = file.c_str();
+
+		}
+		else if (_texture_name.compare("skyup") == 0) {
+
+			top = file.c_str();
 
 		}
 
@@ -97,6 +95,7 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, bottom);
 	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, left);
 	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_X, right);
+
 	// format cube map texture
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -136,8 +135,10 @@ bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char*
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 	int x, y, n;
 	int force_channels = 4;
-	unsigned char*  image_data = stbi_load(file_name, &x, &y, &n, force_channels);
-	if (!image_data) {
+	//stbi_set_flip_vertically_on_load(true);
+	data = stbi_load(file_name, &x, &y, &n, force_channels);
+	//data = stbi_load(file_name, &width, &height, &nrChannels, 0);
+	if (!data) {
 		fprintf(stderr, "ERROR: could not load %s\n", file_name);
 		return false;
 	}
@@ -149,9 +150,10 @@ bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char*
 	}
 
 	// copy image data into 'target' side of cube map
-	glTexImage2D(side_target, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-	free(image_data);
+	glTexImage2D(side_target, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	free(data);
 	return true;
+
 }
 
 

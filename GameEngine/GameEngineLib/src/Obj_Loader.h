@@ -13,7 +13,7 @@
 class Obj_Loader
 {
 	private:
-		std::vector <Vector3> vertexData, normalData, vertexInfo, normalInfo;
+		std::vector <Vector3> vertexData, normalData, vertexInfo, normalInfo, texCoordDataSky;
 		std::vector <Vector2> texCoordData, textureInfo;
 		std::vector <unsigned int> vertexIdx, texCoordIdx, normalIdx;
 		bool texcoordsLoaded = false, normalsLoaded = false;

@@ -17,18 +17,22 @@ class Mesh
 		std::vector<Vector3> vertices;
 		std::vector<Vector3> normals;
 		std::vector<Vector2> texCoords;
+		std::vector<Vector3> texCoordsSky;
 		std::string materialName;
 
 	public:
 		Mesh();
 		Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, std::vector<Vector2> &newtexCoords);
+		Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, std::vector<Vector3> &newtexCoordsSky);
 		~Mesh();
 		void createBufferObjects();
+		void createBufferObjectsSky();
 		void destroyBufferObjects();
 		void draw();
 		std::vector<Vector3> *getVertices() { return &vertices; };
 		std::vector<Vector3> *getNormals() { return &normals; };
 		std::vector<Vector2> *getTexCoords() { return &texCoords; };
+		std::vector<Vector3> *getTexCoordsSky() { return &texCoordsSky; };
 		void setMaterialName(std::string name) { materialName = name; };
 		std::string getMaterialName() { return materialName; };
 };

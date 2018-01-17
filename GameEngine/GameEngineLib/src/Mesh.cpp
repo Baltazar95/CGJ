@@ -4,6 +4,7 @@ Mesh::Mesh()
 	vertices = std::vector<Vector3>();
 	normals = std::vector<Vector3>();
 	texCoords = std::vector<Vector2>();
+	texCoordsSky = std::vector<Vector3>();
 }
 
 Mesh::Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, std::vector<Vector2> &newtexCoords)
@@ -16,6 +17,17 @@ Mesh::Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, 
 	//loader->processMeshData(vertices, normals, texCoords);
 	//delete loader;
 	createBufferObjects();
+}
+Mesh::Mesh(std::vector<Vector3> &newvertices, std::vector<Vector3> &newnormals, std::vector<Vector3> &newtexCoordsSky)
+{
+	vertices = newvertices;
+	normals = newnormals;
+	texCoordsSky = newtexCoordsSky;
+
+	//Obj_Loader *loader = new Obj_Loader(filename);
+	//loader->processMeshData(vertices, normals, texCoords);
+	//delete loader;
+	createBufferObjectsSky();
 }
 
 Mesh::~Mesh()
@@ -65,6 +77,43 @@ void Mesh::createBufferObjects()
 	GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
 }
 
+void Mesh::createBufferObjectsSky()
+{
+	glGenVertexArrays(1, &VaoId);
+	glBindVertexArray(VaoId);
+	{
+		glGenBuffers(1, &vboVertices);
+		glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), &vertices[0], GL_STATIC_DRAW);
+		glEnableVertexAttribArray(VERTICES);
+		glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);
+
+
+		if (!texCoords.empty())
+		{
+
+			glGenBuffers(1, &vboTexCoords);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vboTexCoords);
+			glBufferData(GL_ARRAY_BUFFER, texCoordsSky.size() * sizeof(Vector3), &texCoordsSky[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(TEXCOORDS);
+			glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);
+		}
+		if (!normals.empty())
+		{
+			glGenBuffers(1, &vboNormals);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
+			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vector3), &normals[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(NORMALS);
+			glVertexAttribPointer(NORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);
+		}
+	}
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	GlUtils::checkOpenGLError("ERROR: Could not create VAOs and VBOs");
+}
 
 void Mesh::destroyBufferObjects()
 {

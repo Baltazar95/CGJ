@@ -2,9 +2,17 @@
 
 Obj_Loader::Obj_Loader(std::string& filename, std::map<std::string, Mesh*> *meshes, std::string name)
 {
-	vertexData = std::vector<Vector3>();
-	normalData = std::vector<Vector3>();
-	texCoordData = std::vector<Vector2>();
+	if (name.compare("sky") == 0) {
+		vertexData = std::vector<Vector3>();
+		normalData = std::vector<Vector3>();
+		texCoordDataSky = std::vector<Vector3>();
+	}
+	else {
+		vertexData = std::vector<Vector3>();
+		normalData = std::vector<Vector3>();
+		texCoordData = std::vector<Vector2>();
+	}
+	
 	vertexIdx = std::vector<unsigned int>();
 	normalIdx = std::vector<unsigned int>();
 	texCoordIdx = std::vector<unsigned int>();
@@ -19,6 +27,7 @@ Obj_Loader::~Obj_Loader()
 {
 	vertexData.clear();
 	texCoordData.clear();
+	texCoordDataSky.clear();
 	normalData.clear();
 	vertexIdx.clear();
 	texCoordIdx.clear();
@@ -32,9 +41,16 @@ void Obj_Loader::processMeshData(std::vector<Vector3> &vertices, std::vector<Vec
 		Vector3 v = vertexData[vi - 1];
 		vertices.push_back(v);
 		if (texcoordsLoaded) {
-			unsigned int ti = texCoordIdx[i];
-			Vector2 t = texCoordData[ti - 1];
-			texCoords.push_back(t);
+			/*if (meshName.compare("sky") == 0) {
+				unsigned int ti = texCoordIdx[i];
+				Vector3 t = texCoordDataSky[ti - 1];
+				texCoords.push_back(t);
+			}
+			else {*/
+				unsigned int ti = texCoordIdx[i];
+				Vector2 t = texCoordData[ti - 1];
+				texCoords.push_back(t);
+			//}
 		}
 		if (normalsLoaded) {
 			unsigned int ni = normalIdx[i];
@@ -53,9 +69,17 @@ void Obj_Loader::parseVertex(std::stringstream& sin)
 
 void Obj_Loader::parseTexcoord(std::stringstream& sin)
 {
-	Vector2 t;
-	sin >> t;
-	texCoordData.push_back(t);
+	if (meshName.compare("sky") == 0) {
+		Vector3 t;
+		sin >> t;
+		texCoordDataSky.push_back(t);
+	}
+	else {
+
+		Vector2 t;
+		sin >> t;
+		texCoordData.push_back(t);
+	}
 }
 
 void Obj_Loader::parseNormal(std::stringstream& sin)
@@ -90,9 +114,16 @@ void Obj_Loader::parseMesh(std::stringstream& sin)
 			Vector3 v = vertexData[vi - 1];
 			createdMesh->getVertices()->push_back(v);
 			if (texcoordsLoaded) {
-				unsigned int ti = texCoordIdx[i];
-				Vector2 t = texCoordData[ti - 1];
-				createdMesh->getTexCoords()->push_back(t);
+				if (meshName.compare("sky") ==  0) {
+					unsigned int ti = texCoordIdx[i];
+					Vector3 t = texCoordDataSky[ti - 1];
+					createdMesh->getTexCoordsSky()->push_back(t);
+				}
+				else {
+					unsigned int ti = texCoordIdx[i];
+					Vector2 t = texCoordData[ti - 1];
+					createdMesh->getTexCoords()->push_back(t);
+				}
 			}
 			if (normalsLoaded) {
 				unsigned int ni = normalIdx[i];
@@ -101,7 +132,13 @@ void Obj_Loader::parseMesh(std::stringstream& sin)
 			}
 		}
 
-		createdMesh->createBufferObjects();
+		if (meshName.compare("sky") == 0) {
+			createdMesh->createBufferObjectsSky();
+
+		}
+		else {
+			createdMesh->createBufferObjects();
+		}
 
 		newMeshes->insert(std::pair<std::string, Mesh*>(meshName + std::to_string(parts), createdMesh));
 
@@ -152,9 +189,17 @@ void Obj_Loader::loadMeshData(std::string& filename)
 		Vector3 v = vertexData[vi - 1];
 		createdMesh->getVertices()->push_back(v);
 		if (texcoordsLoaded) {
-			unsigned int ti = texCoordIdx[i];
-			Vector2 t = texCoordData[ti - 1];
-			createdMesh->getTexCoords()->push_back(t);
+			if (meshName.compare("sky") == 0) {
+				unsigned int ti = texCoordIdx[i];
+				Vector3 t = texCoordDataSky[ti - 1];
+				createdMesh->getTexCoordsSky()->push_back(t);
+			}
+			else {
+				unsigned int ti = texCoordIdx[i];
+				Vector2 t = texCoordData[ti - 1];
+				createdMesh->getTexCoords()->push_back(t);
+			}
+			
 		}
 		if (normalsLoaded) {
 			unsigned int ni = normalIdx[i];
@@ -163,7 +208,14 @@ void Obj_Loader::loadMeshData(std::string& filename)
 		}
 	}
 
-	createdMesh->createBufferObjects();
+	if (meshName.compare("sky") == 0) {
+		createdMesh->createBufferObjectsSky();
+
+	}
+	else {
+		createdMesh->createBufferObjects();
+
+	}
 
 	newMeshes->insert(std::pair<std::string, Mesh*>(meshName, createdMesh));
 

@@ -2,7 +2,7 @@
 
 in vec3 exFragmentPosition;
 in vec3 exNormal;
-in vec2 exTexcoord;
+in vec3 exTexcoord;
 
 out vec4 FragmentColor;
 

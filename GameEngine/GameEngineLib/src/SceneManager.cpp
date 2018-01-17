@@ -30,7 +30,7 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	//texture SKY
 	//front  back  up  down left right
-	tl.loadCubeMapData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyfront.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyback.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyup.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skydown.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyleft.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyright.png"));
+	tl.loadCubeMapData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyfront.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyback.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyup.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skydown.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyleft.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyright.jpg"));
 
 	//textures = tl.getTextures();
 	//container
@@ -45,7 +45,7 @@ SceneManager::SceneManager()
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Cube.obj"), &meshes, "Cube");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/Bridge.obj"), &meshes, "Bridge");
 	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/plane.obj"), &meshes, "Plane");
-
+	loader = Obj_Loader(std::string("../../GameEngine/GameEngineLib/src/Meshes/sky.obj"), &meshes, "Sky");
 /* */
 //setup cameras
 	camera = new Camera(UBO_BP);
@@ -75,7 +75,7 @@ SceneManager::SceneManager()
 /* */
 	T = mf.translation(-15.0f, -15.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
-	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"]);
+	sky = new SceneNode(meshes["Sky"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"]);
 
 	sceneGraph->addChild(sky);
 
