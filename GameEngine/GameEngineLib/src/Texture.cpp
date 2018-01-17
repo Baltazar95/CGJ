@@ -40,8 +40,6 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 
 	std::string myFiles[] = {frontfile, backfile, topfile, bottomfile, leftfile, rightfile };
 
-	std::cout << "got my files" << std::endl;
-
 	for each (std::string file in myFiles)
 	{
 		std::string last_element(file.substr(file.rfind("/") + 1));
@@ -51,32 +49,32 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 
 		if (_texture_name.compare("skyfront")==0) {
 
-			front = file.c_str();
+			front = file;
 
 		}
 		else if (_texture_name.compare("skyback") == 0) {
 
-			back = file.c_str();
+			back = file;
 
 		}
 		else if (_texture_name.compare("skyright") == 0) {
 
-			right = file.c_str();
+			right = file;
 
 		}
-		else if (_texture_name.compare("skyback") == 0) {
+		else if (_texture_name.compare("skyleft") == 0) {
 
-			back = file.c_str();
+			left = file;
 
 		}
 		else if (_texture_name.compare("skydown") == 0) {
 
-			bottom = file.c_str();
+			bottom = file;
 
 		}
 		else if (_texture_name.compare("skyup") == 0) {
 
-			top = file.c_str();
+			top = file;
 
 		}
 
@@ -130,18 +128,17 @@ std::string Texture::getName() {
 	return _texture_name;
 }
 
-bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name) {
+bool Texture::load_cube_map_side(GLuint tex_cube, GLenum side_target, std::string file_name) {
 
-	std::cout << file_name << std::endl;
-
-	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, tex_cube);
 	int x, y, n;
 	int force_channels = 4;
 	//stbi_set_flip_vertically_on_load(true);
-	data = stbi_load(file_name, &x, &y, &n, force_channels);
+	data = stbi_load(file_name.c_str(), &x, &y, &n, force_channels);
 	//data = stbi_load(file_name, &width, &height, &nrChannels, 0);
 	if (!data) {
 		fprintf(stderr, "ERROR: could not load %s\n", file_name);
+		printf(stbi_failure_reason());
 		return false;
 	}
 
@@ -153,7 +150,7 @@ bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char*
 
 	// copy image data into 'target' side of cube map
 	glTexImage2D(side_target, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	free(data);
+	stbi_image_free(data);
 	return true;
 
 }

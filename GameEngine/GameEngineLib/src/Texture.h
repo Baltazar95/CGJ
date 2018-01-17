@@ -12,12 +12,7 @@ private:
 	std::string _texture_name;
 	int width, height, nrChannels;
 	unsigned char *data;
-	const char* front = "";
-	const char* back = "";
-	const char* top = "";
-	const char* bottom = "";
-	const char* left = "";
-	const char* right = "";
+	std::string front, back, top, bottom, left, right;
 	GLuint tex_cube;
 
 public:
@@ -33,7 +28,7 @@ public:
 
 	std::string Texture::getName();
 	void setTexture(unsigned int tex) { texture = tex; }
-	bool load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name);
+	bool load_cube_map_side(GLuint tex_cube, GLenum side_target, std::string file_name);
 
 
 };

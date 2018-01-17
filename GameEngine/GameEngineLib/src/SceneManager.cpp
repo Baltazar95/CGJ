@@ -30,7 +30,7 @@ SceneManager::SceneManager()
 	tl.loadTextureData(std::string("../../GameEngine/GameEngineLib/src/Textures/metal.jpg"));
 	//texture SKY
 	//front  back  up  down left right
-	tl.loadCubeMapData(std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyfront.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyback.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyup.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skydown.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyleft.jpg"), std::string("../../GameEngine/GameEngineLib/src/Textures/sky/skyright.jpg"));
+	tl.loadCubeMapData(std::string("../../GameEngine/GameEngineLib/src/Textures/skyfront.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/skyback.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/skyup.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/skydown.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/skyleft.png"), std::string("../../GameEngine/GameEngineLib/src/Textures/skyright.png"));
 
 	//textures = tl.getTextures();
 	//container
