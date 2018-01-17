@@ -58,7 +58,7 @@ SceneManager::SceneManager()
 /* */
 //setup cameras
 	camera = new Camera(UBO_BP);
-	camera->setPosition(Vector3(0.0f, 0.0f, 20.0f));
+	camera->setPosition(Vector3(0.0f, 10.0f, 20.0f));
 	camera->setLookAt(Vector3(0.0f, 0.0f, 0.0f));
 	camera->setOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 150.0f);
 	camera->setPerspective(45.0f, (640.0f / 480.0f), 1.0f, 150.0f);
@@ -69,10 +69,10 @@ SceneManager::SceneManager()
 	sceneGraph = new SceneNode(nullptr, /*blShader*/multipleLightsShader, mf.identity4(), nullptr, nullptr, nullptr);
 
 /* */
-	T = mf.translation(-15.0f, -10.0f, -15.0f);
+	T = mf.translation(-15.0f, 0.0f, -15.0f);
 	S = mf.scale(30.0f, 0.1f, 30.0f, 1.0f);
 	//TODO: missing water material
-	water = new SceneNode(meshes["Plane"], waterShader, T*S, nullptr, watertex, nullptr);
+	water = new SceneNode(meshes["Plane"], waterShader, T*S, materials["test2"], watertex, nullptr);
 
 	sceneGraph->addChild(water);
 
@@ -82,22 +82,22 @@ SceneManager::SceneManager()
 	sceneGraph->addChild(cube);
 
 /* */
-	T = mf.translation(0.0f, -7.0f, -20.0f);
+	T = mf.translation(0.0f, 3.0f, -20.0f);
 	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["orange"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
 /* */
-	T = mf.translation(15.0f, -7.0f, -10.0f);
+	T = mf.translation(15.0f, 3.0f, -10.0f);
 	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["red"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
 /* */
-	T = mf.translation(17.0f, -7.0f, -19.0f);
+	T = mf.translation(17.0f, 3.0f, -19.0f);
 	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["test2"], nullptr, nullptr);
 	sceneGraph->addChild(cube);
 
 /* */
-	T = mf.translation(-15.0f, -15.0f, -15.0f);
+	T = mf.translation(-15.0f, -5.0f, -15.0f);
 	S = mf.scale(30.0f, 30.0f, 30.0f, 1.0f);
 	sky = new SceneNode(meshes["Cube"], skyboxShader, T*S, materials["lambert2SG"], textures["sky"], nullptr);
 
@@ -105,18 +105,18 @@ SceneManager::SceneManager()
 
 /* */
 
-	T = mf.translation(15.0f, -9.0f, -15.0f);
-	S = mf.scale(0.3f, 0.3f, 0.3f,1.0f);
+	T = mf.translation(15.0f, 0.0f, -15.0f);
+	S = mf.scale(2.0f, 2.0f, 4.0f, 1.0f);
 	for (auto member : meshes)
 	{
 		if (member.first.find("Bridge") != std::string::npos)
 		{
-			sceneGraph->addChild(new SceneNode(meshes[member.first], nullptr, T, materials[member.second->getMaterialName()], textures["metal"], nullptr));
+			sceneGraph->addChild(new SceneNode(meshes[member.first], textureShader, T*S, materials[member.second->getMaterialName()], textures["metal"], nullptr));
 		}
 	}
 
 /* */
-	T = mf.translation(1.5f, 8.0f, 3.0f);
+	T = mf.translation(1.5f, 18.0f, 3.0f);
 	S = mf.scale(2.0f, 2.0f, 2.0f,1.0f);
 	light = new SceneNode(meshes["Moon"], moonShader, T*S, materials["Material.001"], textures["moon_unwrap"], nullptr);
 	sceneGraph->addChild(light);
@@ -275,7 +275,7 @@ ShaderProgram *SceneManager::createWaterShader()
 
 	shader->addUniform("tex");
 	shader->addUniform("dudvMap");
-
+	shader->addUniform("moveFactor");
 	shader->addUniform("ViewPosition");
 	shader->addUniformBlock("SharedMatrices", UBO_BP);
 
@@ -410,20 +410,20 @@ void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngle
 
 	camera->update(deltaAnglex, deltaAngley, fov, elapsed);
 
-	sceneGraph->update(mf.translation(position));
+	sceneGraph->update(mf.translation(position), elapsed);
 }
 
 void SceneManager::drawScene()
 {
 	if (frameType == REFLECTION)
 	{
-		//sceneGraph->removeChild(water);
+		sceneGraph->removeChild(water);
 		camera->setInvertedCamera();
 
 		//TODO: create light objects and use it to get postions
 		sceneGraph->draw(nullptr, light->getWorldPosition(), camera->getPosition(), fbo);
 		frameType = BLOOM;
-		//sceneGraph->addChild(water);
+		sceneGraph->addChild(water);
 	}
 	else if (frameType == BLOOM)
 	{

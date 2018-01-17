@@ -34,21 +34,25 @@ uniform Light light;
 
 uniform sampler2D tex;
 uniform sampler2D dudvMap;
-
+uniform float moveFactor;
 
 void main()
 {
     vec2 ndc = (clipSpace.xy/ clipSpace.w)/2.0 + 0.5;
     vec2 reflectionCoords = vec2(-ndc.x, ndc.y);
-    vec2 distortion1 = texture(dudvMap, vec2(exTexcoord.x, exTexcoord.y)).rg*2.0 - 1.0;
-    reflectionCoords += distortion1;
+    vec2 distortion1 = (texture(dudvMap, vec2(exTexcoord.x + moveFactor, exTexcoord.y)).rg*2.0 - 1.0) * 0.02;
+    vec2 distortion2 = (texture(dudvMap, vec2(-exTexcoord.x + moveFactor, exTexcoord.y + moveFactor)).rg*2.0 - 1.0) * 0.02;
+    vec2 totaldistortion = distortion1 + distortion2;
+    reflectionCoords += totaldistortion;
 
-    vec4 col = texture(tex, reflectionCoords);
     
+    reflectionCoords.x = clamp(reflectionCoords.x, -0.999, -0.001);
+    reflectionCoords.y = clamp(reflectionCoords.y, 0.001, 0.999);
 
 
     vec3 viewVector = normalize(toCameraVector);
     float reflectiveFactor = pow(dot(viewVector, vec3(0.0, 1.0, 0.0)), 0.5);
 
-    FragmentColor = mix(col, vec4(0.0, 0.0, 1.0, 0.0), reflectiveFactor);
+    vec4 col = texture(tex, reflectionCoords);
+    FragmentColor = mix(col, vec4(0.1, 0.1, 0.8, 0.0), reflectiveFactor);
 }

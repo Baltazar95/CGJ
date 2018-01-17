@@ -78,14 +78,15 @@ void SceneNode::removeChild(SceneNode *child)
 	}
 }
 
-void SceneNode::update(const Matrix4 &model)
+void SceneNode::update(const Matrix4 &model, const int elapsed)
 {
 	worldModel =  model * modelMatrix;
 
 	for (std::vector<SceneNode*>::iterator it = children.begin(); it != children.end(); ++it)
 	{
-		(*it)->update(worldModel);
+		(*it)->update(worldModel, elapsed);
 	}
+	elapsedtime = elapsed;
 }
 
 void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vector3 &cameraPosition, FrameBuffer *fbo)
@@ -157,7 +158,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform1f(useShader->getUniform("pointLights[0].quadratic"), lquadratic);
 
 
-		const GLfloat pos1[] = { 0.5f, -6.5f, -20.5f };
+		const GLfloat pos1[] = { 0.5f, 4.5f, -20.5f };
 		glUniform3fv(useShader->getUniform("pointLights[1].position"), 1, pos1);
 
 		const GLfloat lambient1[] = { 1.0f*0.1f, 0.6f*0.1f, 0.0f*0.1f };
@@ -179,7 +180,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform1f(useShader->getUniform("pointLights[1].quadratic"), lquadratic1);
 
 
-		const GLfloat pos2[] = { 15.5f, -6.5f, -10.5f };
+		const GLfloat pos2[] = { 15.5f, 4.5f, -10.5f };
 		glUniform3fv(useShader->getUniform("pointLights[2].position"), 1, pos2);
 
 		const GLfloat lambient2[] = { 1.0f*0.1f, 0.0f*0.1f, 0.0f*0.1f };
@@ -201,7 +202,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		glUniform1f(useShader->getUniform("pointLights[2].quadratic"), lquadratic2);
 
 
-		const GLfloat pos3[] = { 17.5f, -6.5f, -19.5f };
+		const GLfloat pos3[] = { 17.5f, 4.5f, -19.5f };
 		glUniform3fv(useShader->getUniform("pointLights[3].position"), 1, pos3);
 
 		const GLfloat lambient3[] = { 0.2f*0.1f, 0.2f*0.1f, 1.0f*0.1f };
@@ -222,6 +223,7 @@ void SceneNode::draw(ShaderProgram *shader, const Vector3 &lightPos, const Vecto
 		const GLfloat lquadratic3 = 0.002f;
 		glUniform1f(useShader->getUniform("pointLights[3].quadratic"), lquadratic3);
 
+		glUniform1f(useShader->getUniform("moveFactor"), elapsedtime * 0.001);
 
 		glUniformMatrix4fv(useShader->getUniform("NormalMatrix"), 1, GL_FALSE, mf.normalMatrix(modelMatrix).matrix);
 		glUniformMatrix4fv(useShader->getUniform("ModelMatrix"), 1, GL_FALSE, modelMatrix.matrix);

@@ -18,6 +18,7 @@ class SceneNode
 		Material *material;
 		Matrix4 modelMatrix, worldModel;
 		Texture *texture1, *texture2;
+		int elapsedtime = 0;
 
 	public:
 		SceneNode();
@@ -31,7 +32,7 @@ class SceneNode
 		Vector3 getWorldPosition();
 		void addChild(SceneNode *child);
 		void removeChild(SceneNode *child);
-		void update(const Matrix4 &model);
+		void update(const Matrix4 &model, const int elapsed);
 		void draw(ShaderProgram *shader, const Vector3 &lightPos, const Vector3 &cameraPosition, FrameBuffer *fbo);
 };
 

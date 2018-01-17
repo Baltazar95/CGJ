@@ -24,5 +24,5 @@ void main()
     clipSpace = ProjectionMatrix * ViewMatrix * worldPosition;
     gl_Position = clipSpace;
     toCameraVector = inPosition - worldPosition.xyz;
-    exTexcoord = vec2(inTexcoord.x/2.0 + 0.5, inTexcoord.y/2.0 + 0.5);
+    exTexcoord = vec2(inTexcoord.x/2.0 + 0.5, inTexcoord.y/2.0 + 0.5) * 6;
 }
