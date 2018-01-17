@@ -81,6 +81,8 @@ void Camera::update(const float &deltaAnglex, const float &deltaAngley, const fl
 	Quaternion temp = pitchQuaternion * headingQuaternion;
 	temp.normalize();
 	direction = rotate(temp, direction);
+	up = cross(axis, direction);
+	up.normalize();
 
 	if (projectionMode == PERSPECTIVE)
 	{

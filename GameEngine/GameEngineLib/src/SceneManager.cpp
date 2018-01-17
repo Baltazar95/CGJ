@@ -12,6 +12,7 @@ SceneManager::SceneManager()
 	ShaderProgram *moonShader = createMoonShader();
 	ShaderProgram *textureShader = createSimpleTextureShader();
 	ShaderProgram *skyboxShader = createSkyboxShader();
+	ShaderProgram *multipleLightsShader = createMutipleShader();
 	waterShader = createWaterShader();
 
 
@@ -67,7 +68,7 @@ SceneManager::SceneManager()
 
 /* * /
 	T = mf.translation(-2.0f, 0.0f, 0.0f);
-	cube = new SceneNode(meshes["Cube"], blShader, T, materials["test"], textures["container"]);
+	cube = new SceneNode(meshes["Cube"], multipleLightsShader, T, materials["test"], textures["container"]);
 	sceneGraph->addChild(cube);
 
 /* */
@@ -97,8 +98,9 @@ SceneManager::SceneManager()
 	waterShader->useProgram();
 	glUniform1i(waterShader->getUniform("tex"), 0);
 	waterShader->disableProgram();
-
+/* */
 	fbo = new FrameBuffer(watertex->getTexture(), 640, 480);
+
 }
 
 SceneManager::~SceneManager()
@@ -288,6 +290,74 @@ ShaderProgram *SceneManager::createSkyboxShader()
 	return shader;
 }
 
+ShaderProgram *SceneManager::createMutipleShader()
+{
+	ShaderProgram *shader = new ShaderProgram();
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MultipleLightsVertexShader.glsl", GL_VERTEX_SHADER);
+	shader->addShader("../../GameEngine/GameEngineLib/src/Shaders/MultipleLightsFragmentShader.glsl", GL_FRAGMENT_SHADER);
+	shader->compileShaders();
+	shader->createShaderProgram();
+	shader->addAttribute(VERTICES, "inPosition");
+	shader->addAttribute(TEXCOORDS, "inTexcoord");
+	shader->addAttribute(NORMALS, "inNormal");
+	shader->linkProgram();
+
+	//material properties
+	shader->addUniform("material.ambient");
+	shader->addUniform("material.diffuse");
+	shader->addUniform("material.specular");
+	shader->addUniform("material.shininess");
+	shader->addUniform("material.emissive");
+
+	//light properties
+	shader->addUniform("dirLight.direction");
+	shader->addUniform("dirLight.ambient");
+	shader->addUniform("dirLight.diffuse");
+	shader->addUniform("dirLight.specular");
+
+	shader->addUniform("pointLights[0].position");
+	shader->addUniform("pointLights[0].ambient");
+	shader->addUniform("pointLights[0].diffuse");
+	shader->addUniform("pointLights[0].specular");
+	shader->addUniform("pointLights[0].constant");
+	shader->addUniform("pointLights[0].linear");
+	shader->addUniform("pointLights[0].quadratic");
+
+	shader->addUniform("pointLights[1].position");
+	shader->addUniform("pointLights[1].ambient");
+	shader->addUniform("pointLights[1].diffuse");
+	shader->addUniform("pointLights[1].specular");
+	shader->addUniform("pointLights[1].constant");
+	shader->addUniform("pointLights[1].linear");
+	shader->addUniform("pointLights[1].quadratic");
+
+	shader->addUniform("pointLights[2].position");
+	shader->addUniform("pointLights[2].ambient");
+	shader->addUniform("pointLights[2].diffuse");
+	shader->addUniform("pointLights[2].specular");
+	shader->addUniform("pointLights[2].constant");
+	shader->addUniform("pointLights[2].linear");
+	shader->addUniform("pointLights[2].quadratic");
+
+	shader->addUniform("pointLights[3].position");
+	shader->addUniform("pointLights[3].ambient");
+	shader->addUniform("pointLights[3].diffuse");
+	shader->addUniform("pointLights[3].specular");
+	shader->addUniform("pointLights[3].constant");
+	shader->addUniform("pointLights[3].linear");
+	shader->addUniform("pointLights[3].quadratic");
+
+	shader->addUniform("NormalMatrix");
+	shader->addUniform("ModelMatrix");
+
+	shader->addUniform("tex");
+
+	shader->addUniform("ViewPosition");
+	shader->addUniformBlock("SharedMatrices", UBO_BP);
+
+	return shader;
+}
+
 void SceneManager::updateScene(const float &deltaAnglex, const float &deltaAngley, const float &fov, const int &elapsed)
 {
 	MatrixFactory mf;
@@ -319,13 +389,13 @@ void SceneManager::drawScene()
 {
 	if (frameType == REFLECTION)
 	{
-		sceneGraph->removeChild(water);
+		//sceneGraph->removeChild(water);
 		camera->setInvertedCamera();
 
 		//TODO: create light objects and use it to get postions
 		sceneGraph->draw(nullptr, light->getWorldPosition(), camera->getPosition(), fbo);
 		frameType = BLOOM;
-		sceneGraph->addChild(water);
+		//sceneGraph->addChild(water);
 	}
 	else if (frameType == BLOOM)
 	{
