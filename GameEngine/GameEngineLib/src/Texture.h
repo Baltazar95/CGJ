@@ -18,7 +18,7 @@ private:
 	const char* bottom = "";
 	const char* left = "";
 	const char* right = "";
-	//GLuint* tex_cube;
+	GLuint tex_cube;
 
 public:
 

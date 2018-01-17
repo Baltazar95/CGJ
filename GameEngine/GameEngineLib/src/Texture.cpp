@@ -86,15 +86,15 @@ Texture::Texture(std::string frontfile, std::string backfile, std::string topfil
 
 	// generate a cube-map texture to hold all the sides
 	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &texture);
+	glGenTextures(1, &tex_cube);
 
 	// load each image and copy into a side of the cube-map texture
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, top);
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, bottom);
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, left);
-	load_cube_map_side(texture, GL_TEXTURE_CUBE_MAP_POSITIVE_X, right);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, top);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, bottom);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, left);
+	load_cube_map_side(tex_cube, GL_TEXTURE_CUBE_MAP_POSITIVE_X, right);
 
 	// format cube map texture
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -131,6 +131,8 @@ std::string Texture::getName() {
 }
 
 bool Texture::load_cube_map_side(GLuint texture, GLenum side_target, const char* file_name) {
+
+	std::cout << file_name << std::endl;
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 	int x, y, n;
